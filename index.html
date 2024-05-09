@@ -2,30 +2,39 @@
 <html>
 <head>
     <title>M3U8 Player</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        #video-player {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
-    <video id="video"></video>
-    <input type="text" id="url-input" placeholder="Enter m3u8 URL here">
-    <button onclick="loadVideo()">Load Video</button>
+    <input type="text" id="m3u8-url" placeholder="m3u8 URL을 입력하세요">
+    <button onclick="playVideo()">재생</button>
+    <br>
+    <video id="video-player" controls></video>
 
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
-        var video = document.getElementById('video');
-        var hls = new Hls();
+        var hls;
 
-        function loadVideo() {
-            var url = document.getElementById('url-input').value;
+        function playVideo() {
+            var url = document.getElementById('m3u8-url').value;
+            var player = document.getElementById('video-player');
+
             if(Hls.isSupported()) {
+                hls = new Hls();
                 hls.loadSource(url);
-                hls.attachMedia(video);
+                hls.attachMedia(player);
                 hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play();
+                    player.play();
                 });
             }
-            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = url;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play();
+            else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+                player.src = url;
+                player.addEventListener('loadedmetadata', function() {
+                    player.play();
                 });
             }
         }
