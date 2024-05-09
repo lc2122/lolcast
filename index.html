@@ -4,8 +4,14 @@
     <title>M3U8 Player</title>
     <style>
         #video-player {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            left: 0px;
+            margin: auto;
+            max-height: 100%;
             max-width: 100%;
-            height: auto;
         }
     </style>
 </head>
@@ -13,7 +19,7 @@
     <input type="text" id="m3u8-url" placeholder="m3u8 URL을 입력하세요">
     <button onclick="playVideo()">재생</button>
     <br>
-    <video id="video-player" controls></video>
+    <video id="video-player" style="width: 100%; height: 100%;" controls=""></video>
 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
@@ -21,22 +27,26 @@
 
         function playVideo() {
             var url = document.getElementById('m3u8-url').value;
-            var player = document.getElementById('video-player');
+            fetch(url)
+                .then(response => response.url)
+                .then(m3u8Url => {
+                    var player = document.getElementById('video-player');
 
-            if(Hls.isSupported()) {
-                hls = new Hls();
-                hls.loadSource(url);
-                hls.attachMedia(player);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    player.play();
+                    if(Hls.isSupported()) {
+                        hls = new Hls();
+                        hls.loadSource(m3u8Url);
+                        hls.attachMedia(player);
+                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                            player.play();
+                        });
+                    }
+                    else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+                        player.src = m3u8Url;
+                        player.addEventListener('loadedmetadata', function() {
+                            player.play();
+                        });
+                    }
                 });
-            }
-            else if (player.canPlayType('application/vnd.apple.mpegurl')) {
-                player.src = url;
-                player.addEventListener('loadedmetadata', function() {
-                    player.play();
-                });
-            }
         }
     </script>
 </body>
