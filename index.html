@@ -1,53 +1,26 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>M3U8 Player</title>
-    <style>
-        #video-player {
-            position: absolute;
-            top: 0px;
-            right: 0px;
-            bottom: 0px;
-            left: 0px;
-            margin: auto;
-            max-height: 95%;
-            max-width: 100%;
-        }
-    </style>
-</head>
 <body>
-    <input type="text" id="m3u8-url" placeholder="m3u8 URL을 입력하세요">
-    <button onclick="playVideo()">재생</button>
-    <br>
-    <video id="video-player" style="width: 100%; height: 95%;" controls></video>
 
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script>
-        var hls;
+<video id="videoPlayer" width="320" height="240" controls>
+</video>
 
-        async function playVideo() {
-            var url = document.getElementById('m3u8-url').value;
-            var player = document.getElementById('video-player');
+<script>
+    var player = document.getElementById('videoPlayer');
 
-            // Fetch the URL to handle any redirects
-            var response = await fetch(url, { method: 'HEAD' });
-            var actualUrl = response.url;
-
-            if(Hls.isSupported()) {
-                hls = new Hls();
-                hls.loadSource(actualUrl);
-                hls.attachMedia(player);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    player.play();
-                });
-            }
-            else if (player.canPlayType('application/vnd.apple.mpegurl')) {
-                player.src = actualUrl;
-                player.addEventListener('loadedmetadata', function() {
-                    player.play();
-                });
-            }
+    function playVideo(url) {
+        // 유튜브 주소의 경우 ? 뒷부분을 제거
+        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+            url = url.split('?')[0];
         }
-    </script>
+
+        player.src = url;
+        player.play();
+    }
+
+    // 테스트
+    playVideo('https://www.youtube.com/watch?v=hU05_Rkm8qE');
+</script>
+
 </body>
 </html>
