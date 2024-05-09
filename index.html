@@ -24,7 +24,7 @@
             var player = document.getElementById('video-player');
 
             // Fetch the URL to handle any redirects
-            var response = await fetch(url, { method: 'HEAD', mode: 'no-cors' });
+            var response = await fetch(url, { method: 'HEAD' });
             var actualUrl = response.url;
 
             if(Hls.isSupported()) {
