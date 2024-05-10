@@ -1,38 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Video Player</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <title>Video Player</title>
+  <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet">
+  <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
 </head>
 <body>
-    <video id="videoPlayer" controls></video>
-    <input type="text" id="urlInput" placeholder="단축1 URL을 입력하세요">
-    <button onclick="playVideo()">재생</button>
-
-    <script>
-        async function playVideo() {
-            var video = document.getElementById('videoPlayer');
-            var url = document.getElementById('urlInput').value;
-
-            // Fetch the actual URL from the shortened URL
-            const response = await fetch(url, { method: 'HEAD' });
-            const actualUrl = response.url;
-
-            if(Hls.isSupported()) {
-                var hls = new Hls();
-                hls.loadSource(actualUrl);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play();
-                });
-            }
-            else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = actualUrl;
-                video.addEventListener('loadedmetadata', function() {
-                    video.play();
-                });
-            }
-        }
-    </script>
+  <video id="my-video" class="video-js" controls preload="auto" width="640" height="264" data-setup="{}">
+    <source src="YOUR_M3U8_URL" type="application/x-mpegURL">
+  </video>
 </body>
 </html>
