@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Video Player</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <title>M3U8 Player</title>
+    <style>
+        #video-player {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            left: 0px;
+            margin: auto;
+            max-height: 95%;
+            max-width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <input type="text" id="m3u8-url" placeholder="Enter m3u8 URL">
-    <button onclick="playVideo()">Play</button>
-    <video id="video-player" controls></video>
+    <input type="text" id="m3u8-url" placeholder="m3u8 URL을 입력하세요">
+    <button onclick="playVideo()">재생</button>
+    <br>
+    <video id="video-player" style="width: 100%; height: 95%;" controls></video>
 
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
         var hls;
 
@@ -16,32 +29,24 @@
             var url = document.getElementById('m3u8-url').value;
             var player = document.getElementById('video-player');
 
-            // Function to determine the final URL after all redirects
-            async function getFinalUrl(url) {
-                var response = await fetch(url, { method: 'HEAD' });
-                return response.url;
-            }
+            // Fetch the URL to handle any redirects
+            var response = await fetch(url, { method: 'HEAD' });
+            var actualUrl = response.url;
 
-            // Play video function
-            async function playFinalVideo(finalUrl) {
-                if (Hls.isSupported()) {
-                    hls = new Hls();
-                    hls.loadSource(finalUrl);
-                    hls.attachMedia(player);
-                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                        player.play();
-                    });
-                } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
-                    player.src = finalUrl;
-                    player.addEventListener('loadedmetadata', function() {
-                        player.play();
-                    });
-                }
+            if(Hls.isSupported()) {
+                hls = new Hls();
+                hls.loadSource(actualUrl);
+                hls.attachMedia(player);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    player.play();
+                });
             }
-
-            // Check if the provided URL is a redirect, if yes then get the final URL
-            var finalUrl = await getFinalUrl(url);
-            playFinalVideo(finalUrl);
+            else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+                player.src = actualUrl;
+                player.addEventListener('loadedmetadata', function() {
+                    player.play();
+                });
+            }
         }
     </script>
 </body>
