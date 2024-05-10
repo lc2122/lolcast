@@ -19,7 +19,7 @@
     </style>
 </head>
 <body>
-    <input type="text" id="m3u8-url" placeholder="m3u8 URL or shortened URL">
+    <input type="text" id="m3u8-url" placeholder="m3u18 URL or shortened URL">
     <button onclick="playVideo()">재생</button>
     <br>
     <video id="video-player" class="video-js vjs-default-skin" controls preload="auto" data-setup='{}'>
@@ -27,19 +27,29 @@
     </video>
 
     <script>
+        async function resolveURL(url) {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    var response = await fetch(url, { redirect: 'manual' });
+                    if (response.status >= 300 && response.status < 400 && response.headers.has('Location')) {
+                        var redirectURL = response.headers.get('Location');
+                        resolve(await resolveURL(redirectURL));
+                    } else {
+                        resolve(url);
+                    }
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        }
+
         async function playVideo() {
             var url = document.getElementById('m3u8-url').value;
             var player = videojs('video-player');
 
             try {
-                // Check if the input URL is a shortened URL
-                if (url.startsWith('https://is.gd/')) {
-                    // Resolve the shortened URL to the original URL
-                    var response = await fetch(url, { redirect: 'follow' });
-                    url = response.url;
-                }
-
-                player.src({ type: "application/x-mpegURL", src: url });
+                var originalURL = await resolveURL(url);
+                player.src({ type: "application/x-mpegURL", src: originalURL });
                 player.play();
             } catch (error) {
                 alert('Error loading the video: ' + error.message);
