@@ -1,12 +1,21 @@
 <?php
 if (isset($_GET['url'])) {
     $url = $_GET['url'];
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_exec($ch);
-    $original_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
-    curl_close($ch);
-    echo $original_url;
+
+    // Check if the input URL is a shortened URL
+    if (preg_match('/^https:\/\/(is\.gd|bit\.ly)\//', $url)) {
+        // Resolve the shortened URL to the original URL
+        $response = file_get_contents($url, false, stream_context_create([
+            'http' => [
+                'method' => 'HEAD',
+                'follow_location' => true
+            ]
+        ]));
+        $actualUrl = stream_get_meta_data($http_response_header)['wrapper_data']['Location'];
+    } else {
+        $actualUrl = $url;
+    }
+
+    echo $actualUrl;
 }
 ?>
