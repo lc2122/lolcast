@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>M3U8 Player</title>
+    <title>LOLCAST Player</title>
     <style>
         body { background-color: black; color: white; }
         #video-player {
@@ -17,7 +17,7 @@
     </style>
 </head>
 <body>
-    <input type="text" id="m3u8-url" placeholder="m3u8 URL을 입력하세요">
+    <input type="text" id="url-input" placeholder="URL을 입력하세요">
     <button onclick="playVideo()">재생</button>
     <br>
     <video id="video-player" style="width: 100%; height: 90%;" controls></video>
@@ -26,45 +26,34 @@
     <script>
         var hls;
 
-        function playVideo() {
-            var url = document.getElementById('m3u8-url').value;
+        function parseUrl(url) {
+            const youtubeRegex = /^https?:\/\/(www\.youtube\.com\/live\/|youtu\.be\/)/;
+            const chzzkRegex = /^https?:\/\/chzzk\.naver\.com\/live\//;
+            const twitchRegex = /^https?:\/\/www\.twitch\.tv\//;
+            const kickRegex = /^https?:\/\/kick\.com\//;
+
+            if (url.match(youtubeRegex)) {
+                const videoId = url.split('/').pop().split('?')[0];
+                return `https://lolcast.kr/#/player/youtube/${videoId}`;
+            } else if (url.match(chzzkRegex)) {
+                const streamId = url.split('/').pop();
+                return `https://lolcast.kr/#/player/chzzk/${streamId}`;
+            } else if (url.match(twitchRegex)) {
+                const channelName = url.split('/').pop();
+                return `https://lolcast.kr/#/player/twitch/${channelName}`;
+            } else if (url.match(kickRegex)) {
+                const channelId = url.split('/').pop();
+                return `https://lolcast.kr/#/player/kick/${channelId}`;
+            } else {
+                return url;
+            }
+        }
+
+        async function playVideo() {
+            var url = parseUrl(document.getElementById('url-input').value);
             var player = document.getElementById('video-player');
-            var redirectUrl;
 
-            // YouTube URL 처리
-            if (url.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/) || url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/)) {
-                var youtubeId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/)[1];
-                redirectUrl = 'https://lolcast.kr/#/player/youtube/' + youtubeId;
-                window.location.href = redirectUrl;
-                return;
-            }
-
-            // 치지직 URL 처리
-            if (url.match(/chzzk\.naver\.com\/live\/([a-zA-Z0-9]+)/)) {
-                var chzzkId = url.match(/chzzk\.naver\.com\/live\/([a-zA-Z0-9]+)/)[1];
-                redirectUrl = 'https://lolcast.kr/#/player/chzzk/' + chzzkId;
-                window.location.href = redirectUrl;
-                return;
-            }
-
-            // 트위치 URL 처리
-            if (url.match(/twitch\.tv\/([a-zA-Z0-9_]+)/)) {
-                var twitchUsername = url.match(/twitch\.tv\/([a-zA-Z0-9_]+)/)[1];
-                redirectUrl = 'https://lolcast.kr/#/player/twitch/' + twitchUsername;
-                window.location.href = redirectUrl;
-                return;
-            }
-
-            // Kick URL 처리
-            if (url.match(/kick\.com\/([a-zA-Z0-9]+)/)) {
-                var kickId = url.match(/kick\.com\/([a-zA-Z0-9]+)/)[1];
-                redirectUrl = 'https://lolcast.kr/#/player/kick/' + kickId;
-                window.location.href = redirectUrl;
-                return;
-            }
-
-            // HLS.js 처리
-            if (Hls.isSupported()) {
+            if(Hls.isSupported()) {
                 hls = new Hls();
                 hls.loadSource(url);
                 hls.attachMedia(player);
@@ -73,7 +62,7 @@
                 });
                 hls.on(Hls.Events.ERROR, function(event, data) {
                     if (data.fatal) {
-                        switch (data.type) {
+                        switch(data.type) {
                             case Hls.ErrorTypes.NETWORK_ERROR:
                                 alert("네트워크 오류가 발생했습니다.");
                                 break;
@@ -86,7 +75,8 @@
                         }
                     }
                 });
-            } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+            }
+            else if (player.canPlayType('application/vnd.apple.mpegurl')) {
                 player.src = url;
                 player.addEventListener('loadedmetadata', function() {
                     player.play().catch(e => alert('재생을 시작할 수 없습니다: ' + e.message));
