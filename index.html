@@ -31,9 +31,9 @@
 
             // Check if the input URL is a shortened URL
             if (url.startsWith('https://is.gd/')) {
-                // Resolve the shortened URL to the original URL
-                var response = await fetch(url, { redirect: 'follow' });
-                url = response.url;
+                // Resolve the shortened URL to the original URL using resolve_url.php
+                var response = await fetch('resolve_url.php?url=' + encodeURIComponent(url));
+                url = await response.text();
             }
 
             // Fetch the URL to handle any redirects
