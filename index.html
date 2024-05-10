@@ -2,40 +2,44 @@
 <html>
 <head>
     <title>M3U8 Player</title>
-    <style>
-        body { background-color: black; color: white; }
-    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowplayer/7.2.7/skin/skin.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowplayer/7.2.7/flowplayer.min.js"></script>
 </head>
 <body>
-    <input type="text" id="m3u8-url" placeholder="m3u8 URL or shortened URL">
-    <button onclick="openVideo()">재생</button>
+    <div id="player"></div>
 
     <script>
-        async function resolveURL(url) {
-            return new Promise(async (resolve, reject) => {
-                try {
-                    var response = await fetch('resolve_url.php?url=' + encodeURIComponent(url));
-                    if (response.ok) {
-                        var originalURL = await response.text();
-                        resolve(originalURL);
-                    } else {
-                        reject(new Error('Failed to resolve URL'));
-                    }
-                } catch (error) {
-                    reject(error);
+        // M3U8 URL 입력 필드와 재생 버튼 추가
+        var m3u8Input = document.createElement('input');
+        m3u8Input.type = 'text';
+        m3u8Input.id = 'm3u8-url';
+        m3u8Input.placeholder = 'M3U8 URL';
+
+        var playButton = document.createElement('button');
+        playButton.textContent = '재생';
+        playButton.onclick = playVideo;
+
+        document.body.appendChild(m3u8Input);
+        document.body.appendChild(playButton);
+
+        function playVideo() {
+            var m3u8Url = document.getElementById('m3u8-url').value;
+
+            // Flowplayer 인스턴스 생성
+            var player = flowplayer('#player', {
+                src: m3u8Url,
+                live: true,
+                hlsjs: {
+                    // 복잡한 M3U8 URL 처리를 위한 옵션
+                    manifestLoadingMaxRetry: 2,
+                    manifestLoadingRetryDelay: 1000,
+                    levelLoadingMaxRetry: 2,
+                    levelLoadingRetryDelay: 1000
                 }
             });
-        }
 
-        async function openVideo() {
-            var url = document.getElementById('m3u8-url').value;
-
-            try {
-                var originalURL = await resolveURL(url);
-                window.open(originalURL, '_blank');
-            } catch (error) {
-                alert('Error opening the video: ' + error.message);
-            }
+            // 플레이어 실행
+            player.play();
         }
     </script>
 </body>
