@@ -1,24 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>LOLCAST M3U8 Player</title>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://unpkg.com/popper.js@1.12.3"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="home.css">
-    <script type="text/javascript" src="main.js"></script>
+    <title>Video Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
-    <div class="col-lg-4" id="text-box">
-        <h1 class="page-name">LOLCAST M3U8 Player</h1>
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Paste the direct URL or m3u8 link here" id="m3u8-placeholder">
-            <span class="input-group-btn">
-                <button class="btn btn-primary" type="button" id="play-btn">Play</button>
-            </span>
-        </div>
-    </div>
+    <input type="text" id="m3u8-url" placeholder="Enter m3u8 URL">
+    <button onclick="playVideo()">Play</button>
+    <video id="video-player" controls></video>
+
+    <script>
+        var hls;
+
+        async function playVideo() {
+            var url = document.getElementById('m3u8-url').value;
+            var player = document.getElementById('video-player');
+
+            // Function to determine the final URL after all redirects
+            async function getFinalUrl(url) {
+                var response = await fetch(url, { method: 'HEAD' });
+                return response.url;
+            }
+
+            // Play video function
+            async function playFinalVideo(finalUrl) {
+                if (Hls.isSupported()) {
+                    hls = new Hls();
+                    hls.loadSource(finalUrl);
+                    hls.attachMedia(player);
+                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                        player.play();
+                    });
+                } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+                    player.src = finalUrl;
+                    player.addEventListener('loadedmetadata', function() {
+                        player.play();
+                    });
+                }
+            }
+
+            // Check if the provided URL is a redirect, if yes then get the final URL
+            var finalUrl = await getFinalUrl(url);
+            playFinalVideo(finalUrl);
+        }
+    </script>
 </body>
 </html>
