@@ -16,6 +16,18 @@ if (isset($_GET['url'])) {
         $actualUrl = $url;
     }
 
+    // Handle complex M3U8 URL with query parameters
+    if (strpos($actualUrl, '?') !== false) {
+        $parts = parse_url($actualUrl);
+        parse_str($parts['query'], $query_params);
+
+        // Process the query parameters as needed
+        // For example, you can handle the 'Policy' parameter
+        if (isset($query_params['Policy'])) {
+            $actualUrl = $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . http_build_query($query_params);
+        }
+    }
+
     echo $actualUrl;
 }
 ?>
