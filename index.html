@@ -26,44 +26,41 @@
     <script>
         var hls;
 
-        async function playVideo() {
-            var url = document.getElementById('m3u8-url').value;
-            var player = document.getElementById('video-player');
+async function playVideo() {
+    var url = document.getElementById('m3u8-url').value;
+    var player = document.getElementById('video-player');
 
-            // Check if the input URL is a shortened URL
-            if (url.startsWith('https://is.gd/')) {
-                // Resolve the shortened URL to the original M3U8 URL
-                var response = await fetch(url, { method: 'HEAD', redirect: 'follow' });
-                var actualUrl = response.url;
+    // Check if the input URL is a shortened URL
+    if (url.startsWith('https://is.gd/') || url.startsWith('https://bit.ly/')) {
+        // Resolve the shortened URL to the original M3U8 URL
+        var response = await fetch(url, { method: 'HEAD', redirect: 'follow' });
+        var actualUrl = response.url;
 
-                // Check if the resolved URL is an M3U8 URL
-                if (actualUrl.endsWith('.m3u8')) {
-                    url = actualUrl;
-                } else {
-                    alert('Invalid M3U8 URL');
-                    return;
-                }
-            }
-
-            // Fetch the URL to handle any redirects
-            response = await fetch(url, { method: 'HEAD' });
-            actualUrl = response.url;
-
-            if(Hls.isSupported()) {
-                hls = new Hls();
-                hls.loadSource(actualUrl);
-                hls.attachMedia(player);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    player.play();
-                });
-            }
-            else if (player.canPlayType('application/vnd.apple.mpegurl')) {
-                player.src = actualUrl;
-                player.addEventListener('loadedmetadata', function() {
-                    player.play();
-                });
-            }
+        // Check if the resolved URL is an M3U8 URL
+        if (actualUrl.endsWith('.m3u8')) {
+            url = actualUrl;
+        } else {
+            alert('Invalid M3U8 URL');
+            return;
         }
-    </script>
-</body>
-</html>
+    }
+
+    // Fetch the URL to handle any redirects
+    response = await fetch(url, { method: 'HEAD' });
+    actualUrl = response.url;
+
+    if(Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(actualUrl);
+        hls.attachMedia(player);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            player.play();
+        });
+    }
+    else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+        player.src = actualUrl;
+        player.addEventListener('loadedmetadata', function() {
+            player.play();
+        });
+    }
+}
