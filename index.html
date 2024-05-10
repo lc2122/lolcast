@@ -18,17 +18,15 @@
   <script>
     var player = jwplayer("player");
 
-    function loadVideo() {
+    async function loadVideo() {
       var videoUrl = document.getElementById("videoUrlInput").value;
 
       if (videoUrl.startsWith("https://is.gd/")) {
         // Resolve the shortened URL
-        resolveUrl(videoUrl, function(resolvedUrl) {
-          setupPlayer(resolvedUrl);
-        });
-      } else {
-        setupPlayer(videoUrl);
+        videoUrl = await resolveUrl(videoUrl);
       }
+
+      setupPlayer(videoUrl);
     }
 
     function setupPlayer(videoUrl) {
@@ -41,15 +39,9 @@
       });
     }
 
-    function resolveUrl(shortUrl, callback) {
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", shortUrl, true);
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          callback(xhr.responseURL);
-        }
-      };
-      xhr.send();
+    async function resolveUrl(shortUrl) {
+      const response = await fetch(shortUrl, { redirect: "follow" });
+      return response.url;
     }
   </script>
 </body>
