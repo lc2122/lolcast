@@ -14,7 +14,7 @@
         bottom: 0px;
         left: 0px;
         margin: auto;
-        max-height: 90%;
+        max-height: 80%;
         max-width: 100%;
       }
       #shortened-url-input {
@@ -42,7 +42,7 @@
     <button onclick="playVideo()">재생</button>
     <a href="https://gall.dcinside.com/mgallery/board/lists?id=liz" target="_blank">리즈갤</a>
     <br />
-    <video id="video-player" style="width: 100%; height: 90%;" controls></video>
+    <video id="video-player" style="width: 100%; height: 80%;" controls></video>
 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
@@ -51,25 +51,32 @@
       function copyRedirectedUrl() {
         var url = document.getElementById("shortened-url-input").value;
         if (url.startsWith("http://") || url.startsWith("https://")) {
-          // Use cors-anywhere proxy to bypass same-origin policy
-          var proxyUrl = "https://cors-anywhere.herokuapp.com/" + encodeURIComponent(url);
-          fetch(proxyUrl)
-            .then((response) => response.url)
-            .then((redirectUrl) => {
-              // Copy the redirected URL to the clipboard
-              const tempInput = document.createElement("input");
-              tempInput.style = "position: absolute; left: -1000px; top: -1000px";
-              tempInput.value = redirectUrl;
-              document.body.appendChild(tempInput);
-              tempInput.select();
-              document.execCommand("copy");
-              document.body.removeChild(tempInput);
-              alert("URL 리다이렉트 주소가 복사되었습니다: " + redirectUrl);
-            })
-            .catch((error) => {
-              console.error("Error extracting redirected URL: ", error);
-              alert("URL 리다이렉트 주소 추출에 실패했습니다: " + error.message);
-            });
+          // Send an HTTP request to the URL to extract the redirected URL
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", url, true);
+          xhr.withCredentials = false;
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+              if (xhr.status >= 300 && xhr.status < 400) {
+                var redirectUrl = xhr.getResponseHeader("Location");
+                if (redirectUrl) {
+                  const tempInput = document.createElement("input");
+                  tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+                  tempInput.value = redirectUrl;
+                  document.body.appendChild(tempInput);
+                  tempInput.select();
+                  document.execCommand("copy");
+                  document.body.removeChild(tempInput);
+                  alert("URL 리다이렉트 주소가 복사되었습니다: " + redirectUrl);
+                } else {
+                  alert("리다이렉트된 URL을 찾을 수 없습니다.");
+                }
+              } else {
+                alert("요청에 실패했습니다: " + xhr.status);
+              }
+            }
+          };
+          xhr.send();
         } else {
           alert("유효한 URL을 입력해주세요.");
         }
@@ -79,16 +86,16 @@
         var url = document.getElementById("m3u8-url").value;
         var player = document.getElementById("video-player");
 
-        if(Hls.isSupported()) {
+        if (Hls.isSupported()) {
           hls = new Hls();
           hls.loadSource(url);
           hls.attachMedia(player);
-          hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            player.play().catch(e => alert('재생을 시작할 수 없습니다: ' + e.message));
+          hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            player.play().catch((e) => alert("재생을 시작할 수 없습니다: " + e.message));
           });
-          hls.on(Hls.Events.ERROR, function(event, data) {
+          hls.on(Hls.Events.ERROR, function (event, data) {
             if (data.fatal) {
-              switch(data.type) {
+              switch (data.type) {
                 case Hls.ErrorTypes.NETWORK_ERROR:
                   alert("네트워크 오류가 발생했습니다.");
                   break;
@@ -104,9 +111,7 @@
         } else if (player.canPlayType("application/vnd.apple.mpegurl")) {
           player.src = url;
           player.addEventListener("loadedmetadata", function () {
-            player.play().catch((e) =>
-              alert("재생을 시작할 수 없습니다: " + e.message)
-            );
+            player.play().catch((e) => alert("재생을 시작할 수 없습니다: " + e.message));
           });
         }
       }
