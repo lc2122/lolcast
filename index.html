@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>M3U8 Player</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
         body { background-color: black; color: white; }
         #video-player {
@@ -17,8 +18,8 @@
     </style>
 </head>
 <body>
-    <input type="text" id="m3u8-url" placeholder="m3u8 URL을 입력하세요">
-    <button onclick="playVideo()">재생</button> <a href="https://gall.dcinside.com/mgallery/board/lists?id=liz" target="_blank">리즈갤</a>
+    <input type="text" id="short-url" placeholder="단축 URL을 입력하세요">
+    <button onclick="getRedirectUrl()">주소 복사 및 재생</button> <a href="https://gall.dcinside.com/mgallery/board/lists?id=liz" target="_blank">리즈갤</a>
     <br>
     <video id="video-player" style="width: 100%; height: 90%;" controls></video>
 
@@ -26,8 +27,36 @@
     <script>
         var hls;
 
+        function getRedirectUrl() {
+            const shortUrl = document.getElementById('short-url').value;
+            axios.get(shortUrl, { maxRedirects: 0 })
+                .then(response => {
+                    const redirectUrl = response.headers.location;
+                    if (redirectUrl) {
+                        copyToClipboard(redirectUrl);
+                        document.getElementById('short-url').value = redirectUrl;
+                        playVideo();
+                    } else {
+                        alert('리다이렉트되는 주소를 찾을 수 없습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('오류가 발생했습니다.');
+                });
+        }
+
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+        }
+
         async function playVideo() {
-            var url = document.getElementById('m3u8-url').value;
+            var url = document.getElementById('short-url').value;
             var player = document.getElementById('video-player');
 
             if(Hls.isSupported()) {
