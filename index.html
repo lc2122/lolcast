@@ -5,14 +5,19 @@
 </head>
 <body>
     <video id="videoPlayer" controls></video>
-    <input type="text" id="urlInput" placeholder="단축 URL을 입력하세요">
+    <input type="text" id="urlInput" placeholder="단1축 URL을 입력하세요">
     <button onclick="playVideo()">재생</button>
 
     <script>
-        function playVideo() {
+        async function playVideo() {
             var video = document.getElementById('videoPlayer');
             var url = document.getElementById('urlInput').value;
-            video.src = url;
+
+            // Fetch the actual URL from the shortened URL
+            const response = await fetch(url, { method: 'HEAD' });
+            const actualUrl = response.url;
+
+            video.src = actualUrl;
             video.load();
             video.play();
         }
