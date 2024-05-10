@@ -1,64 +1,61 @@
+hls.js 기반 코드에서 단축 URL을 처리하기 위해 코드를 보완하려면 다음과 같이 수정할 수 있습니다:
+
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>M3U8 Player</title>
-    <script src="https://content.jwplatform.com/libraries/IDzF62Zm.js"></script>
     <style>
-        body { background-color: black; color: white; }
-        #player { width: 100%; height: 500px; }
+        #video-player {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            left: 0px;
+            margin: auto;
+            max-height: 95%;
+            max-width: 100%;
+        }
     </style>
 </head>
 <body>
-    <input type="text" id="m3u8-url" placeholder="M3U8 URL or Shortened URL">
+    <input type="text" id="m3u8-url" placeholder="m3u8 URL 또는 단축 URL을 입력하세요">
     <button onclick="playVideo()">재생</button>
-    <div id="player"></div>
+    <br>
+    <video id="video-player" style="width: 100%; height: 95%;" controls></video>
 
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
-        async function resolveShortUrl(url) {
-            try {
-                const response = await fetch(`resolve_url.php?url=${encodeURIComponent(url)}`);
-                if (response.ok) {
-                    return await response.text();
-                } else {
-                    throw new Error('Failed to resolve shortened URL');
-                }
-            } catch (error) {
-                console.error('Error resolving URL:', error);
-                throw error;
-            }
-        }
+        var hls;
 
         async function playVideo() {
-            const url = document.getElementById('m3u8-url').value;
+            var url = document.getElementById('m3u8-url').value;
+            var player = document.getElementById('video-player');
 
-            try {
-                let m3u8Url;
-                if (url.startsWith('https://is.gd/') || url.startsWith('https://bit.ly/')) {
-                    m3u8Url = await resolveShortUrl(url);
-                } else {
-                    m3u8Url = url;
-                }
+            // Check if the input URL is a shortened URL
+            if (url.startsWith('https://is.gd/')) {
+                // Resolve the shortened URL to the original URL
+                var response = await fetch(url, { redirect: 'follow' });
+                url = response.url;
+            }
 
-                const player = jwplayer('player').setup({
-                    file: m3u8Url,
-                    type: 'hls',
-                    width: '100%',
-                    height: '100%',
-                    aspectratio: '16:9',
-                    autostart: true,
-                    hlsjsdefault: true,
-                    hlsjs: {
-                        maxMaxBufferLength: 60,
-                        maxBufferSize: 60 * 1000 * 1000,
-                        maxBufferHole: 1,
-                        liveSyncDuration: 30,
-                        liveMaxLatencyDuration: 120,
-                        enableWorker: true,
-                        enableSoftwareAES: true
-                    }
+            // Fetch the URL to handle any redirects
+            var response = await fetch(url, { method: 'HEAD' });
+            var actualUrl = response.url;
+
+            if(Hls.isSupported()) {
+                hls = new Hls();
+                hls.loadSource(actualUrl);
+                hls.attachMedia(player);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    player.play();
                 });
-            } catch (error) {
-                alert(`Error playing video: ${error.message}`);
+            }
+            else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+                player.src = actualUrl;
+                player.addEventListener('loadedmetadata', function() {
+                    player.play();
+                });
             }
         }
     </script>
