@@ -19,7 +19,7 @@
     </style>
 </head>
 <body>
-    <input type="text" id="m3u8-url" placeholder="m3u8 URL or shortened URL">
+    <input type="text" id="m3u8-url" placeholder="m31u8 URL or shortened URL">
     <button onclick="playVideo()">재생</button>
     <br>
     <video id="video-player" class="video-js vjs-default-skin" controls preload="auto" data-setup='{}'>
@@ -27,15 +27,15 @@
     </video>
 
     <script>
-        async function resolveURL(url) {
+        async function getOriginalURL(url) {
             return new Promise(async (resolve, reject) => {
                 try {
-                    var response = await fetch(url, { redirect: 'manual' });
-                    if (response.status >= 300 && response.status < 400 && response.headers.has('Location')) {
-                        var redirectURL = response.headers.get('Location');
-                        resolve(await resolveURL(redirectURL));
+                    var response = await fetch('resolve_url.php?url=' + encodeURIComponent(url));
+                    if (response.ok) {
+                        var originalURL = await response.text();
+                        resolve(originalURL);
                     } else {
-                        resolve(response.url);
+                        reject(new Error('Failed to resolve URL'));
                     }
                 } catch (error) {
                     reject(error);
@@ -48,7 +48,7 @@
             var player = videojs('video-player');
 
             try {
-                var originalURL = await resolveURL(url);
+                var originalURL = await getOriginalURL(url);
                 player.src({ type: "application/x-mpegURL", src: originalURL });
                 player.play();
             } catch (error) {
