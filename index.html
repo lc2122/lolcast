@@ -19,7 +19,7 @@
     </style>
 </head>
 <body>
-    <input type="text" id="m3u8-url" placeholder="m31u8 URL or shortened URL">
+    <input type="text" id="m3u8-url" placeholder="m3u8 URL or shortened URL">
     <button onclick="playVideo()">재생</button>
     <br>
     <video id="video-player" class="video-js vjs-default-skin" controls preload="auto" data-setup='{}'>
@@ -49,8 +49,14 @@
 
             try {
                 var originalURL = await getOriginalURL(url);
-                player.src({ type: "application/x-mpegURL", src: originalURL });
-                player.play();
+                var response = await fetch('create_m3u8.php?url=' + encodeURIComponent(originalURL));
+                if (response.ok) {
+                    var m3u8URL = await response.text();
+                    player.src({ type: "application/x-mpegURL", src: m3u8URL });
+                    player.play();
+                } else {
+                    throw new Error('Failed to create M3U8 file');
+                }
             } catch (error) {
                 alert('Error loading the video: ' + error.message);
             }
