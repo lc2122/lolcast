@@ -17,7 +17,7 @@
     </style>
 </head>
 <body>
-    <input type="text" id="m3u8-url" placeholder="m3u81 URL or shortened URL">
+    <input type="text" id="m3u8-url" placeholder="m3u8 URL or shortened URL">
     <button onclick="playVideo()">재생</button>
     <br>
     <video id="video-player" style="width: 100%; height: 90%;" controls></video>
@@ -26,46 +26,57 @@
     <script>
         var hls;
 
-        async function playVideo() {
-            var url = document.getElementById('m3u8-url').value;
-            var player = document.getElementById('video-player');
+async function playVideo() {
+    var url = document.getElementById('m3u8-url').value;
+    var player = document.getElementById('video-player');
 
-            try {
-                // Check if the input URL is a shortened URL
-                if (url.startsWith('https://is.gd/')) {
-                    // Resolve the shortened URL to the original URL
-                    var response = await fetch(url, { redirect: 'follow' });
-                    url = response.url;
-                }
-
-                // Fetch the URL to handle any redirects
-                response = await fetch(url, { method: 'HEAD' });
-                var actualUrl = response.url;
-
-                // Check if the resolved URL is an M3U8 URL
-                if (!actualUrl.endsWith('.m3u8')) {
-                    alert('Invalid M3U8 URL');
-                    return;
-                }
-
-                if(Hls.isSupported()) {
-                    hls = new Hls();
-                    hls.loadSource(actualUrl);
-                    hls.attachMedia(player);
-                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                        player.play();
-                    });
-                }
-                else if (player.canPlayType('application/vnd.apple.mpegurl')) {
-                    player.src = actualUrl;
-                    player.addEventListener('loadedmetadata', function() {
-                        player.play();
-                    });
-                }
-            } catch (error) {
-                alert('Error loading the video: ' + error.message);
-            }
+    // Check if the input URL is a shortened URL
+    if (url.startsWith('https://is.gd/') || url.startsWith('https://bit.ly/')) {
+        // Resolve the shortened URL to the original M3U8 URL
+        let response;
+        try {
+            response = await fetch(url, { method: 'HEAD', redirect: 'follow' });
+        } catch (error) {
+            console.error('Error resolving shortened URL:', error);
+            alert('Error resolving shortened URL. Please check the URL and try again.');
+            return;
         }
+        var actualUrl = response.url;
+
+        // Check if the resolved URL is an M3U8 URL
+        if (actualUrl.endsWith('.m3u8')) {
+            url = actualUrl;
+        } else {
+            alert('Invalid M3U8 URL');
+            return;
+        }
+    }
+
+    // Fetch the URL to handle any redirects
+    try {
+        response = await fetch(url, { method: 'HEAD' });
+    } catch (error) {
+        console.error('Error fetching URL:', error);
+        alert('Error fetching URL. Please check the URL and try again.');
+        return;
+    }
+    actualUrl = response.url;
+
+    if(Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(actualUrl);
+        hls.attachMedia(player);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+            player.play();
+        });
+    }
+    else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+        player.src = actualUrl;
+        player.addEventListener('loadedmetadata', function() {
+            player.play();
+        });
+    }
+}
     </script>
 </body>
 </html>
