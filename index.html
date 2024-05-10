@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>HLS Streaming Example</title>
+    <title>Streaming Player</title>
 </head>
 <body>
-  <video id="videoPlayer" controls></video>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script src="video.js"></script>
+    <input type="text" id="inputUrl" placeholder="Enter the shortened URL of the m3u8 file">
+    <button onclick="playStream()">Play</button>
+    <video id="videoPlayer" controls></video>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="player.js"></script>
 </body>
-</html>
