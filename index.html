@@ -6,7 +6,9 @@
 <body>
     <input type="text" id="inputUrl" placeholder="Enter the shortened URL of the m3u8 file">
     <button onclick="playStream()">Play</button>
-    <video id="videoPlayer" controls></video>
+    <video controls>
+  <source src="https://ch25-livecdn.spotvnow.co.kr/ch25/spt25_pc.smil/playlist.m3u8?Policy=eyJTdGF0ZW1lbnQiOiBbeyJSZXNvdXJjZSI6Imh0dHBzOi8vY2gyNS1saXZlY2RuLnNwb3R2bm93LmNvLmtyL2NoMjUvc3B0MjVfcGMuc21pbC8qIiwiQ29uZGl0aW9uIjp7IkRhdGVMZXNzVGhhbiI6eyJBV1M6RXBvY2hUaW1lIjoxNzE1MzkxNDgwfX19XX0_&Signature=YDtKRfHphRU6BwsnhDq3Ymna3pfh~mjArhVkbyJlaFjlpW2clsdshas8~pxEeB2jCuQ5kt93XX9ST6AY-ZuN8JiBorToNAQVTSVtxLG0PqZhHuvVz9mcAHt0GQEQA2~hxHslttpmg31vNp~JBDB6Ah~zmqyPpqkHQfOXm4dTCOL0V1QT7U7Nc7weu51VMNPMk64Sl9mW2lxK5dXt~eGelUObtRER8tV~OCh8O7eIPEc9LRLuP4I~j4e1m0osn1a2rECiWXAws0btETAMPH1NHud7~bASrerg1mNvcsfhy0GwtFiHTYq9ojthyO7i6SF9GrxdCNSB0LoSoGYQKbf2pA__&Key-Pair-Id=APKAI2M6I5EDDXED7H5Q" type="application/x-mpegURL">
+</video>
 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="player.js"></script>
