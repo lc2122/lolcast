@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 <title>Video Player</title> 
 <style> 
-    #video-container { 
+    #video-container     { 
         margin-top: 15px; 
     } 
     video {
@@ -16,41 +16,39 @@
         width: 100%; 
         height: 93vh; 
     } 
-</style>
-</head> 
-<body>
+    </style>
+  </head> 
+  <body>
     <input type="text" id="video-url" placeholder="Enter video URL"> 
     <button onclick="playVideo()">Play</button>
-    <a href="https://gall.dcinside.com/mgallery/board/lists?id=liz" >리즈갤</a>
     <div id="video-container"> </div> 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
+ 
 <script>
     <iframe src="external-site-url" width="100%" height="93vh" sandbox="allow-same-origin allow-scripts"></iframe>
-    function playVideo() { 
-        const videoUrl = document.getElementById('video-url').value;
-        if (videoUrl.includes('.m3u8')) { 
-            const video = document.createElement('video'); 
-            video.controls = true; 
-            video.autoplay = true; 
-            const hls = new Hls(); 
-            hls.loadSource(videoUrl); 
-            hls.attachMedia(video); 
-            hls.on(Hls.Events.MANIFEST_PARSED, function() { 
-                video.play(); 
-            }); 
-            document.getElementById('video-container').innerHTML = ''; 
-            document.getElementById('video-container').appendChild(video); 
-        } else { 
-            const iframe = document.createElement('iframe'); 
-            iframe.src = videoUrl; 
-            iframe.width = '100%'; 
-            iframe.height = '93vh'; 
-            iframe.setAttribute('target', '_self'); // 현재 창에서 열리도록 설정
-            document.getElementById('video-container').innerHTML = ''; 
-            document.getElementById('video-container').appendChild(iframe); 
-        } 
+  function playVideo() { 
+    const videoUrl = document.getElementById('video-url').value;
+    if (videoUrl.includes('.m3u8')) { 
+      const video = document.createElement('video'); 
+      video.controls = true; 
+      video.autoplay = true; 
+      const hls = new Hls(); 
+      hls.loadSource(videoUrl); 
+      hls.attachMedia(video); 
+      hls.on(Hls.Events.MANIFEST_PARSED, function() { 
+        video.play(); 
+      }); 
+      document.getElementById('video-container').innerHTML = ''; 
+      document.getElementById('video-container').appendChild(video); 
+    } else { 
+      const iframe = document.createElement('iframe'); 
+      iframe.src = videoUrl; 
+      iframe.width = '100%'; 
+      iframe.height = '93vh'; 
+      document.getElementById('video-container').innerHTML = ''; 
+      document.getElementById('video-container').appendChild(iframe); 
     } 
+  } 
 </script> 
 </body> 
-</html> 
+</html>
