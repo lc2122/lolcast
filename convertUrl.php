@@ -11,5 +11,5 @@ if ($result && $result->ok) {
 } 
 else {
   echo "Error occurred: " . ($result ? $result->error : "Unknown error"); 
-} 
+}  
 ?>
