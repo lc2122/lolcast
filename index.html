@@ -28,12 +28,13 @@
 <script>
     function playVideo() { 
         const videoUrl = document.getElementById('video-url').value;
-        if (videoUrl.includes('.m3u8')) { 
+        const convertedUrl = convertUrl(videoUrl);
+        if (convertedUrl.includes('.m3u8')) { 
             const video = document.createElement('video'); 
             video.controls = true; 
             video.autoplay = true; 
             const hls = new Hls();
-            hls.loadSource(videoUrl); 
+            hls.loadSource(convertedUrl); 
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, function() { 
                 video.play(); 
@@ -42,12 +43,23 @@
             document.getElementById('video-container').appendChild(video);
         } else {
             const iframe = document.createElement('iframe');
-            iframe.src = videoUrl; 
+            iframe.src = convertedUrl; 
             iframe.width = '100%'; 
             iframe.height = '93vh'; 
             document.getElementById('video-container').innerHTML = '';
             document.getElementById('video-container').appendChild(iframe);
         } 
+    }
+
+    function convertUrl(videoUrl) {
+        // Use AJAX to send videoUrl to converturl.php for processing
+        // Example:
+        // const xhttp = new XMLHttpRequest();
+        // xhttp.open("GET", "converturl.php?url=" + videoUrl, false);
+        // xhttp.send();
+        // return xhttp.responseText;
+        // This is just an example, actual implementation will depend on your server-side setup
+        return videoUrl;
     }
 </script>
 </body> 
