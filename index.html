@@ -37,8 +37,8 @@
             hls.loadSource(convertedUrl); 
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, function() { 
-                video.play(); 
-            }); 
+            video.play(); 
+        });
             document.getElementById('video-container').innerHTML = '';
             document.getElementById('video-container').appendChild(video);
         } 
