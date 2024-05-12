@@ -14,7 +14,7 @@
     } 
     iframe { 
         width: 100%; 
-        height: 95%; 
+        height: 95vh; 
     } 
     </style>
   </head> 
@@ -43,7 +43,7 @@
       const iframe = document.createElement('iframe'); 
       iframe.src = videoUrl; 
       iframe.width = '100%'; 
-      iframe.height = '95%'; 
+      iframe.height = '95vh'; 
       document.getElementById('video-container').innerHTML = ''; 
       document.getElementById('video-container').appendChild(iframe); 
     } 
