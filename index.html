@@ -3,49 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Video Player</title>
-<style>
-#video-container {
-margin-top: 15px;
-}
-video {
-width: 100%;
-height: 90vh; /* 90% of the viewport height */
-}
-iframe {
-width: 100%;
-height: 93vh;
-}
-</style>
+<title>단축 URL 영상 재생</title>
 </head>
 <body>
-<input type="text" id="video-url" placeholder="Enter video URL">
-<button onclick="playVideo()">Play</button>
-<div id="video-container"></div>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<input type="text" id="shortUrl" placeholder="단축 URL을 입력하세요">
+<button onclick="playOriginalUrl()">재생</button>
+<video id="videoPlayer" controls></video>
+
 <script>
-function playVideo() {
-const videoUrl = encodeURIComponent(document.getElementById('video-url').value);
-if (videoUrl.includes('.m3u8')) {
-const video = document.createElement('video');
-video.controls = true;
-video.autoplay = true;
-const hls = new Hls();
-hls.loadSource(decodeURIComponent(videoUrl));
-hls.attachMedia(video);
-hls.on(Hls.Events.MANIFEST_PARSED, function() {
-video.play();
-});
-document.getElementById('video-container').innerHTML = '';
-document.getElementById('video-container').appendChild(video);
-} else {
-const iframe = document.createElement('iframe');
-iframe.src = decodeURIComponent(videoUrl);
-iframe.width = '100%';
-iframe.height = '93vh';
-document.getElementById('video-container').innerHTML = '';
-document.getElementById('video-container').appendChild(iframe);
-}
+function playOriginalUrl() {
+  var shortUrl = document.getElementById("shortUrl").value;
+  
+  // AJAX 요청을 통해 서버에 단축 URL을 보내어 원래 URL을 받아옵니다.
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var originalUrl = xhr.responseText;
+      var videoPlayer = document.getElementById("videoPlayer");
+      
+      // HLS 재생 확장 플레이어를 사용하여 영상을 재생합니다.
+      videoPlayer.src = originalUrl;
+      videoPlayer.play();
+    }
+  };
+  
+  xhr.open("GET", "convertUrl.php?url=" + shortUrl);
+  xhr.send();
 }
 </script>
 </body>
