@@ -7,16 +7,15 @@
 <title>Video Player</title>
 </head>
 <body>
-  <iframe id="frameA" width="560" height="315" src="about:blank"></iframe>
-  <iframe id="frameB" width="560" height="315" src="about:blank"></iframe>
 
   <input type="text" id="videoUrl" placeholder="Enter video URL">
   <button onclick="playVideo()">Play Video</button>
-
+  <iframe id="frameA" src="frame-a.html" width="80%" height="100%"></iframe>
+  
   <script>
     function playVideo() {
       var videoUrl = document.getElementById('videoUrl').value;
-      var frameB = document.getElementById('frameB');
+      var frameB = document.getElementById('frameA');
       frameB.src = videoUrl;
     }
   </script>
