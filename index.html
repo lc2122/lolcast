@@ -2,23 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Frame Example</title>
+<title>Video Player</title>
 </head>
 <body>
-<iframe id="frameA" src="frame-a.html" width="10%" height="100%"></iframe>
-<iframe id="frameB" src="frame-b.html" width="90%" height="100%"></iframe>
+  <iframe id="frameA" width="560" height="315" src="about:blank"></iframe>
+  <iframe id="frameB" width="560" height="315" src="about:blank"></iframe>
 
-<script>
-document.getElementById('frameA').contentWindow.document.body.innerHTML = `
   <input type="text" id="videoUrl" placeholder="Enter video URL">
   <button onclick="playVideo()">Play Video</button>
-`;
 
-function playVideo() {
-  const videoUrl = document.getElementById('videoUrl').value;
-  document.getElementById('frameB').contentWindow.location.replace(videoUrl);
-}
-</script>
+  <script>
+    function playVideo() {
+      var videoUrl = document.getElementById('videoUrl').value;
+      var frameB = document.getElementById('frameB');
+      frameB.src = videoUrl;
+    }
+  </script>
 </body>
 </html>
