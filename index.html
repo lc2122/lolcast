@@ -41,25 +41,24 @@
             }); 
             document.getElementById('video-container').innerHTML = '';
             document.getElementById('video-container').appendChild(video);
-        } else {
-            const iframe = document.createElement('iframe');
-            iframe.src = convertedUrl; 
-            iframe.width = '100%'; 
-            iframe.height = '93vh'; 
-            document.getElementById('video-container').innerHTML = '';
-            document.getElementById('video-container').appendChild(iframe);
         } 
-    }
-
-    function convertUrl(videoUrl) {
-        // Use AJAX to send videoUrl to converturl.php for processing
-        // Example:
-        // const xhttp = new XMLHttpRequest();
-        // xhttp.open("GET", "converturl.php?url=" + videoUrl, false);
-        // xhttp.send();
-        // return xhttp.responseText;
-        // This is just an example, actual implementation will depend on your server-side setup
-        return videoUrl;
+         else if (videoUrl.includes('is.gd')) { 
+             const newUrl = videoUrl.replace('is.gd', 'is.gd-');
+             // Appending '-' to the url 
+             const iframe = document.createElement('iframe');
+             iframe.src = newUrl; iframe.width = '100%';
+             iframe.height = '93vh';
+             document.getElementById('video-container').innerHTML = ''; 
+             document.getElementById('video-container').appendChild(iframe);
+         }       
+         else { 
+             const iframe = document.createElement('iframe');
+             iframe.src = videoUrl; 
+             iframe.width = '100%';
+             iframe.height = '93vh';
+             document.getElementById('video-container').innerHTML = '';
+             document.getElementById('video-container').appendChild(iframe);
+         }
     }
 </script>
 </body> 
