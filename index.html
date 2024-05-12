@@ -46,7 +46,8 @@
              const newUrl = videoUrl.replace('is.gd', 'is.gd-');
              // Appending '-' to the url 
              const iframe = document.createElement('iframe');
-             iframe.src = newUrl; iframe.width = '100%';
+             iframe.src = newUrl; 
+             iframe.width = '100%';
              iframe.height = '93vh';
              document.getElementById('video-container').innerHTML = ''; 
              document.getElementById('video-container').appendChild(iframe);
