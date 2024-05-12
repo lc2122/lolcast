@@ -39,14 +39,17 @@ function playVideo() {
     }); 
     document.getElementById('video-container').innerHTML = ''; 
     document.getElementById('video-container').appendChild(video); 
-  } else { 
+  } else if (videoUrl.includes('youtube.com')) { 
+    const videoId = videoUrl.split('v=')[1];
     const iframe = document.createElement('iframe'); 
-    iframe.src = videoUrl; 
+    iframe.src = `https://www.youtube.com/embed/${videoId}`; 
     iframe.width = '100%'; 
     iframe.height = '93vh'; 
     document.getElementById('video-container').innerHTML = ''; 
     document.getElementById('video-container').appendChild(iframe); 
-  } 
+  } else { 
+    alert('Invalid video URL');
+  }
 } 
  </script>
 </body> 
