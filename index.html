@@ -1,4 +1,13 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>단축 URL 영상 재생</title> <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script> </head> <body> <input type="text" id="shortUrl" placeholder="단축 URL을 입력하세요"> <button onclick="playOriginalUrl()">재생</button> <video id="videoPlayer" controls></video>
+<!DOCTYPE html> <html lang="en"> 
+ <head> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>단축 URL 영상 재생</title> <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+ </head>
+ <body> 
+  <input type="text" id="shortUrl" placeholder="단축 URL을 입력하세요">
+  <button onclick="playOriginalUrl()">재생</button>
+  <video id="videoPlayer" controls></video>
  
 <script>
     function playOriginalUrl() {
@@ -10,18 +19,18 @@
                 var originalUrl = xhr.responseText;
                 var videoPlayer = document.getElementById("videoPlayer");
                 if (Hls.isSupported()) {
-                    var hls = new Hls();
-                    hls.loadSource(originalUrl);
-                    hls.attachMedia(videoPlayer);
-                    hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                        videoPlayer.play();
-                    });
-                } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-                    videoPlayer.src = originalUrl;
-                    videoPlayer.addEventListener('loadedmetadata', function () {
-                        videoPlayer.play();
-                    });
-                }
+    var hls = new Hls();
+    hls.loadSource(originalUrl);
+    hls.attachMedia(videoPlayer);
+    hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        videoPlayer.play();
+    });
+} else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+    videoPlayer.src = originalUrl;
+    videoPlayer.addEventListener('loadedmetadata', function () {
+        videoPlayer.play();
+    });
+}
             }
         };
         xhr.open("GET", "convertUrl.php?url=" + shortUrl);
