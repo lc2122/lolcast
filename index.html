@@ -6,6 +6,8 @@
         <title>Video Player</title> 
         
  <style>
+     body { background-color: black; color: white; }
+
      #video-container {
          margin-top: 15px; 
      } 
@@ -28,15 +30,15 @@
         
 <script>
     function openInVideoPlayer(event) { 
-  event.preventDefault(); 
-  const videoUrl = event.target.getAttribute('href'); 
-  const iframe = document.createElement('iframe'); 
-  iframe.src = videoUrl; 
-  iframe.width = '100%'; 
-  iframe.height = '93vh'; 
-  document.getElementById('video-container').innerHTML = ''; 
-  document.getElementById('video-container').appendChild(iframe); 
-}
+             event.preventDefault(); 
+    const videoUrl = event.target.getAttribute('href'); 
+    const iframe = document.createElement('iframe'); 
+            iframe.src = videoUrl; 
+            iframe.width = '100%'; 
+            iframe.height = '93vh'; 
+            document.getElementById('video-container').innerHTML = ''; 
+            document.getElementById('video-container').appendChild(iframe); 
+        }
     function playVideo() { 
         const videoUrl = document.getElementById('video-url').value;
         if (videoUrl.includes('.m3u8')) { 
