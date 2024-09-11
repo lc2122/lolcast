@@ -1,74 +1,98 @@
-<!DOCTYPE html> 
-<html lang="en">
-    <head> 
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Video Player</title> 
-        
-        <style>
-            #video-container {
-                margin-top: 10px; 
-            } 
-            video {
-                width: 100%; 
-                height: 90vh; /* 90% of the viewport height */
-            } 
-            iframe {
-                width: 100%;
-                height: 93vh; 
-            }
-        </style> 
-    </head> 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HLS Player</title>
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.7.2/plyr.css" />
+  <style>
+    .container {
+      margin: 100px auto;
+      width: 70%;
+    }
+    video {
+      width: 100%;
+    }
+  </style>
+</head>
 <body>
-        <input type="text" id="video-url" placeholder="Enter video URL"> 
-        <button onclick="playVideo()">Play</button>
-        <a href="https://gall.dcinside.com/mgallery/board/lists?id=liz" target="_blank" onclick="openInVideoPlayer(event)">리즈갤</a>
-        <br> is.gd/단축주소 뒤에 -를 넣고 입력시 나온 m3u8 주소 입력 ex)https://is.gd/lolcast -> https://is.gd/lolcast- 입력
-        <div id="video-container"> </div> 
-        <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script> 
-        
-<script>
-    function openInVideoPlayer(event) { 
-        event.preventDefault(); 
-        const videoUrl = event.target.getAttribute('href'); 
-        const iframe = document.createElement('iframe'); 
-        iframe.src = videoUrl; 
-        iframe.width = '100%'; 
-        iframe.height = '93vh'; 
-        document.getElementById('video-container').innerHTML = ''; 
-        document.getElementById('video-container').appendChild(iframe); 
-    }
+  <div class="container">
+    <label for="m3u8Url">m3u8 URL:</label>
+    <input type="text" id="m3u8Url" value="https://example.com/playlist.m3u8">
+    <button id="loadBtn">Load</button>
 
-    function playVideo() { 
-        let videoUrl = document.getElementById('video-url').value;
-        if (videoUrl.includes('.m3u8')) { 
-            const proxyUrl = `http://localhost:3000/proxy?url=${encodeURIComponent(videoUrl)}`;
-            const video = document.createElement('video'); 
-            video.controls = true; 
-            video.autoplay = true; 
-            const hls = new Hls();
-            hls.loadSource(proxyUrl); 
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, function() { 
-                video.play(); 
-            }); 
-            document.getElementById('video-container').innerHTML = '';
-            document.getElementById('video-container').appendChild(video);
-        } else {
-            const iframe = document.createElement('iframe');
-            iframe.src = videoUrl; 
-            iframe.width = '100%'; 
-            iframe.height = '93vh'; 
-            document.getElementById('video-container').innerHTML = '';
-            document.getElementById('video-container').appendChild(iframe);
-        } 
-    }
+    <video controls crossorigin playsinline poster="https://bitdash-a.akamaihd.net/content/sintel/poster.png"></video>
+  </div>
 
-    document.getElementById('video-url').addEventListener('keyup', function(event) {
-        if (event.key === 'Enter') {
-            playVideo();
+  <script src="https://cdn.plyr.io/3.7.2/plyr.polyfilled.min.js"></script>
+  <script src="https://cdn.rawgit.com/video-dev/hls.js/18bb552/dist/hls.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const video = document.querySelector('video');
+      const m3u8UrlInput = document.getElementById('m3u8Url');
+      const loadBtn = document.getElementById('loadBtn');
+      let player;
+
+      const defaultOptions = {};
+
+      loadBtn.addEventListener('click', () => {
+        const source = m3u8UrlInput.value;
+
+        if (player) {
+          player.destroy();
         }
+
+        if (!Hls.isSupported()) {
+          video.src = source;
+          player = new Plyr(video, defaultOptions);
+        } else {
+          const hls = new Hls();
+          hls.loadSource(source);
+
+          hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
+            const availableQualities = hls.levels.map((l) => l.height);
+            availableQualities.unshift(0); // prepend 0 to quality array
+
+            defaultOptions.quality = {
+              default: 0, // Default - AUTO
+              options: availableQualities,
+              forced: true,
+              onChange: (e) => updateQuality(e),
+            };
+            defaultOptions.i18n = {
+              qualityLabel: {
+                0: 'Auto',
+              },
+            };
+
+            hls.on(Hls.Events.LEVEL_SWITCHED, (event, data) => {
+              const span = document.querySelector(".plyr__menu__container [data-plyr='quality'][value='0'] span");
+              if (hls.autoLevelEnabled) {
+                span.innerHTML = `AUTO (${hls.levels[data.level].height}p)`;
+              } else {
+                span.innerHTML = 'AUTO';
+              }
+            });
+
+            player = new Plyr(video, defaultOptions);
+          });
+
+          hls.attachMedia(video);
+          window.hls = hls;
+        }
+      });
+
+      function updateQuality(newQuality) {
+        if (newQuality === 0) {
+          window.hls.currentLevel = -1; // Enable AUTO quality if option.value = 0
+        } else {
+          window.hls.levels.forEach((level, levelIndex) => {
+            if (level.height === newQuality) {
+              console.log(`Found quality match with ${newQuality}`);
+              window.hls.currentLevel = levelIndex;
+            }
+          });
+        }
+      }
     });
-</script>
-</body> 
+  </script>
+</body>
 </html>
