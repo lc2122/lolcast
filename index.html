@@ -10,16 +10,26 @@
     <div class="container">
         <!-- 상단: 영상 표시 -->
         <div class="top-section">
-            <iframe id="video-iframe" src=""></iframe>
+            <iframe
+                id="video-iframe"
+                src=""
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+            ></iframe>
         </div>
         <!-- 중간: 버튼 메뉴 -->
         <div class="menu-section">
-            <button id="youtube-btn" aria-label="Load YouTube Live Stream">유튜브</button>
-            <button id="forest-btn" aria-label="Load Forest Stream">숲</button>
+            <button id="youtube-btn">유튜브</button>
+            <button id="forest-btn">숲</button>
         </div>
         <!-- 하단: 채팅창 -->
         <div class="bottom-section">
-            <iframe id="chat-iframe" src="https://insagirl-toto.appspot.com/chatting/lgic/"></iframe>
+            <iframe
+                id="chat-iframe"
+                src="https://insagirl-toto.appspot.com/chatting/lgic/*"
+                frameborder="0"
+            ></iframe>
         </div>
     </div>
     <script src="script.js"></script>
