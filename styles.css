@@ -14,20 +14,6 @@ body {
     height: 100%;
 }
 
-/* Top section styles */
-.top-section {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#video-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
 /* Menu section styles */
 .menu-section {
     display: flex;
@@ -55,6 +41,20 @@ body {
 
 #flow-btn {
     background-color: #00FFA3;
+}
+
+/* Top section styles */
+.top-section {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#video-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
 }
 
 /* Bottom section styles */
