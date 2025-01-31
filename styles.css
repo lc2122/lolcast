@@ -3,18 +3,18 @@ body, html {
     padding: 0;
     height: 100%;
     font-family: Arial, sans-serif;
-    overflow: hidden; /* 화면 스크롤 방지 */
+    overflow: hidden; /* Prevent scrolling */
 }
 
 .container {
     display: flex;
     flex-direction: column;
-    height: 100vh; /* 전체 화면 높이 */
+    height: 100vh; /* Full screen height */
 }
 
-/* 상단: 영상 표시 */
+/* Top section: Video display */
 .top-section {
-    flex: 1; /* 남은 공간의 1/2 */
+    flex: 2; /* Allocate more space */
     background-color: #000;
 }
 
@@ -24,7 +24,7 @@ body, html {
     border: none;
 }
 
-/* 중간: 버튼 메뉴 */
+/* Middle section: Button menu */
 .menu-section {
     display: flex;
     justify-content: space-around;
@@ -50,9 +50,9 @@ body, html {
     color: white;
 }
 
-/* 하단: 채팅창 */
+/* Bottom section: Chat window */
 .bottom-section {
-    flex: 1; /* 남은 공간의 1/2 */
+    flex: 1; /* Allocate less space */
     background-color: #e0e0e0;
 }
 
