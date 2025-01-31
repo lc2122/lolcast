@@ -14,7 +14,7 @@ body, html {
 
 /* Top section: Video display */
 .top-section {
-    flex: 35; /* Allocate 35% of the space */
+    flex: 40; /* Allocate 35% of the space */
     background-color: #000;
 }
 
@@ -50,9 +50,13 @@ body, html {
     color: white;
 }
 
+#flow-btn {
+    background-color: #00FFA3;
+}
+
 /* Bottom section: Chat window */
 .bottom-section {
-    flex: 55; /* Allocate 55% of the space */
+    flex: 50; /* Allocate 55% of the space */
     background-color: #e0e0e0;
 }
 
