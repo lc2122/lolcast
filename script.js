@@ -10,12 +10,19 @@ const CHANNELS = {
         buttonLabel: '숲',
         color: '#00aaff',
         url: () => 'https://play.sooplive.co.kr/aflol/280920430/embed'
+    },
+
+    flow: {
+        buttonLabel: 'flow',
+        color: '#00FFA3',
+        url: () => 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html'
     }
 };
 
 const videoIframe = document.getElementById('video-iframe');
 const youtubeBtn = document.getElementById('youtube-btn');
 const forestBtn = document.getElementById('forest-btn');
+const forestBtn = document.getElementById('flow-btn');
 
 // YouTube 버튼 클릭 시
 youtubeBtn.addEventListener('click', async () => {
@@ -31,6 +38,11 @@ youtubeBtn.addEventListener('click', async () => {
 // 숲 버튼 클릭 시
 forestBtn.addEventListener('click', () => {
     videoIframe.src = CHANNELS.forest.url(); // 상단 iframe에 숲 영상 로드
+});
+// flow
+
+flowBtn.addEventListener('click', () => {
+    videoIframe.src = CHANNELS.flow.url(); // 상단 iframe에 flow 영상 로드
 });
 
 // 초기 로드 시 유튜브 라이브 영상 표시
