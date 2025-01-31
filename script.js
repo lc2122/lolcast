@@ -62,16 +62,17 @@ function displayCorsPrompt() {
     document.body.appendChild(corsPrompt);
 }
 
-// Function to fetch YouTube live video ID
+// Function to fetch YouTube live video ID using GM_xmlhttpRequest
 async function fetchLiveVideoId(channelId) {
     const YOUTUBE_LIVE_URL = `https://www.youtube.com/channel/${channelId}/live`;
     return new Promise((resolve, reject) => {
-        fetch(YOUTUBE_LIVE_URL)
-            .then(response => response.text())
-            .then(text => {
-                const videoIdMatch = text.match(/"videoId":"([\w-]+)"/);
-                const isLiveNow = text.includes('"isLiveNow":true') || text.includes('"isLive":true');
-                const liveBroadcastContentMatch = text.match(/"liveBroadcastContent":"(\w+)"/);
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: YOUTUBE_LIVE_URL,
+            onload: function(response) {
+                const videoIdMatch = response.responseText.match(/"videoId":"([\w-]+)"/);
+                const isLiveNow = response.responseText.includes('"isLiveNow":true') || response.responseText.includes('"isLive":true');
+                const liveBroadcastContentMatch = response.responseText.match(/"liveBroadcastContent":"(\w+)"/);
                 const isLiveBroadcast = liveBroadcastContentMatch && liveBroadcastContentMatch[1] === 'live';
 
                 if (videoIdMatch && videoIdMatch[1] && (isLiveNow || isLiveBroadcast)) {
@@ -79,8 +80,9 @@ async function fetchLiveVideoId(channelId) {
                 } else {
                     reject('No live video found.');
                 }
-            })
-            .catch(error => reject(error));
+            },
+            onerror: reject
+        });
     });
 }
 
