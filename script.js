@@ -4,14 +4,13 @@ const CHANNELS = {
         buttonLabel: '유튜브',
         color: '#FF0000',
         url: (id) => `https://www.youtube.com/embed/live_stream?channel=${id}`,
-        fallbackUrl: 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html' // 대체 영상 URL
+        fallbackUrl: 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html'  // 대체 영상 URL
     },
     forest: {
         buttonLabel: '숲',
         color: '#00aaff',
         url: () => 'https://play.sooplive.co.kr/aflol/280920430/embed'
     },
-
     flow: {
         buttonLabel: 'flow',
         color: '#00FFA3',
@@ -22,7 +21,7 @@ const CHANNELS = {
 const videoIframe = document.getElementById('video-iframe');
 const youtubeBtn = document.getElementById('youtube-btn');
 const forestBtn = document.getElementById('forest-btn');
-const forestBtn = document.getElementById('flow-btn');
+const flowBtn = document.getElementById('flow-btn'); // Fix this line
 
 // YouTube 버튼 클릭 시
 youtubeBtn.addEventListener('click', async () => {
@@ -30,8 +29,10 @@ youtubeBtn.addEventListener('click', async () => {
     videoIframe.src = youtubeUrl; // 상단 iframe에 유튜브 라이브 영상 로드
 
     // 라이브 영상이 없는 경우 대체 영상 로드
-    videoIframe.onerror = () => {
-        videoIframe.src = CHANNELS.youtube.fallbackUrl;
+    videoIframe.onload = () => {
+        if (videoIframe.contentWindow.document.body.innerHTML.includes('This video is unavailable')) {
+            videoIframe.src = CHANNELS.youtube.fallbackUrl;
+        }
     };
 });
 
@@ -39,8 +40,8 @@ youtubeBtn.addEventListener('click', async () => {
 forestBtn.addEventListener('click', () => {
     videoIframe.src = CHANNELS.forest.url(); // 상단 iframe에 숲 영상 로드
 });
-// flow
 
+// flow 버튼 클릭 시
 flowBtn.addEventListener('click', () => {
     videoIframe.src = CHANNELS.flow.url(); // 상단 iframe에 flow 영상 로드
 });
@@ -51,7 +52,9 @@ window.addEventListener('load', () => {
     videoIframe.src = youtubeUrl;
 
     // 라이브 영상이 없는 경우 대체 영상 로드
-    videoIframe.onerror = () => {
-        videoIframe.src = CHANNELS.youtube.fallbackUrl;
+    videoIframe.onload = () => {
+        if (videoIframe.contentWindow.document.body.innerHTML.includes('This video is unavailable')) {
+            videoIframe.src = CHANNELS.youtube.fallbackUrl;
+        }
     };
 });
