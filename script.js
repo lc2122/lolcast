@@ -21,12 +21,10 @@ async function fetchLiveVideoId(channelId) {
         fetch(YOUTUBE_LIVE_URL)
             .then(response => response.text())
             .then(text => {
-                const videoIdMatch = text.match(/"videoId":"([\w-]+)"/);
+                const videoIdMatch = text.match(/"videoId":"([a-zA-Z0-9_-]{11})"/);
                 const isLiveNow = text.includes('"isLiveNow":true') || text.includes('"isLive":true');
-                const liveBroadcastContentMatch = text.match(/"liveBroadcastContent":"(\w+)"/);
-                const isLiveBroadcast = liveBroadcastContentMatch && liveBroadcastContentMatch[1] === 'live';
 
-                if (videoIdMatch && videoIdMatch[1] && (isLiveNow || isLiveBroadcast)) {
+                if (videoIdMatch && videoIdMatch[1] && isLiveNow) {
                     resolve(videoIdMatch[1]);
                 } else {
                     reject('No live video found.');
