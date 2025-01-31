@@ -18,13 +18,12 @@ const chzzkBtn = document.getElementById('chzzk-btn');
 async function fetchLiveVideoId(channelId) {
     const YOUTUBE_LIVE_URL = `https://www.youtube.com/channel/${channelId}/live`;
     return new Promise((resolve, reject) => {
-        GM_xmlhttpRequest({
-            method: "GET",
-            url: YOUTUBE_LIVE_URL,
-            onload: function(response) {
-                const videoIdMatch = response.responseText.match(/"videoId":"([\w-]+)"/);
-                const isLiveNow = response.responseText.includes('"isLiveNow":true') || response.responseText.includes('"isLive":true');
-                const liveBroadcastContentMatch = response.responseText.match(/"liveBroadcastContent":"(\w+)"/);
+        fetch(YOUTUBE_LIVE_URL)
+            .then(response => response.text())
+            .then(text => {
+                const videoIdMatch = text.match(/"videoId":"([\w-]+)"/);
+                const isLiveNow = text.includes('"isLiveNow":true') || text.includes('"isLive":true');
+                const liveBroadcastContentMatch = text.match(/"liveBroadcastContent":"(\w+)"/);
                 const isLiveBroadcast = liveBroadcastContentMatch && liveBroadcastContentMatch[1] === 'live';
 
                 if (videoIdMatch && videoIdMatch[1] && (isLiveNow || isLiveBroadcast)) {
@@ -32,9 +31,8 @@ async function fetchLiveVideoId(channelId) {
                 } else {
                     reject('No live video found.');
                 }
-            },
-            onerror: reject
-        });
+            })
+            .catch(error => reject(error));
     });
 }
 
@@ -54,6 +52,3 @@ youtubeBtn.addEventListener('click', async () => {
 chzzkBtn.addEventListener('click', () => {
     chatIframe.src = CHANNELS.chzzk.url;
 });
-
-// 초기 로드 시 채팅창 설정
-chatIframe.src = 'https://insagirl-toto.appspot.com/chatting/lgic/';
