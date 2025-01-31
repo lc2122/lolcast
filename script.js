@@ -3,7 +3,8 @@ const CHANNELS = {
         id: 'UCw1DsweY9b2AKGjV4kGJP1A',
         buttonLabel: '유튜브',
         color: '#FF0000',
-        url: (id) => `https://www.youtube.com/embed/${id}`
+        url: (id) => `https://www.youtube.com/embed/live_stream?channel=${id}`,
+        fallbackUrl: 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html' // 대체 영상 URL
     },
     forest: {
         buttonLabel: '숲',
@@ -13,45 +14,32 @@ const CHANNELS = {
 };
 
 const videoIframe = document.getElementById('video-iframe');
-const chatIframe = document.getElementById('chat-iframe');
 const youtubeBtn = document.getElementById('youtube-btn');
 const forestBtn = document.getElementById('forest-btn');
 
-// Define the proxy URL
-const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
-
-// Function to fetch YouTube live video ID using CORS Anywhere proxy
-async function fetchLiveVideoId(channelId) {
-    const YOUTUBE_LIVE_URL = `https://www.youtube.com/channel/${channelId}/live`;
-    try {
-        const response = await fetch(`${PROXY_URL}${YOUTUBE_LIVE_URL}`);
-        const text = await response.text();
-        const videoIdMatch = text.match(/"videoId":"([\w-]+)"/);
-        const isLiveNow = text.includes('"isLiveNow":true') || text.includes('"isLive":true');
-
-        if (videoIdMatch && videoIdMatch[1] && isLiveNow) {
-            return videoIdMatch[1];
-        } else {
-            throw new Error('No live video found.');
-        }
-    } catch (error) {
-        console.error('Error fetching live video ID:', error);
-        throw error;
-    }
-}
-
-// YouTube button click event
+// YouTube 버튼 클릭 시
 youtubeBtn.addEventListener('click', async () => {
-    try {
-        const videoId = await fetchLiveVideoId(CHANNELS.youtube.id);
-        const youtubeUrl = CHANNELS.youtube.url(videoId);
-        videoIframe.src = youtubeUrl; // Load YouTube video in the top iframe
-    } catch (error) {
-        alert('라이브 영상을 찾을 수 없습니다.');
-    }
+    const youtubeUrl = CHANNELS.youtube.url(CHANNELS.youtube.id);
+    videoIframe.src = youtubeUrl; // 상단 iframe에 유튜브 라이브 영상 로드
+
+    // 라이브 영상이 없는 경우 대체 영상 로드
+    videoIframe.onerror = () => {
+        videoIframe.src = CHANNELS.youtube.fallbackUrl;
+    };
 });
 
-// Forest button click event
+// 숲 버튼 클릭 시
 forestBtn.addEventListener('click', () => {
-    videoIframe.src = CHANNELS.forest.url(); // Load Forest video in the top iframe
+    videoIframe.src = CHANNELS.forest.url(); // 상단 iframe에 숲 영상 로드
+});
+
+// 초기 로드 시 유튜브 라이브 영상 표시
+window.addEventListener('load', () => {
+    const youtubeUrl = CHANNELS.youtube.url(CHANNELS.youtube.id);
+    videoIframe.src = youtubeUrl;
+
+    // 라이브 영상이 없는 경우 대체 영상 로드
+    videoIframe.onerror = () => {
+        videoIframe.src = CHANNELS.youtube.fallbackUrl;
+    };
 });
