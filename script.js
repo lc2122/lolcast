@@ -1,63 +1,59 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const m3u8Input = document.getElementById('m3u8Input');
-  const video = document.querySelector('video');
-
-  const defaultOptions = {};
-
-  m3u8Input.addEventListener('change', () => {
-    const source = m3u8Input.value;
-    
-    if (!Hls.isSupported()) {
-      video.src = source;
-      var player = new Plyr(video, defaultOptions);
-    } else {
-      const hls = new Hls();
-      hls.loadSource(source);
-
-      hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
-        const availableQualities = hls.levels.map((l) => l.height);
-        availableQualities.unshift(0); //prepend 0 to quality array
-
-        defaultOptions.quality = {
-          default: 0, //Default - AUTO
-          options: availableQualities,
-          forced: true,
-          onChange: (e) => updateQuality(e),
-        };
-        // Add Auto Label 
-        defaultOptions.i18n = {
-          qualityLabel: {
-            0: 'Auto',
-          },
-        };
-
-        hls.on(Hls.Events.LEVEL_SWITCHED, function (event, data) {
-          var span = document.querySelector(".plyr__menu__container [data-plyr='quality'][value='0'] span")
-          if (hls.autoLevelEnabled) {
-            span.innerHTML = `AUTO (${hls.levels[data.level].height}p)`
-          } else {
-            span.innerHTML = `AUTO`
-          }
-        })
-
-        var player = new Plyr(video, defaultOptions);
-      });
-
-      hls.attachMedia(video);
-      window.hls = hls;
+const CHANNELS = {
+    youtube: {
+        id: 'UCw1DsweY9b2AKGjV4kGJP1A',
+        buttonLabel: '유튜브',
+        color: '#FF0000',
+        url: (id) => `https://www.youtube.com/embed/${id}`
+    },
+    chzzk: {
+        url: 'https://chzzk.naver.com/live/9381e7d6816e6d915a44a13c0195b202'
     }
-  });
+};
+
+const chatIframe = document.getElementById('chat-iframe');
+const youtubeBtn = document.getElementById('youtube-btn');
+const chzzkBtn = document.getElementById('chzzk-btn');
+
+// 유튜브 라이브 영상 ID 가져오기
+async function fetchLiveVideoId(channelId) {
+    const YOUTUBE_LIVE_URL = `https://www.youtube.com/channel/${channelId}/live`;
+    return new Promise((resolve, reject) => {
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: YOUTUBE_LIVE_URL,
+            onload: function(response) {
+                const videoIdMatch = response.responseText.match(/"videoId":"([\w-]+)"/);
+                const isLiveNow = response.responseText.includes('"isLiveNow":true') || response.responseText.includes('"isLive":true');
+                const liveBroadcastContentMatch = response.responseText.match(/"liveBroadcastContent":"(\w+)"/);
+                const isLiveBroadcast = liveBroadcastContentMatch && liveBroadcastContentMatch[1] === 'live';
+
+                if (videoIdMatch && videoIdMatch[1] && (isLiveNow || isLiveBroadcast)) {
+                    resolve(videoIdMatch[1]);
+                } else {
+                    reject('No live video found.');
+                }
+            },
+            onerror: reject
+        });
+    });
+}
+
+// 유튜브 버튼 클릭 시
+youtubeBtn.addEventListener('click', async () => {
+    try {
+        const videoId = await fetchLiveVideoId(CHANNELS.youtube.id);
+        const youtubeUrl = CHANNELS.youtube.url(videoId);
+        chatIframe.src = youtubeUrl;
+    } catch (error) {
+        console.error(error);
+        alert('라이브 영상을 찾을 수 없습니다.');
+    }
 });
 
-function updateQuality(newQuality) {
-  if (newQuality === 0) {
-    window.hls.currentLevel = -1; //Enable AUTO quality if option.value = 0
-  } else {
-    window.hls.levels.forEach((level, levelIndex) => {
-      if (level.height === newQuality) {
-        console.log("Found quality match with " + newQuality);
-        window.hls.currentLevel = levelIndex;
-      }
-    });
-  }
-}
+// 치지직 버튼 클릭 시
+chzzkBtn.addEventListener('click', () => {
+    chatIframe.src = CHANNELS.chzzk.url;
+});
+
+// 초기 로드 시 채팅창 설정
+chatIframe.src = 'https://insagirl-toto.appspot.com/chatting/lgic/*';
