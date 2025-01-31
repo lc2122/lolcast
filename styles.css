@@ -1,21 +1,25 @@
-body, html {
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    height: 100%;
-    font-family: Arial, sans-serif;
-    overflow: hidden; /* Prevent scrolling */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 .container {
     display: flex;
     flex-direction: column;
-    height: 100vh; /* Full screen height */
+    height: 100%;
 }
 
-/* Top section: Video display */
+/* Top section styles */
 .top-section {
-    flex: 40; /* Allocate 35% of the space */
-    background-color: #000;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #video-iframe {
@@ -24,40 +28,41 @@ body, html {
     border: none;
 }
 
-/* Middle section: Button menu */
+/* Menu section styles */
 .menu-section {
     display: flex;
     justify-content: space-around;
     padding: 10px;
-    background-color: #f0f0f0;
+    background-color: #f8f8f8;
 }
 
-.menu-section button {
+.menu-button {
     padding: 10px 20px;
     font-size: 16px;
-    cursor: pointer;
+    color: white;
     border: none;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 #youtube-btn {
     background-color: #FF0000;
-    color: white;
 }
 
 #forest-btn {
     background-color: #00aaff;
-    color: white;
 }
 
 #flow-btn {
     background-color: #00FFA3;
 }
 
-/* Bottom section: Chat window */
+/* Bottom section styles */
 .bottom-section {
-    flex: 50; /* Allocate 55% of the space */
-    background-color: #e0e0e0;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #chat-iframe {
