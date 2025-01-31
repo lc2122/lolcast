@@ -5,17 +5,17 @@ const CHANNELS = {
         color: '#FF0000',
         url: (id) => `https://www.youtube.com/embed/${id}`
     },
-    chzzk: {
-        buttonLabel: '치지직',
+    forest: {
+        buttonLabel: '숲',
         color: '#00aaff',
-        url: () => 'https://chzzk.naver.com/live/9381e7d6816e6d915a44a13c0195b202'
+        url: () => 'https://play.sooplive.co.kr/aflol/280920430/embed'
     }
 };
 
 const videoIframe = document.getElementById('video-iframe');
 const chatIframe = document.getElementById('chat-iframe');
 const youtubeBtn = document.getElementById('youtube-btn');
-const chzzkBtn = document.getElementById('chzzk-btn');
+const forestBtn = document.getElementById('forest-btn');
 
 // 유튜브 라이브 영상 ID 가져오기
 async function fetchLiveVideoId(channelId) {
@@ -51,9 +51,9 @@ youtubeBtn.addEventListener('click', async () => {
     }
 });
 
-// 치지직 버튼 클릭 시
-chzzkBtn.addEventListener('click', () => {
-    videoIframe.src = CHANNELS.chzzk.url(); // 상단 iframe에 치지직 영상 로드
+// 숲 버튼 클릭 시
+forestBtn.addEventListener('click', () => {
+    videoIframe.src = CHANNELS.forest.url(); // 상단 iframe에 숲 영상 로드
 });
 
 // 페이지 로드 시 유튜브 라이브 영상 자동 로드
