@@ -3,7 +3,7 @@ const CHANNELS = {
         id: 'UCw1DsweY9b2AKGjV4kGJP1A',
         buttonLabel: '유튜브',
         color: '#FF0000',
-        url: (id) => `/#/player/youtube/${id}`
+        url: (id) => `https://www.youtube.com/embed/${id}`
     },
     forest: {
         buttonLabel: '숲',
