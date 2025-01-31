@@ -6,7 +6,9 @@ const CHANNELS = {
         url: (id) => `https://www.youtube.com/embed/${id}`
     },
     chzzk: {
-        url: 'https://chzzk.naver.com/live/9381e7d6816e6d915a44a13c0195b202'
+        buttonLabel: '치지직',
+        color: '#00aaff',
+        url: () => 'https://chzzk.naver.com/live/9381e7d6816e6d915a44a13c0195b202'
     }
 };
 
@@ -22,10 +24,12 @@ async function fetchLiveVideoId(channelId) {
         fetch(YOUTUBE_LIVE_URL)
             .then(response => response.text())
             .then(text => {
-                const videoIdMatch = text.match(/"videoId":"([a-zA-Z0-9_-]{11})"/);
+                const videoIdMatch = text.match(/"videoId":"([\w-]+)"/);
                 const isLiveNow = text.includes('"isLiveNow":true') || text.includes('"isLive":true');
+                const liveBroadcastContentMatch = text.match(/"liveBroadcastContent":"(\w+)"/);
+                const isLiveBroadcast = liveBroadcastContentMatch && liveBroadcastContentMatch[1] === 'live';
 
-                if (videoIdMatch && videoIdMatch[1] && isLiveNow) {
+                if (videoIdMatch && videoIdMatch[1] && (isLiveNow || isLiveBroadcast)) {
                     resolve(videoIdMatch[1]);
                 } else {
                     reject('No live video found.');
@@ -49,5 +53,17 @@ youtubeBtn.addEventListener('click', async () => {
 
 // 치지직 버튼 클릭 시
 chzzkBtn.addEventListener('click', () => {
-    videoIframe.src = CHANNELS.chzzk.url; // 상단 iframe에 치지직 영상 로드
+    videoIframe.src = CHANNELS.chzzk.url(); // 상단 iframe에 치지직 영상 로드
+});
+
+// 페이지 로드 시 유튜브 라이브 영상 자동 로드
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const videoId = await fetchLiveVideoId(CHANNELS.youtube.id);
+        const youtubeUrl = CHANNELS.youtube.url(videoId);
+        videoIframe.src = youtubeUrl; // 상단 iframe에 유튜브 영상 로드
+    } catch (error) {
+        console.error(error);
+        alert('라이브 영상을 찾을 수 없습니다.');
+    }
 });
