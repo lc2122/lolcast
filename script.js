@@ -56,4 +56,4 @@ chzzkBtn.addEventListener('click', () => {
 });
 
 // 초기 로드 시 채팅창 설정
-chatIframe.src = 'https://insagirl-toto.appspot.com/chatting/lgic/*';
+chatIframe.src = 'https://insagirl-toto.appspot.com/chatting/lgic/';
