@@ -3,13 +3,13 @@ body, html {
     padding: 0;
     height: 100%;
     font-family: Arial, sans-serif;
-    overflow: hidden;
+    overflow: hidden; /* 화면 스크롤 방지 */
 }
 
 .container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100vh; /* 전체 화면 높이 */
 }
 
 .top-section {
@@ -17,7 +17,7 @@ body, html {
     justify-content: space-around;
     padding: 10px;
     background-color: #f0f0f0;
-    height: 60px;
+    height: 60px; /* 상단 섹션 높이 */
 }
 
 .top-section button {
@@ -39,8 +39,11 @@ body, html {
 }
 
 .bottom-section {
-    flex: 1;
+    flex: 1; /* 남은 공간을 모두 차지 */
     background-color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 iframe {
