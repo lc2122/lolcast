@@ -10,6 +10,7 @@ const CHANNELS = {
     }
 };
 
+const videoIframe = document.getElementById('video-iframe');
 const chatIframe = document.getElementById('chat-iframe');
 const youtubeBtn = document.getElementById('youtube-btn');
 const chzzkBtn = document.getElementById('chzzk-btn');
@@ -39,7 +40,7 @@ youtubeBtn.addEventListener('click', async () => {
     try {
         const videoId = await fetchLiveVideoId(CHANNELS.youtube.id);
         const youtubeUrl = CHANNELS.youtube.url(videoId);
-        chatIframe.src = youtubeUrl;
+        videoIframe.src = youtubeUrl; // 상단 iframe에 유튜브 영상 로드
     } catch (error) {
         console.error(error);
         alert('라이브 영상을 찾을 수 없습니다.');
@@ -48,5 +49,5 @@ youtubeBtn.addEventListener('click', async () => {
 
 // 치지직 버튼 클릭 시
 chzzkBtn.addEventListener('click', () => {
-    chatIframe.src = CHANNELS.chzzk.url;
+    videoIframe.src = CHANNELS.chzzk.url; // 상단 iframe에 치지직 영상 로드
 });
