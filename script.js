@@ -17,19 +17,26 @@ const chatIframe = document.getElementById('chat-iframe');
 const youtubeBtn = document.getElementById('youtube-btn');
 const forestBtn = document.getElementById('forest-btn');
 
+// Define the proxy URL
+const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
+
 // Function to fetch YouTube live video ID using CORS Anywhere proxy
 async function fetchLiveVideoId(channelId) {
-    const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
     const YOUTUBE_LIVE_URL = `https://www.youtube.com/channel/${channelId}/live`;
-    const response = await fetch(`${PROXY_URL}${YOUTUBE_LIVE_URL}`);
-    const text = await response.text();
-    const videoIdMatch = text.match(/"videoId":"([\w-]+)"/);
-    const isLiveNow = text.includes('"isLiveNow":true') || text.includes('"isLive":true');
+    try {
+        const response = await fetch(`${PROXY_URL}${YOUTUBE_LIVE_URL}`);
+        const text = await response.text();
+        const videoIdMatch = text.match(/"videoId":"([\w-]+)"/);
+        const isLiveNow = text.includes('"isLiveNow":true') || text.includes('"isLive":true');
 
-    if (videoIdMatch && videoIdMatch[1] && isLiveNow) {
-        return videoIdMatch[1];
-    } else {
-        throw new Error('No live video found.');
+        if (videoIdMatch && videoIdMatch[1] && isLiveNow) {
+            return videoIdMatch[1];
+        } else {
+            throw new Error('No live video found.');
+        }
+    } catch (error) {
+        console.error('Error fetching live video ID:', error);
+        throw error;
     }
 }
 
@@ -40,7 +47,6 @@ youtubeBtn.addEventListener('click', async () => {
         const youtubeUrl = CHANNELS.youtube.url(videoId);
         videoIframe.src = youtubeUrl; // Load YouTube video in the top iframe
     } catch (error) {
-        console.error(error);
         alert('라이브 영상을 찾을 수 없습니다.');
     }
 });
