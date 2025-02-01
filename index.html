@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>모바일 페이지</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 버튼 크기 조정 */
+        .menu-button {
+            padding: 5px 10px; /* 버튼 크기 줄임 */
+            font-size: 14px; /* 폰트 크기 줄임 */
+            margin: 2px; /* 버튼 간격 조정 */
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -80,7 +88,8 @@
                 menuSection.style.width = "20%"; // 우측 20% 너비
                 menuSection.style.height = "auto";
                 menuSection.style.display = "flex";
-                menuSection.style.flexDirection = "column"; // 버튼을 세로로 배치
+                menuSection.style.flexDirection = "row"; // 버튼을 가로로 배치
+                menuSection.style.justifyContent = "space-around"; // 버튼 간격 조정
                 menuSection.style.alignItems = "center"; // 버튼을 중앙 정렬
                 menuSection.style.paddingTop = "10px"; // 상단 여백 추가
 
