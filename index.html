@@ -8,6 +8,10 @@
 </head>
 <body>
     <div class="container">
+        <!-- 상단: F5 버튼 -->
+        <div class="refresh-section">
+            <button id="refresh-btn" class="refresh-button">F5</button>
+        </div>
         <!-- 중간: 버튼 메뉴 -->
         <div class="menu-section">
             <button id="youtube-btn" class="menu-button">유튜브</button>
@@ -47,6 +51,12 @@
                 chatIframe.src = "https://insagirl-toto.appspot.com/chatting/lgic/";
             }
         };
+
+        // F5 버튼 클릭 시 채팅창 새로고침
+        const refreshBtn = document.getElementById('refresh-btn');
+        refreshBtn.addEventListener('click', () => {
+            chatIframe.src = chatIframe.src; // 현재 URL을 다시 설정하여 새로고침
+        });
     </script>
     <script src="script.js"></script>
 </body>
