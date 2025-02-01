@@ -38,6 +38,17 @@
     </div>
 
     <script>
+        // SameSite=None 쿠키 설정 함수
+        function setSameSiteNoneCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = `${name}=${value}${expires}; path=/; Secure; SameSite=None`;
+        }
+
         // 레이아웃 조정 함수
         function design() {
             const container = document.querySelector('.container');
@@ -55,6 +66,9 @@
             const chatIframe = document.getElementById('chat-iframe');
             const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
             
+            // SameSite=None 쿠키 설정 (필요한 경우)
+            setSameSiteNoneCookie('exampleCookie', 'exampleValue', 7); // 예시 쿠키
+
             // 해시 전달 방식으로 채팅창 로드
             if(location.hash && location.hash.substring(1)) {
                 chatIframe.src = lgicurl + '#' + decodeURIComponent(location.hash.substring(1));
