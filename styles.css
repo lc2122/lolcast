@@ -44,11 +44,11 @@ body {
 }
 
 #refresh-btn {
-    background-color: #555; /* F5 버튼 색상 */
+    background-color: #FFA500; /* 주황색으로 변경 */
 }
 
 #refresh-btn:hover {
-    background-color: #777; /* F5 버튼 호버 색상 */
+    background-color: #FF8C00; /* 호버 시 더 진한 주황색 */
 }
 
 /* Top section styles */
