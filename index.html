@@ -8,8 +8,8 @@
 </head>
 <body>
     <div class="container">
-        <!-- 중간: 버튼 메뉴 -->
-        <div class="menu-section">
+        <!-- 우측 상단: 버튼 메뉴 -->
+        <div class="menu-section" id="menu-section">
             <button id="youtube-btn" class="menu-button">유튜브</button>
             <button id="forest-btn" class="menu-button">숲</button>
             <button id="flow-btn" class="menu-button">flow</button>
@@ -54,6 +54,7 @@
             const isMobile = window.innerWidth <= 768; // 모바일 화면 기준 (768px 이하)
             const videoIframe = document.getElementById('video-iframe');
             const chatIframe = document.getElementById('chat-iframe');
+            const menuSection = document.getElementById('menu-section');
             const container = document.querySelector('.container');
             const topSection = document.querySelector('.top-section');
             const bottomSection = document.querySelector('.bottom-section');
@@ -71,6 +72,13 @@
                 bottomSection.style.position = "absolute";
                 bottomSection.style.bottom = "0";
                 bottomSection.style.left = "0";
+
+                // 모바일: 버튼 메뉴를 상단에 배치
+                menuSection.style.position = "absolute";
+                menuSection.style.top = "0";
+                menuSection.style.left = "0";
+                menuSection.style.width = "100%";
+                menuSection.style.zIndex = "10"; // 버튼이 영상 위에 표시되도록
             } else {
                 // PC: 좌우 레이아웃
                 topSection.style.width = "80%"; // 좌측 80%
@@ -84,6 +92,17 @@
                 bottomSection.style.position = "absolute";
                 bottomSection.style.top = "0";
                 bottomSection.style.right = "0";
+
+                // PC: 버튼 메뉴를 우측 상단에 배치
+                menuSection.style.position = "absolute";
+                menuSection.style.top = "0";
+                menuSection.style.right = "20%"; // 우측 20% 영역에 배치
+                menuSection.style.width = "20%"; // 우측 20% 너비
+                menuSection.style.zIndex = "10"; // 버튼이 영상 위에 표시되도록
+                menuSection.style.display = "flex";
+                menuSection.style.flexDirection = "column"; // 버튼을 세로로 배치
+                menuSection.style.alignItems = "center"; // 버튼을 중앙 정렬
+                menuSection.style.paddingTop = "10px"; // 상단 여백 추가
             }
         }
 
