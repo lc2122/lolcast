@@ -28,11 +28,26 @@
         <div class="bottom-section">
             <iframe
                 id="chat-iframe"
-                src="https://insagirl-toto.appspot.com/chatting/lgic/"
+                src=""
                 frameborder="0"
             ></iframe>
         </div>
     </div>
+    <script>
+        // 채팅 iframe의 src를 동적으로 설정
+        const chatIframe = document.getElementById('chat-iframe');
+
+        // 먼저 로그인 페이지를 로드
+        chatIframe.src = "https://insagirl-toto.appspot.com/signin/?next=https://insagirl-toto.appspot.com/chatlogin/lgic/";
+
+        // 로그인 페이지가 로드된 후 채팅 페이지를 로드
+        chatIframe.onload = function() {
+            // 로그인 페이지가 완전히 로드된 후 채팅 페이지로 이동
+            if (chatIframe.src === "https://insagirl-toto.appspot.com/signin/?next=https://insagirl-toto.appspot.com/chatlogin/lgic/") {
+                chatIframe.src = "https://insagirl-toto.appspot.com/chatting/lgic/";
+            }
+        };
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
