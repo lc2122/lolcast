@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <!-- 우측 상단: 버튼 메뉴 -->
+        <!-- 상단: 버튼 메뉴 -->
         <div class="menu-section" id="menu-section">
             <button id="youtube-btn" class="menu-button">유튜브</button>
             <button id="forest-btn" class="menu-button">숲</button>
@@ -16,8 +16,8 @@
             <button id="refresh-btn" class="menu-button">F5</button>
         </div>
         
-        <!-- 상단: 영상 표시 -->
-        <div class="top-section">
+        <!-- 중간: 영상 표시 -->
+        <div class="video-section">
             <iframe
                 id="video-iframe"
                 src=""
@@ -28,7 +28,7 @@
         </div>
         
         <!-- 하단: 채팅창 -->
-        <div class="bottom-section">
+        <div class="chat-section">
             <iframe
                 id="chat-iframe"
                 src=""
@@ -52,57 +52,48 @@
         // 레이아웃 조정 함수
         function design() {
             const isMobile = window.innerWidth <= 768; // 모바일 화면 기준 (768px 이하)
-            const videoIframe = document.getElementById('video-iframe');
-            const chatIframe = document.getElementById('chat-iframe');
             const menuSection = document.getElementById('menu-section');
-            const container = document.querySelector('.container');
-            const topSection = document.querySelector('.top-section');
-            const bottomSection = document.querySelector('.bottom-section');
+            const videoSection = document.querySelector('.video-section');
+            const chatSection = document.querySelector('.chat-section');
 
             if (isMobile) {
                 // 모바일: 상하 레이아웃
-                topSection.style.width = "100%";
-                topSection.style.height = "70%"; // 상단 70%
-                topSection.style.position = "absolute";
-                topSection.style.top = "0";
-                topSection.style.left = "0";
-
-                bottomSection.style.width = "100%";
-                bottomSection.style.height = "30%"; // 하단 30%
-                bottomSection.style.position = "absolute";
-                bottomSection.style.bottom = "0";
-                bottomSection.style.left = "0";
-
-                // 모바일: 버튼 메뉴를 상단에 배치
-                menuSection.style.position = "absolute";
-                menuSection.style.top = "0";
-                menuSection.style.left = "0";
+                menuSection.style.position = "relative";
                 menuSection.style.width = "100%";
-                menuSection.style.zIndex = "10"; // 버튼이 영상 위에 표시되도록
+                menuSection.style.height = "auto";
+                menuSection.style.display = "flex";
+                menuSection.style.justifyContent = "space-around";
+                menuSection.style.padding = "10px 0";
+
+                videoSection.style.width = "100%";
+                videoSection.style.height = "60vh"; // 영상 영역 높이
+                videoSection.style.position = "relative";
+
+                chatSection.style.width = "100%";
+                chatSection.style.height = "30vh"; // 채팅 영역 높이
+                chatSection.style.position = "relative";
             } else {
                 // PC: 좌우 레이아웃
-                topSection.style.width = "80%"; // 좌측 80%
-                topSection.style.height = "100%";
-                topSection.style.position = "absolute";
-                topSection.style.top = "0";
-                topSection.style.left = "0";
-
-                bottomSection.style.width = "20%"; // 우측 20%
-                bottomSection.style.height = "100%";
-                bottomSection.style.position = "absolute";
-                bottomSection.style.top = "0";
-                bottomSection.style.right = "0";
-
-                // PC: 버튼 메뉴를 우측 상단에 배치
                 menuSection.style.position = "absolute";
                 menuSection.style.top = "0";
-                menuSection.style.right = "20%"; // 우측 20% 영역에 배치
+                menuSection.style.right = "0";
                 menuSection.style.width = "20%"; // 우측 20% 너비
-                menuSection.style.zIndex = "10"; // 버튼이 영상 위에 표시되도록
+                menuSection.style.height = "auto";
                 menuSection.style.display = "flex";
                 menuSection.style.flexDirection = "column"; // 버튼을 세로로 배치
                 menuSection.style.alignItems = "center"; // 버튼을 중앙 정렬
                 menuSection.style.paddingTop = "10px"; // 상단 여백 추가
+
+                videoSection.style.width = "80%"; // 좌측 80% 너비
+                videoSection.style.height = "100vh"; // 영상 영역 높이
+                videoSection.style.position = "absolute";
+                videoSection.style.left = "0";
+
+                chatSection.style.width = "20%"; // 우측 20% 너비
+                chatSection.style.height = "calc(100vh - 60px)"; // 채팅 영역 높이 (버튼 메뉴 높이 제외)
+                chatSection.style.position = "absolute";
+                chatSection.style.top = "60px"; // 버튼 메뉴 높이만큼 아래로 이동
+                chatSection.style.right = "0";
             }
         }
 
