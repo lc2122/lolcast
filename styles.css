@@ -14,28 +14,6 @@ body {
     height: 100%;
 }
 
-/* Refresh section styles */
-.refresh-section {
-    display: flex;
-    justify-content: flex-end;
-    padding: 10px;
-    background-color: #f8f8f8;
-}
-
-.refresh-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #555;
-}
-
-.refresh-button:hover {
-    background-color: #777;
-}
-
 /* Menu section styles */
 .menu-section {
     display: flex;
@@ -63,6 +41,14 @@ body {
 
 #flow-btn {
     background-color: #00FFA3;
+}
+
+#refresh-btn {
+    background-color: #555; /* F5 버튼 색상 */
+}
+
+#refresh-btn:hover {
+    background-color: #777; /* F5 버튼 호버 색상 */
 }
 
 /* Top section styles */
