@@ -13,8 +13,9 @@
             <button id="youtube-btn" class="menu-button">유튜브</button>
             <button id="forest-btn" class="menu-button">숲</button>
             <button id="flow-btn" class="menu-button">flow</button>
-            <button id="refresh-btn" class="menu-button">F5</button> <!-- F5 버튼 추가 -->
+            <button id="refresh-btn" class="menu-button">F5</button>
         </div>
+        
         <!-- 상단: 영상 표시 -->
         <div class="top-section">
             <iframe
@@ -25,6 +26,7 @@
                 allowfullscreen
             ></iframe>
         </div>
+        
         <!-- 하단: 채팅창 -->
         <div class="bottom-section">
             <iframe
@@ -34,25 +36,44 @@
             ></iframe>
         </div>
     </div>
+
     <script>
-        // 채팅 iframe의 src를 동적으로 설정
-        const chatIframe = document.getElementById('chat-iframe');
+        // 레이아웃 조정 함수
+        function design() {
+            const container = document.querySelector('.container');
+            const topSection = document.querySelector('.top-section');
+            const bottomSection = document.querySelector('.bottom-section');
+            
+            // 뷰포트 크기 기준으로 영역 분할
+            const viewportHeight = window.innerHeight;
+            topSection.style.height = `${viewportHeight * 0.7}px`;
+            bottomSection.style.height = `${viewportHeight * 0.3}px`;
+        }
 
-        // 먼저 로그인 페이지를 로드
-        chatIframe.src = "https://insagirl-toto.appspot.com/signin/?next=https://insagirl-toto.appspot.com/chatlogin/lgic/";
-
-        // 로그인 페이지가 로드된 후 채팅 페이지를 로드
-        chatIframe.onload = function() {
-            // 로그인 페이지가 완전히 로드된 후 채팅 페이지로 이동
-            if (chatIframe.src === "https://insagirl-toto.appspot.com/signin/?next=https://insagirl-toto.appspot.com/chatlogin/lgic/") {
-                chatIframe.src = "https://insagirl-toto.appspot.com/chatting/lgic/";
+        // 초기 설정 및 채팅 iframe 로드
+        window.onload = function() {
+            const chatIframe = document.getElementById('chat-iframe');
+            const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
+            
+            // 해시 전달 방식으로 채팅창 로드
+            if(location.hash && location.hash.substring(1)) {
+                chatIframe.src = lgicurl + '#' + decodeURIComponent(location.hash.substring(1));
+            } else {
+                chatIframe.src = lgicurl;
             }
+            
+            design(); // 초기 레이아웃 설정
         };
 
-        // F5 버튼 클릭 시 채팅창 새로고침
+        // 화면 크기 변경시 레이아웃 조정
+        window.onresize = design;
+
+        // F5 버튼 클릭 시 채팅창 새로고침 (해시 유지)
         const refreshBtn = document.getElementById('refresh-btn');
         refreshBtn.addEventListener('click', () => {
-            chatIframe.src = chatIframe.src; // 현재 URL을 다시 설정하여 새로고침
+            const chatIframe = document.getElementById('chat-iframe');
+            const currentSrc = chatIframe.src;
+            chatIframe.src = currentSrc; // 해시 포함된 URL 유지
         });
     </script>
     <script src="script.js"></script>
