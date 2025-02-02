@@ -1,10 +1,11 @@
+// Define the channels and their properties
 const CHANNELS = {
     youtube: {
         id: 'UCw1DsweY9b2AKGjV4kGJP1A',
         buttonLabel: '유튜브',
         color: '#FF0000',
         url: (id) => `https://www.youtube.com/embed/live_stream?channel=${id}`,
-        fallbackUrl: 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html' // 대체 영상 URL
+        fallbackUrl: 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html'
     },
     forest: {
         buttonLabel: '숲',
@@ -18,10 +19,8 @@ const CHANNELS = {
     }
 };
 
+// Get the video iframe
 const videoIframe = document.getElementById('video-iframe');
-const youtubeBtn = document.getElementById('youtube-btn');
-const forestBtn = document.getElementById('forest-btn');
-const flowBtn = document.getElementById('flow-btn');
 
 // Function to handle fallback URL
 const handleFallback = () => {
@@ -35,27 +34,27 @@ const setButtonColor = (button, color) => {
     button.style.backgroundColor = color;
 };
 
-// YouTube 버튼 클릭 시
-youtubeBtn.addEventListener('click', () => {
+// YouTube button click event
+document.getElementById('youtube-btn').addEventListener('click', () => {
     const youtubeUrl = CHANNELS.youtube.url(CHANNELS.youtube.id);
     videoIframe.src = youtubeUrl;
-    setButtonColor(youtubeBtn, CHANNELS.youtube.color);
+    setButtonColor(document.getElementById('youtube-btn'), CHANNELS.youtube.color);
     handleFallback();
 });
 
-// 숲 버튼 클릭 시
-forestBtn.addEventListener('click', () => {
+// Forest button click event
+document.getElementById('forest-btn').addEventListener('click', () => {
     videoIframe.src = CHANNELS.forest.url();
-    setButtonColor(forestBtn, CHANNELS.forest.color);
+    setButtonColor(document.getElementById('forest-btn'), CHANNELS.forest.color);
 });
 
-// flow 버튼 클릭 시
-flowBtn.addEventListener('click', () => {
+// Flow button click event
+document.getElementById('flow-btn').addEventListener('click', () => {
     videoIframe.src = CHANNELS.flow.url();
-    setButtonColor(flowBtn, CHANNELS.flow.color);
+    setButtonColor(document.getElementById('flow-btn'), CHANNELS.flow.color);
 });
 
-// Twitch 채널 로드
+// Load Twitch channel
 function loadTwitchChannel() {
     const hash = window.location.hash;
     if (hash.startsWith('#/twitch/')) {
@@ -65,8 +64,17 @@ function loadTwitchChannel() {
     }
 }
 
-// 초기 로드 시 flow 영상 표시 및 Twitch 채널 로드
+// Initial load
 window.addEventListener('load', () => {
     videoIframe.src = CHANNELS.flow.url();
     loadTwitchChannel();
 });
+
+// Example message to be sent
+const message = { type: 'example', data: 'Hello, world!' };
+
+// Ensure the target origin matches the recipient window's origin
+const targetOrigin = 'https://insagirl-toto.appspot.com';
+
+// Send the message
+window.postMessage(message, targetOrigin);
