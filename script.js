@@ -32,7 +32,7 @@ const handleFallback = (iframe) => {
     };
 };
 
-// 创建并插入 iframe
+// 动态创建并插入 iframe
 function createIframe(src) {
     const iframe = document.createElement('iframe');
     iframe.src = src;
