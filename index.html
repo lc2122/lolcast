@@ -135,20 +135,16 @@
         // 화면 크기 변경시 레이아웃 조정
         window.onresize = design;
 
-        // F5 버튼 클릭 시 채팅창 새로고침 (해시 유지)
-        document.addEventListener('DOMContentLoaded', () => {
-            const refreshBtn = document.getElementById('refresh-btn');
-            if (refreshBtn) {
-                refreshBtn.addEventListener('click', () => {
-                    const chatIframe = document.getElementById('chat-iframe');
-                    if (chatIframe) {
-                         const currentSrc = chatIframe.src;
-                         const hash = window.location.hash; 
-                         chatIframe.src = currentSrc + hash; 
-                    }
-                });
-            }
-        });
+// F5 버튼 클릭 시 채팅창 새로고침 (해시 유지)
+const refreshBtn = document.getElementById('refresh-btn');
+refreshBtn.addEventListener('click', () => {
+    const chatIframe = document.getElementById('chat-iframe');
+    if (chatIframe) {
+        const currentSrc = chatIframe.src;
+        const hash = window.location.hash; 
+        chatIframe.src = currentSrc + hash; 
+    }
+});
     </script>
     <script src="script.js"></script>
 </body>
