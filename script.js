@@ -50,22 +50,21 @@ inputBtn.addEventListener('click', () => {
 
 // "Go" 버튼 클릭 시
 goBtn.addEventListener('click', () => {
-const userInput = urlInput.value;
-const transformedUrl = transformUrl(userInput);
-if (transformedUrl) {
-if (transformedUrl.endsWith('.m3u8')) {
-// m3u8 플레이어 URL을 iframe의 src로 설정
-const playerUrl = https://lc2122.github.io/m3u8-player/player/#${encodeURIComponent(transformedUrl)};
-videoIframe.src = playerUrl;
-} else {
-videoIframe.src = transformedUrl;
-}
-localStorage.setItem('lastInputValue', userInput);
-urlInput.value = '';
-document.getElementById('input-modal').style.display = 'none';
-}
-}); 
-
+    const userInput = urlInput.value;
+    const transformedUrl = transformUrl(userInput);
+    if (transformedUrl) {
+        if (transformedUrl.endsWith('.m3u8')) {
+            // m3u8 플레이어 URL을 iframe의 src로 설정
+            const playerUrl = `https://lc2122.github.io/m3u8-player/player/#${encodeURIComponent(transformedUrl)}`;
+            videoIframe.src = playerUrl;
+        } else {
+            videoIframe.src = transformedUrl;
+        }
+        localStorage.setItem('lastInputValue', userInput);
+        urlInput.value = '';
+        document.getElementById('input-modal').style.display = 'none';
+    }
+});
 // "X" 버튼 클릭 시 입력창 닫기
 const closeBtn = document.getElementById('close-btn');
 closeBtn.addEventListener('click', () => {
