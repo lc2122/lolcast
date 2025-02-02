@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>모바일 페이지</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         /* 버튼 크기 조정 */
         .menu-button {
-            padding: 5px 10px;
-            font-size: 14px;
-            margin: 2px;
+            padding: 5px 10px; /* 버튼 크기 줄임 */
+            font-size: 14px; /* 폰트 크기 줄임 */
+            margin: 2px; /* 버튼 간격 조정 */
         }
     </style>
 </head>
@@ -19,7 +18,6 @@
     <div class="container">
         <!-- 상단: 버튼 메뉴 -->
         <div class="menu-section" id="menu-section">
-            <button id="hrm-btn" class="menu-button">흐름</button>
             <button id="youtube-btn" class="menu-button">유튜브</button>
             <button id="forest-btn" class="menu-button">숲</button>
             <button id="flow-btn" class="menu-button">flow</button>
@@ -28,7 +26,13 @@
         
         <!-- 중간: 영상 표시 -->
         <div class="video-section">
-            <!-- 动态插入 iframe -->
+            <iframe
+                id="video-iframe"
+                src=""
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+            ></iframe>
         </div>
         
         <!-- 하단: 채팅창 -->
@@ -55,12 +59,13 @@
 
         // 레이아웃 조정 함수
         function design() {
-            const isMobile = window.innerWidth <= 768;
+            const isMobile = window.innerWidth <= 768; // 모바일 화면 기준 (768px 이하)
             const menuSection = document.getElementById('menu-section');
             const videoSection = document.querySelector('.video-section');
             const chatSection = document.querySelector('.chat-section');
 
             if (isMobile) {
+                // 모바일: 상하 레이아웃
                 menuSection.style.position = "relative";
                 menuSection.style.width = "100%";
                 menuSection.style.height = "auto";
@@ -69,93 +74,35 @@
                 menuSection.style.padding = "10px 0";
 
                 videoSection.style.width = "100%";
-                videoSection.style.height = "60vh";
+                videoSection.style.height = "60vh"; // 영상 영역 높이
                 videoSection.style.position = "relative";
 
                 chatSection.style.width = "100%";
-                chatSection.style.height = "30vh";
+                chatSection.style.height = "30vh"; // 채팅 영역 높이
                 chatSection.style.position = "relative";
             } else {
+                // PC: 좌우 레이아웃
                 menuSection.style.position = "absolute";
                 menuSection.style.top = "0";
                 menuSection.style.right = "0";
-                menuSection.style.width = "20%";
+                menuSection.style.width = "20%"; // 우측 20% 너비
                 menuSection.style.height = "auto";
                 menuSection.style.display = "flex";
-                menuSection.style.flexDirection = "row";
-                menuSection.style.justifyContent = "space-around";
-                menuSection.style.alignItems = "center";
-                menuSection.style.paddingTop = "10px";
+                menuSection.style.flexDirection = "row"; // 버튼을 가로로 배치
+                menuSection.style.justifyContent = "space-around"; // 버튼 간격 조정
+                menuSection.style.alignItems = "center"; // 버튼을 중앙 정렬
+                menuSection.style.paddingTop = "10px"; // 상단 여백 추가
 
-                videoSection.style.width = "80%";
-                videoSection.style.height = "100vh";
+                videoSection.style.width = "80%"; // 좌측 80% 너비
+                videoSection.style.height = "100vh"; // 영상 영역 높이
                 videoSection.style.position = "absolute";
                 videoSection.style.left = "0";
 
-                chatSection.style.width = "20%";
-                chatSection.style.height = "calc(100vh - 60px)";
+                chatSection.style.width = "20%"; // 우측 20% 너비
+                chatSection.style.height = "calc(100vh - 60px)"; // 채팅 영역 높이 (버튼 메뉴 높이 제외)
                 chatSection.style.position = "absolute";
-                chatSection.style.top = "60px";
+                chatSection.style.top = "60px"; // 버튼 메뉴 높이만큼 아래로 이동
                 chatSection.style.right = "0";
-            }
-        }
-
-        // 动态创建并插入 iframe
-        function createIframe(src) {
-            const iframe = document.createElement('iframe');
-            iframe.src = src;
-            iframe.frameborder = '0';
-            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-            iframe.allowfullscreen = true;
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            return iframe;
-        }
-
-        // URL을 분석하여 영상 재생
-        function handleVideoRedirect(url) {
-            const videoSection = document.querySelector('.video-section');
-
-            // 清空当前视频区域
-            while (videoSection.firstChild) {
-                videoSection.removeChild(videoSection.firstChild);
-            }
-
-            // YouTube
-            if (url.includes('https://lc2122.github.io/lolcast/youtube/')) {
-                const videoId = url.split('/').pop();
-                const iframe = createIframe(`https://www.youtube.com/embed/${videoId}`);
-                videoSection.appendChild(iframe);
-            }
-            // 치지직 (Chzzk)
-            else if (url.includes('https://lc2122.github.io/lolcast/chzzk/')) {
-                const channelId = url.split('/').pop();
-                const iframe = createIframe(`https://chzzk.naver.com/live/${channelId}`);
-                videoSection.appendChild(iframe);
-            }
-            // 아프리카TV (Afreeca)
-            else if (url.includes('https://lc2122.github.io/lolcast/soop/')) {
-                const channelId = url.split('/').pop();
-                const iframe = createIframe(`https://play.sooplive.co.kr/${channelId}/280495766/embed`);
-                videoSection.appendChild(iframe);
-            }
-            // Twitch
-            else if (url.includes('https://lc2122.github.io/lolcast/twitch/')) {
-                const channelId = url.split('/').pop();
-                const iframe = createIframe(`https://player.twitch.tv/?channel=${channelId}&parent=https://lc2122.github.io/lolcast/`);
-                videoSection.appendChild(iframe);
-            }
-            // Kick
-            else if (url.includes('https://lc2122.github.io/lolcast/kick/')) {
-                const channelId = url.split('/').pop();
-                const iframe = createIframe(`https://player.kick.com/${channelId}`);
-                videoSection.appendChild(iframe);
-            }
-            // m3u8 (HLS)
-            else if (url.includes('https://lc2122.github.io/lolcast/m3u8/')) {
-                const m3u8Url = url.split('/').pop();
-                const iframe = createIframe(m3u8Url);
-                videoSection.appendChild(iframe);
             }
         }
 
@@ -163,9 +110,9 @@
         window.onload = function() {
             const chatIframe = document.getElementById('chat-iframe');
             const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
-
+            
             // SameSite=None 쿠키 설정 (필요한 경우)
-            setSameSiteNoneCookie('exampleCookie', 'exampleValue', 7);
+            setSameSiteNoneCookie('exampleCookie', 'exampleValue', 7); // 예시 쿠키
 
             // 해시 전달 방식으로 채팅창 로드
             if(location.hash && location.hash.substring(1)) {
@@ -173,23 +120,8 @@
             } else {
                 chatIframe.src = lgicurl;
             }
-
-            // 채팅창 iframe에서 메시지 수신을 위한 이벤트 리스너
-            window.addEventListener('message', (event) => {
-                if (event.origin !== 'https://insagirl-toto.appspot.com') return;
-
-                const url = event.data;
-                handleVideoRedirect(url);
-            });
-
-            // "흐름" 버튼 클릭 이벤트 추가
-            const hrmBtn = document.getElementById('hrm-btn');
-            hrmBtn.addEventListener('click', () => {
-                const url = 'https://insagirl-toto.appspot.com/hrm/?where=1';
-                window.open(url, '_blank');
-            });
-
-            design();
+            
+            design(); // 초기 레이아웃 설정
         };
 
         // 화면 크기 변경시 레이아웃 조정
@@ -200,7 +132,7 @@
         refreshBtn.addEventListener('click', () => {
             const chatIframe = document.getElementById('chat-iframe');
             const currentSrc = chatIframe.src;
-            chatIframe.src = currentSrc;
+            chatIframe.src = currentSrc; // 해시 포함된 URL 유지
         });
     </script>
     <script src="script.js"></script>
