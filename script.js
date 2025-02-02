@@ -69,6 +69,30 @@ function transformUrl(url) {
         alert('URL을 입력해주세요.');
         return;
     }
+
+    // 축약된 형식인지 확인 (예: youtube/id, twitch/id)
+    const isShortForm = /^(youtube|twitch|chzzk|kick|afreeca)\/[^\/]+$/.test(url);
+
+    if (isShortForm) {
+        const [platform, channelId] = url.split('/');
+        switch (platform) {
+            case 'youtube':
+                return `https://www.youtube.com/embed/${channelId}`;
+            case 'twitch':
+                return `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
+            case 'chzzk':
+                return `https://chzzk.naver.com/live/${channelId}`;
+            case 'kick':
+                return `https://player.kick.com/${channelId}`;
+            case 'afreeca':
+                return `https://play.sooplive.co.kr/${channelId}/embed`;
+            default:
+                alert('지원하지 않는 플랫폼입니다.');
+                return;
+        }
+    }
+
+    // 기존의 전체 URL 처리 로직
     if (!url.startsWith('http')) {
         alert('유효한 URL을 입력해주세요.');
         return;
@@ -104,7 +128,6 @@ function transformUrl(url) {
         alert('지원하지 않는 URL 형식입니다.');
     }
 }
-
 // Load Twitch channel
 function loadTwitchChannel() {
     const hash = window.location.hash;
