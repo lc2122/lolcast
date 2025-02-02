@@ -85,8 +85,25 @@ body {
     background-color: #0056b3;
 }
 
+/* Input modal styles */
+#input-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%; /* 设置宽度为屏幕宽度的90% */
+    max-width: 400px; /* 最大宽度限制 */
+    margin: 20px auto; /* 水平居中 */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    z-index: 1000;
+}
+
 .url-input {
-    width: 300px;
+    width: calc(100% - 120px); /* 输入框宽度自适应 */
     padding: 8px;
     font-size: 14px;
     border: 1px solid #ccc;
@@ -94,17 +111,10 @@ body {
     margin-right: 10px;
 }
 
-#input-modal {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+#go-btn, #close-btn {
+    width: 50px; /* 按钮宽度固定 */
+    padding: 8px;
+    font-size: 12px;
 }
 
 #go-btn {
@@ -112,8 +122,6 @@ body {
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -127,8 +135,6 @@ body {
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
