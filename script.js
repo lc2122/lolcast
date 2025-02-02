@@ -41,61 +41,71 @@ function createIframe(src) {
     iframe.allowfullscreen = true;
     iframe.style.width = '100%';
     iframe.style.height = '100%';
+    console.log(`Creating iframe with src: ${src}`);
     return iframe;
 }
 
 // 영상 로드 처리
 function handleVideoRedirect(url) {
+    console.log(`Handling video redirect for URL: ${url}`);
+    const videoSection = document.querySelector('.video-section');
+
     // 현재 영상 영역 초기화
     while (videoSection.firstChild) {
         videoSection.removeChild(videoSection.firstChild);
     }
 
-    // YouTube
-    if (url.includes('https://lc2122.github.io/lolcast/youtube/')) {
-        const videoId = url.split('/').pop();
-        const iframe = createIframe(`https://www.youtube.com/embed/${videoId}`);
-        handleFallback(iframe);
-        videoSection.appendChild(iframe);
-    }
-    // 치지직 (Chzzk)
-    else if (url.includes('https://lc2122.github.io/lolcast/chzzk/')) {
-        const channelId = url.split('/').pop();
-        const iframe = createIframe(`https://chzzk.naver.com/live/${channelId}`);
-        videoSection.appendChild(iframe);
-    }
-    // 아프리카TV (Afreeca)
-    else if (url.includes('https://lc2122.github.io/lolcast/soop/')) {
-        const channelId = url.split('/').pop();
-        const iframe = createIframe(`https://play.sooplive.co.kr/${channelId}/280495766/embed`);
-        videoSection.appendChild(iframe);
-    }
-    // Twitch
-    else if (url.includes('https://lc2122.github.io/lolcast/twitch/')) {
-        const channelId = url.split('/').pop();
-        const iframe = createIframe(`https://player.twitch.tv/?channel=${channelId}&parent=https://lc2122.github.io/lolcast/`);
-        videoSection.appendChild(iframe);
-    }
-    // Kick
-    else if (url.includes('https://lc2122.github.io/lolcast/kick/')) {
-        const channelId = url.split('/').pop();
-        const iframe = createIframe(`https://player.kick.com/${channelId}`);
-        videoSection.appendChild(iframe);
-    }
-    // m3u8 (HLS)
-    else if (url.includes('https://lc2122.github.io/lolcast/m3u8/')) {
-        const m3u8Url = url.split('/').pop();
-        const iframe = createIframe(m3u8Url);
-        videoSection.appendChild(iframe);
-    }
-    // CHANNELS에 정의된 고정 영상 소스
-    else if (url.includes('forest')) {
-        const iframe = createIframe(CHANNELS.forest.url());
-        videoSection.appendChild(iframe);
-    }
-    else if (url.includes('flow')) {
-        const iframe = createIframe(CHANNELS.flow.url());
-        videoSection.appendChild(iframe);
+    try {
+        // YouTube
+        if (url.includes('https://lc2122.github.io/lolcast/youtube/')) {
+            const videoId = url.split('/').pop();
+            const iframe = createIframe(`https://www.youtube.com/embed/${videoId}`);
+            videoSection.appendChild(iframe);
+        }
+        // 치지직 (Chzzk)
+        else if (url.includes('https://lc2122.github.io/lolcast/chzzk/')) {
+            const channelId = url.split('/').pop();
+            const iframe = createIframe(`https://chzzk.naver.com/live/${channelId}`);
+            videoSection.appendChild(iframe);
+        }
+        // 아프리카TV (Afreeca)
+        else if (url.includes('https://lc2122.github.io/lolcast/soop/')) {
+            const channelId = url.split('/').pop();
+            const iframe = createIframe(`https://play.sooplive.co.kr/${channelId}/280495766/embed`);
+            videoSection.appendChild(iframe);
+        }
+        // Twitch
+        else if (url.includes('https://lc2122.github.io/lolcast/twitch/')) {
+            const channelId = url.split('/').pop();
+            const iframe = createIframe(`https://player.twitch.tv/?channel=${channelId}&parent=https://lc2122.github.io/lolcast/`);
+            videoSection.appendChild(iframe);
+        }
+        // Kick
+        else if (url.includes('https://lc2122.github.io/lolcast/kick/')) {
+            const channelId = url.split('/').pop();
+            const iframe = createIframe(`https://player.kick.com/${channelId}`);
+            videoSection.appendChild(iframe);
+        }
+        // m3u8 (HLS)
+        else if (url.includes('https://lc2122.github.io/lolcast/m3u8/')) {
+            const m3u8Url = url.split('/').pop();
+            const iframe = createIframe(m3u8Url);
+            videoSection.appendChild(iframe);
+        }
+        // CHANNELS에 정의된 고정 영상 소스
+        else if (url.includes('forest')) {
+            const iframe = createIframe(CHANNELS.forest.url());
+            videoSection.appendChild(iframe);
+        }
+        else if (url.includes('flow')) {
+            const iframe = createIframe(CHANNELS.flow.url());
+            videoSection.appendChild(iframe);
+        }
+        else {
+            console.error('Unknown URL format:', url);
+        }
+    } catch (error) {
+        console.error('Error handling video redirect:', error);
     }
 }
 
