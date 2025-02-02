@@ -116,12 +116,8 @@ window.onload = function() {
     } else {
         chatIframe.src = lgicurl;
     }
-    design();
-
-    // script.js의 로직
-    videoIframe.src = CHANNELS.flow.url();
-    loadTwitchChannel();
-};
+   design(); // 초기 레이아웃 설정
+        };
 
         // "흐름" 버튼 클릭 이벤트 추가
         const hrmBtn = document.getElementById('hrm-btn');
