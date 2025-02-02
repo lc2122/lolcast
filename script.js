@@ -59,7 +59,6 @@ goBtn.addEventListener('click', () => {
     if (transformedUrl) {
         if (transformedUrl.endsWith('.m3u8')) {
             const playerUrl = `https://lc2122.github.io/m3u8-player/player/#${encodeURIComponent(transformedUrl)}`;
-            window.open(playerUrl, '_blank'); 
         } else {
             videoIframe.src = transformedUrl;
         }
