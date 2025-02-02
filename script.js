@@ -102,7 +102,7 @@ function transformUrl(url) {
         }
     }
 
-    // 기존의 전체 URL 처리 로직
+   // 기존의 전체 URL 처리 로직
     if (!url.startsWith('http')) {
         alert('유효한 URL을 입력해주세요.');
         return;
@@ -132,6 +132,11 @@ function transformUrl(url) {
     else if (url.startsWith('https://lolcast.kr/#/player/afreeca/')) {
         const channelId = url.split('/').pop();
         return `https://play.sooplive.co.kr/${channelId}/embed`;
+    }
+    // HLS 스트림
+    else if (url.endsWith('.m3u8')) {
+        playHlsStream(url);
+        return null; // HLS 스트림은 iframe에 직접 할당하지 않음
     }
     // 기타 지원하지 않는 URL
     else {
