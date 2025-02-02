@@ -57,11 +57,14 @@ goBtn.addEventListener('click', () => {
     const userInput = urlInput.value;
     const transformedUrl = transformUrl(userInput);
     if (transformedUrl) {
-        videoIframe.src = transformedUrl;
-        // 입력된 URL을 localStorage에 저장
+        if (transformedUrl.endsWith('.m3u8')) {
+            playHlsStream(transformedUrl);
+        } else {
+            videoIframe.src = transformedUrl;
+        }
         localStorage.setItem('lastInputValue', userInput);
-        urlInput.value = ''; 
-        document.getElementById('input-modal').style.display = 'none'; 
+        urlInput.value = '';
+        document.getElementById('input-modal').style.display = 'none';
     }
 });
 
