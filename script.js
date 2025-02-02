@@ -136,6 +136,24 @@ function transformUrl(url) {
     }
 }
 
+function playHlsStream(url) {
+    if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(videoIframe);
+        hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+            videoIframe.play();
+        });
+    } else if (videoIframe.canPlayType('application/vnd.apple.mpegurl')) {
+        videoIframe.src = url;
+        videoIframe.addEventListener('loadedmetadata', () => {
+            videoIframe.play();
+        });
+    } else {
+        alert('HLS is not supported on this browser.');
+    }
+}
+
 // Load Twitch channel
 function loadTwitchChannel() {
     const hash = window.location.hash;
