@@ -21,6 +21,8 @@ const videoIframe = document.getElementById('video-iframe');
 const youtubeBtn = document.getElementById('youtube-btn');
 const forestBtn = document.getElementById('forest-btn');
 const flowBtn = document.getElementById('flow-btn');
+const inputBtn = document.getElementById('input-btn');
+const goBtn = document.getElementById('go-btn');
 
 // YouTube 버튼 클릭 시
 youtubeBtn.addEventListener('click', () => {
@@ -38,6 +40,52 @@ forestBtn.addEventListener('click', () => {
 flowBtn.addEventListener('click', () => {
     videoIframe.src = CHANNELS.flow.url();
 });
+
+// "Input" 버튼 클릭 시
+inputBtn.addEventListener('click', () => {
+    document.getElementById('input-modal').style.display = 'block';
+});
+
+// "Go" 버튼 클릭 시
+goBtn.addEventListener('click', () => {
+    const urlInput = document.getElementById('url-input');
+    const userInput = urlInput.value;
+    const transformedUrl = transformUrl(userInput);
+    if (transformedUrl) {
+        videoIframe.src = transformedUrl;
+        urlInput.value = ''; 
+        document.getElementById('input-modal').style.display = 'none'; 
+    }
+});
+
+// URL 
+function transformUrl(url) {
+    if (!url) {
+        alert('URL을 입력해주세요.');
+        return;
+    }
+    if (!url.startsWith('http')) {
+        alert('유효한 URL을 입력해주세요.');
+        return;
+    }
+    
+    if (url.startsWith('https://lolcast.kr/#/player/chzzk/')) {
+        return url.replace('https://lolcast.kr/#/player/chzzk/', 'https://lc2122.github.io/lolcast/#/chzzk/');
+    } else if (url.startsWith('https://lolcast.kr/#/player/afreeca/')) {
+        return url.replace('https://lolcast.kr/#/player/afreeca/', 'https://lc2122.github.io/lolcast/#/soop/');
+    } else if (url.startsWith('https://www.youtube.com/embed/live_stream?channel=')) {
+        const channelId = url.split('channel=')[1];
+        return `https://www.youtube.com/embed/${channelId}`;
+    } else if (url.startsWith('https://player.twitch.tv/?channel=')) {
+        const channelId = url.split('channel=')[1];
+        return `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
+    } else if (url.startsWith('https://player.kick.com/')) {
+        const channelId = url.split('/').pop();
+        return `https://player.kick.com/${channelId}`;
+    } else {
+        alert('지원하지 않는 URL 형식입니다.');
+    }
+}
 
 // Load Twitch channel
 function loadTwitchChannel() {
