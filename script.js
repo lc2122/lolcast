@@ -64,11 +64,11 @@ function transformUrl(url) {
     }
     
     const patterns = {
-        youtube: /^https?:\/\/www\.youtube\.com\/embed\/live_stream\?channel=([^&]+)/,
-        twitch: /^https?:\/\/player\.twitch\.tv\?channel=([^&]+)/,
-        chzzk: /^https?:\/\/chzzk\.naver\.com\/live\/([^/]+)/,
-        kick: /^https?:\/\/player\.kick\.com\/([^/]+)/,
-        afreeca: /^https?:\/\/play\.sooplive\.co.kr\/([^/]+)/
+        youtube: /^<url id="\w+" type="url" status="failed" title="" wc="0">https:\/\/www\.youtube\.com\/embed\/<\/url>(\w+)/,
+        twitch: /^<url id="\w+" type="url" status="failed" title="" wc="0">https:\/\/player\.twitch\.tv\/\?channel=<\/url>(\w+)&parent=lc2122\.github\.io/,
+        chzzk: /^<url id="\w+" type="url" status="parsed" title="치지직 CHZZK" wc="299">https:\/\/chzzk\.naver\.com\/live\/<\/url>(\w+)/,
+        kick: /^<url id="\w+" type="url" status="failed" title="" wc="0">https:\/\/player\.kick\.com\/<\/url>(\w+)/,
+        afreeca: /^<url id="\w+" type="url" status="parsed" title="SOOP" wc="2274">https:\/\/play\.sooplive\.co.kr\/<\/url>(\w+)\/embed/
     };
 
     for (const platform in patterns) {
@@ -92,6 +92,7 @@ function transformUrl(url) {
         }
     }
 }
+
 
 const inputModal = document.getElementById('input-modal');
 
