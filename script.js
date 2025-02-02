@@ -59,7 +59,7 @@ function loadTwitchChannel() {
     const hash = window.location.hash;
     if (hash.startsWith('#/twitch/')) {
         const channelId = hash.split('/')[2];
-        const twitchUrl = `https://player.twitch.tv/?channel=${channelId}&parent=insagirl-toto.appspot.com`;
+        const twitchUrl = `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
         videoIframe.src = twitchUrl;
     }
 }
