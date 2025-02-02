@@ -136,18 +136,13 @@ window.onload = function() {
         // 화면 크기 변경시 레이아웃 조정
         window.onresize = design;
 
-        document.addEventListener('DOMContentLoaded', () => {
-    // F5 버튼 클릭 시 채팅창 새로고침 (해시 유지)
-    const refreshBtn = document.getElementById('refresh-btn');
-    if (refreshBtn) {
+        // F5 버튼 클릭 시 채팅창 새로고침 (해시 유지)
+        const refreshBtn = document.getElementById('refresh-btn');
         refreshBtn.addEventListener('click', () => {
             const chatIframe = document.getElementById('chat-iframe');
-            if (chatIframe) {
-                const currentSrc = chatIframe.src;
-                chatIframe.src = currentSrc; // 해시 포함된 URL 유지
-            }
+            const currentSrc = chatIframe.src;
+            chatIframe.src = currentSrc; // 해시 포함된 URL 유지
         });
-    }
     </script>
     <script src="script.js"></script>
 </body>
