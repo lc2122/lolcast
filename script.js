@@ -3,8 +3,7 @@ const CHANNELS = {
         id: 'UCw1DsweY9b2AKGjV4kGJP1A',
         buttonLabel: '유튜브',
         color: '#FF0000',
-        url: (id) => `https://www.youtube.com/embed/live_stream?channel=${id}`,
-        fallbackUrl: 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html'
+        url: (id) => `https://www.youtube.com/embed/live_stream?channel=${id}`
     },
     forest: {
         buttonLabel: '숲',
@@ -22,13 +21,6 @@ const videoIframe = document.getElementById('video-iframe');
 const youtubeBtn = document.getElementById('youtube-btn');
 const forestBtn = document.getElementById('forest-btn');
 const flowBtn = document.getElementById('flow-btn');
-
-// Function to handle fallback URL
-const handleFallback = () => {
-    videoIframe.addEventListener('error', () => {
-        videoIframe.src = CHANNELS.youtube.fallbackUrl;
-    });
-};
 
 // YouTube 버튼 클릭 시
 youtubeBtn.addEventListener('click', () => {
