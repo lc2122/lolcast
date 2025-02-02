@@ -99,31 +99,25 @@ function transformUrl(url) {
     }
 }
 
-const inputModal = document.getElementById('input-modal');
-const urlInput = document.getElementById('url-input');
-const goButton = document.getElementById('go-btn');
-
-// 모달 외부를 클릭하면 모달을 닫는 함수
-function handleOutsideClick(event) {
-    // 모달 내부(입력창, Go 버튼)를 클릭한 경우는 무시
-    if (inputModal.contains(event.target)) {
-        return;
-    }
-    // 모달 외부를 클릭한 경우 모달 닫기
-    inputModal.style.display = 'none';
+function openModal() {
+    inputModal.style.display = 'block';
+    document.addEventListener('click', handleOutsideClick);
 }
 
-// 모달 외부 클릭 이벤트 리스너 추가
-document.addEventListener('click', handleOutsideClick);
+function closeModal() {
+    inputModal.style.display = 'none';
+    document.removeEventListener('click', handleOutsideClick);
+}
 
-// 입력창과 Go 버튼 클릭 시 이벤트 전파 막기 (필요 없음, 위에서 처리됨)
-urlInput.addEventListener('click', (event) => {
-    event.stopPropagation();
-});
+// 모달 열기 예시
+document.getElementById('input-btn').addEventListener('click', openModal);
 
-goButton.addEventListener('click', (event) => {
-    event.stopPropagation();
-});
+// 모달 닫기
+function handleOutsideClick(event) {
+    if (!inputModal.contains(event.target)) {
+        closeModal();
+    }
+}
 
 // Load Twitch channel
 function loadTwitchChannel() {
