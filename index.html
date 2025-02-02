@@ -47,12 +47,11 @@
         </div>
     </div>
     
-<div id="input-modal" style="display: none;">
-    <input type="text" id="url-input" class="url-input" placeholder="URL 입력" />
-    <button id="go-btn" class="menu-button">Go</button>
-</div>
+    <div id="input-modal" style="display: none;">
+        <input type="text" id="url-input" class="url-input" placeholder="URL 입력" />
+        <button id="go-btn" class="menu-button">Go</button>
+    </div>
 
-    
     <script>
         // SameSite=None 쿠키 설정 함수
         function setSameSiteNoneCookie(name, value, days) {
@@ -114,16 +113,16 @@
             }
         }
 
-window.onload = function() {
-    // index.html의 로직
-    const chatIframe = document.getElementById('chat-iframe');
-    const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
-    if(location.hash && location.hash.substring(1)) {
-        chatIframe.src = lgicurl + '#' + decodeURIComponent(location.hash.substring(1));
-    } else {
-        chatIframe.src = lgicurl;
-    }
-   design(); // 초기 레이아웃 설정
+        // 초기 로드 시 실행
+        window.onload = function() {
+            const chatIframe = document.getElementById('chat-iframe');
+            const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
+            if(location.hash && location.hash.substring(1)) {
+                chatIframe.src = lgicurl + '#' + decodeURIComponent(location.hash.substring(1));
+            } else {
+                chatIframe.src = lgicurl;
+            }
+            design(); // 초기 레이아웃 설정
         };
 
         // "흐름" 버튼 클릭 이벤트 추가
@@ -137,11 +136,17 @@ window.onload = function() {
         window.onresize = design;
 
         // F5 버튼 클릭 시 채팅창 새로고침 (해시 유지)
-        const refreshBtn = document.getElementById('refresh-btn');
-        refreshBtn.addEventListener('click', () => {
-            const chatIframe = document.getElementById('chat-iframe');
-            const currentSrc = chatIframe.src;
-            chatIframe.src = currentSrc; // 해시 포함된 URL 유지
+        document.addEventListener('DOMContentLoaded', () => {
+            const refreshBtn = document.getElementById('refresh-btn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', () => {
+                    const chatIframe = document.getElementById('chat-iframe');
+                    if (chatIframe) {
+                        const currentSrc = chatIframe.src;
+                        chatIframe.src = currentSrc; // 해시 포함된 URL 유지
+                    }
+                });
+            }
         });
     </script>
     <script src="script.js"></script>
