@@ -4,7 +4,7 @@ const CHANNELS = {
         buttonLabel: '유튜브',
         color: '#FF0000',
         url: (id) => `https://www.youtube.com/embed/live_stream?channel=${id}`,
-        fallbackUrl: 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html'  
+        fallbackUrl: 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html'  // 备用视频 URL
     },
     forest: {
         buttonLabel: '숲',
@@ -18,79 +18,104 @@ const CHANNELS = {
     }
 };
 
-const videoIframe = document.getElementById('video-iframe');
+const videoSection = document.querySelector('.video-section');
 const youtubeBtn = document.getElementById('youtube-btn');
 const forestBtn = document.getElementById('forest-btn');
 const flowBtn = document.getElementById('flow-btn');
 
 // Function to handle fallback URL
-const handleFallback = () => {
-    if (videoIframe.contentWindow.document.body.innerHTML.includes('This video is unavailable')) {
-        videoIframe.src = CHANNELS.youtube.fallbackUrl;
-    }
+const handleFallback = (iframe) => {
+    iframe.onload = () => {
+        if (iframe.contentWindow.document.body.innerHTML.includes('This video is unavailable')) {
+            iframe.src = CHANNELS.youtube.fallbackUrl;
+        }
+    };
 };
 
+// 创建并插入 iframe
+function createIframe(src) {
+    const iframe = document.createElement('iframe');
+    iframe.src = src;
+    iframe.frameborder = '0';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowfullscreen = true;
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    return iframe;
+}
+
+// 处理视频加载
 function handleVideoRedirect(url) {
-    const videoIframe = document.getElementById('video-iframe');
+    // 清空当前视频区域
+    while (videoSection.firstChild) {
+        videoSection.removeChild(videoSection.firstChild);
+    }
 
     // YouTube
     if (url.includes('https://lc2122.github.io/lolcast/youtube/')) {
         const videoId = url.split('/').pop();
-        videoIframe.src = `https://www.youtube.com/embed/${videoId}`;
-        videoIframe.onload = handleFallback;
+        const iframe = createIframe(`https://www.youtube.com/embed/${videoId}`);
+        handleFallback(iframe);
+        videoSection.appendChild(iframe);
     }
     // 치지직 (Chzzk)
     else if (url.includes('https://lc2122.github.io/lolcast/chzzk/')) {
         const channelId = url.split('/').pop();
-        videoIframe.src = `https://chzzk.naver.com/live/${channelId}`;
+        const iframe = createIframe(`https://chzzk.naver.com/live/${channelId}`);
+        videoSection.appendChild(iframe);
     }
     // 아프리카TV (Afreeca)
     else if (url.includes('https://lc2122.github.io/lolcast/soop/')) {
         const channelId = url.split('/').pop();
-        videoIframe.src = `https://play.sooplive.co.kr/${channelId}/280495766/embed`;
+        const iframe = createIframe(`https://play.sooplive.co.kr/${channelId}/280495766/embed`);
+        videoSection.appendChild(iframe);
     }
     // Twitch
     else if (url.includes('https://lc2122.github.io/lolcast/twitch/')) {
         const channelId = url.split('/').pop();
-        videoIframe.src = `https://player.twitch.tv/?channel=${channelId}&parent=https://lc2122.github.io/lolcast/`;
+        const iframe = createIframe(`https://player.twitch.tv/?channel=${channelId}&parent=https://lc2122.github.io/lolcast/`);
+        videoSection.appendChild(iframe);
     }
     // Kick
     else if (url.includes('https://lc2122.github.io/lolcast/kick/')) {
         const channelId = url.split('/').pop();
-        videoIframe.src = `https://player.kick.com/${channelId}`;
+        const iframe = createIframe(`https://player.kick.com/${channelId}`);
+        videoSection.appendChild(iframe);
     }
     // m3u8 (HLS)
     else if (url.includes('https://lc2122.github.io/lolcast/m3u8/')) {
         const m3u8Url = url.split('/').pop();
-        playHlsVideo(m3u8Url);
+        const iframe = createIframe(m3u8Url);
+        videoSection.appendChild(iframe);
     }
-    // CHANNELS 
+    // CHANNELS 中的固定视频源
     else if (url.includes('forest')) {
-        videoIframe.src = CHANNELS.forest.url();
+        const iframe = createIframe(CHANNELS.forest.url());
+        videoSection.appendChild(iframe);
     }
     else if (url.includes('flow')) {
-        videoIframe.src = CHANNELS.flow.url();
+        const iframe = createIframe(CHANNELS.flow.url());
+        videoSection.appendChild(iframe);
     }
 }
 
-// YouTube
+// YouTube 按钮点击时
 youtubeBtn.addEventListener('click', () => {
     const youtubeUrl = CHANNELS.youtube.url(CHANNELS.youtube.id);
-    videoIframe.src = youtubeUrl;
-    videoIframe.onload = handleFallback;
+    handleVideoRedirect(youtubeUrl);
 });
 
-// Forest 
+// Forest 按钮点击时
 forestBtn.addEventListener('click', () => {
-    videoIframe.src = CHANNELS.forest.url();
+    handleVideoRedirect('forest');
 });
 
-// Flow 
+// Flow 按钮点击时
 flowBtn.addEventListener('click', () => {
-    videoIframe.src = CHANNELS.flow.url();
+    handleVideoRedirect('flow');
 });
 
-//
+// 页面加载时，默认加载 Flow 频道的视频
 window.addEventListener('load', () => {
-    videoIframe.src = CHANNELS.flow.url();
+    handleVideoRedirect('flow');
 });
