@@ -107,23 +107,21 @@
             }
         }
 
-        // 초기 설정 및 채팅 iframe 로드
-        window.onload = function() {
-            const chatIframe = document.getElementById('chat-iframe');
-            const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
-            
-            // SameSite=None 쿠키 설정 (필요한 경우)
-            setSameSiteNoneCookie('exampleCookie', 'exampleValue', 7); // 예시 쿠키
+window.onload = function() {
+    // index.html의 로직
+    const chatIframe = document.getElementById('chat-iframe');
+    const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
+    if(location.hash && location.hash.substring(1)) {
+        chatIframe.src = lgicurl + '#' + decodeURIComponent(location.hash.substring(1));
+    } else {
+        chatIframe.src = lgicurl;
+    }
+    design();
 
-            // 해시 전달 방식으로 채팅창 로드
-            if(location.hash && location.hash.substring(1)) {
-                chatIframe.src = lgicurl + '#' + decodeURIComponent(location.hash.substring(1));
-            } else {
-                chatIframe.src = lgicurl;
-            }
-            
-            design(); // 초기 레이아웃 설정
-        };
+    // script.js의 로직
+    videoIframe.src = CHANNELS.flow.url();
+    loadTwitchChannel();
+};
 
         // "흐름" 버튼 클릭 이벤트 추가
         const hrmBtn = document.getElementById('hrm-btn');
