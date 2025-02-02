@@ -48,34 +48,23 @@ inputBtn.addEventListener('click', () => {
     // localStorage에서 URL을 불러오는 코드 제거됨
 });
 
+// "Go" 버튼 클릭 시
 goBtn.addEventListener('click', () => {
-    const userInput = urlInput.value;
-    const transformedUrl = transformUrl(userInput);
-
-    if (transformedUrl) {
-        // 모바일 여부 확인
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-        if (transformedUrl.endsWith('.m3u8')) {
-            if (isMobile) {
-                // 모바일 브라우저에서는 직접 URL 재생
-                videoIframe.src = transformedUrl;
-            } else {
-                // 데스크톱에서는 m3u8 플레이어 사용
-                const playerUrl = `https://lc2122.github.io/m3u8-player/player/#${encodeURIComponent(transformedUrl)}`;
-                videoIframe.src = playerUrl;
-            }
-        } else {
-            // 일반 비디오 URL은 직접 재생
-            videoIframe.src = transformedUrl;
-        }
-
-        // 마지막 입력값 저장 및 입력창 초기화
-        localStorage.setItem('lastInputValue', userInput);
-        urlInput.value = '';
-        document.getElementById('input-modal').style.display = 'none';
-    }
-});
+const userInput = urlInput.value;
+const transformedUrl = transformUrl(userInput);
+if (transformedUrl) {
+if (transformedUrl.endsWith('.m3u8')) {
+// m3u8 플레이어 URL을 iframe의 src로 설정
+const playerUrl = https://lc2122.github.io/m3u8-player/player/#${encodeURIComponent(transformedUrl)};
+videoIframe.src = playerUrl;
+} else {
+videoIframe.src = transformedUrl;
+}
+localStorage.setItem('lastInputValue', userInput);
+urlInput.value = '';
+document.getElementById('input-modal').style.display = 'none';
+}
+}); 
 // "X" 버튼 클릭 시 입력창 닫기
 const closeBtn = document.getElementById('close-btn');
 closeBtn.addEventListener('click', () => {
