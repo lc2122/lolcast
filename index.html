@@ -5,12 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>모바일 페이지</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script> <!-- hls.js 라이브러리 -->
     <style>
         /* 버튼 크기 조정 */
         .menu-button {
             padding: 5px 10px; /* 버튼 크기 줄임 */
             font-size: 14px; /* 폰트 크기 줄임 */
             margin: 2px; /* 버튼 간격 조정 */
+        }
+
+        /* 채팅 iframe 확대 */
+        #chat-iframe {
+            zoom: 1.2; /* 120%로 확대 */
+            /* 또는 */
+            transform: scale(1.2);
+            transform-origin: 0 0;
         }
     </style>
 </head>
@@ -106,6 +115,72 @@
             }
         }
 
+        // URL을 분석하여 영상 재생
+        function handleVideoRedirect(url) {
+            const videoIframe = document.getElementById('video-iframe');
+
+            // YouTube
+            if (url.includes('https://lolcast.kr/#/player/youtube/')) {
+                const videoId = url.split('/').pop(); // YouTube 동영상 ID 추출
+                videoIframe.src = `https://www.youtube.com/embed/${videoId}`;
+            }
+            // 치지직 (Chzzk)
+            else if (url.includes('https://lolcast.kr/#/player/chzzk/')) {
+                const channelId = url.split('/').pop(); // 치지직 채널 ID 추출
+                videoIframe.src = `https://chzzk.naver.com/live/${channelId}`;
+            }
+            // 아프리카TV (Afreeca)
+            else if (url.includes('https://lolcast.kr/#/player/afreeca/')) {
+                const channelId = url.split('/').pop(); // 아프리카TV 채널 ID 추출
+                videoIframe.src = `https://play.sooplive.co.kr/${channelId}/280495766/embed`;
+            }
+            // Twitch
+            else if (url.includes('https://lolcast.kr/#/player/twitch/')) {
+                const channelId = url.split('/').pop(); // Twitch 채널 ID 추출
+                videoIframe.src = `https://player.twitch.tv/?channel=${channelId}&parent=https://lc2122.github.io/lolcast/`;
+            }
+            // Kick
+            else if (url.includes('https://lolcast.kr/#/player/kick/')) {
+                const channelId = url.split('/').pop(); // Kick 채널 ID 추출
+                videoIframe.src = `https://player.kick.com/${channelId}`;
+            }
+            // m3u8 (HLS)
+            else if (url.includes('.m3u8')) {
+                playHlsVideo(url); // hls.js를 사용하여 재생
+            }
+        }
+
+        // hls.js를 사용하여 m3u8 영상 재생
+        function playHlsVideo(url) {
+            const videoIframe = document.getElementById('video-iframe');
+            videoIframe.src = ''; // iframe 초기화
+
+            // 비디오 요소 생성
+            const videoElement = document.createElement('video');
+            videoElement.controls = true;
+            videoElement.style.width = '100%';
+            videoElement.style.height = '100%';
+
+            // hls.js 설정
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(videoElement);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    videoElement.play();
+                });
+            } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+                // Safari 등 네이티브 HLS 지원 브라우저
+                videoElement.src = url;
+                videoElement.addEventListener('loadedmetadata', () => {
+                    videoElement.play();
+                });
+            }
+
+            // iframe 대신 비디오 요소를 표시
+            videoIframe.replaceWith(videoElement);
+        }
+
         // 초기 설정 및 채팅 iframe 로드
         window.onload = function() {
             const chatIframe = document.getElementById('chat-iframe');
@@ -120,7 +195,19 @@
             } else {
                 chatIframe.src = lgicurl;
             }
-            
+
+            // 채팅창 iframe에서 메시지 수신을 위한 이벤트 리스너
+            window.addEventListener('message', (event) => {
+                // 메시지가 올바른 출처에서 온 것인지 확인
+                if (event.origin !== 'https://insagirl-toto.appspot.com') return;
+
+                // 메시지 데이터에서 URL 추출
+                const url = event.data;
+
+                // URL을 분석하여 영상 재생
+                handleVideoRedirect(url);
+            });
+
             design(); // 초기 레이아웃 설정
         };
 
