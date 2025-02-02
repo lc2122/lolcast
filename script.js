@@ -45,11 +45,7 @@ flowBtn.addEventListener('click', () => {
 // "Input" 버튼 클릭 시
 inputBtn.addEventListener('click', () => {
     document.getElementById('input-modal').style.display = 'block';
-    // 입력창이 열릴 때 localStorage에서 저장된 URL을 불러옴
-    const lastInputValue = localStorage.getItem('lastInputValue');
-    if (lastInputValue) {
-        urlInput.value = lastInputValue;
-    }
+    // localStorage에서 URL을 불러오는 코드 제거됨
 });
 
 // "Go" 버튼 클릭 시
