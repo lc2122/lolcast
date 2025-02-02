@@ -1,12 +1,12 @@
 const CHANNELS = {
     youtube: {
         id: 'UCw1DsweY9b2AKGjV4kGJP1A',
-        buttonLabel: '유튜브',
+        buttonLabel: '숙제1',
         color: '#FF0000',
         url: (id) => `https://www.youtube.com/embed/live_stream?channel=${id}`
     },
     forest: {
-        buttonLabel: '숲',
+        buttonLabel: '숙제2',
         color: '#00aaff',
         url: () => 'https://play.sooplive.co.kr/aflol/embed'
     },
