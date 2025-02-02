@@ -29,6 +29,12 @@ const handleFallback = () => {
         videoIframe.src = CHANNELS.youtube.fallbackUrl;
     }
 };
+            // "흐름" 버튼 클릭 이벤트 추가
+            const hrmBtn = document.getElementById('hrm-btn');
+            hrmBtn.addEventListener('click', () => {
+                const url = 'https://insagirl-toto.appspot.com/hrm/?where=1';
+                window.open(url, '_blank');
+            });
 
 // YouTube 버튼 클릭 시
 youtubeBtn.addEventListener('click', () => {
