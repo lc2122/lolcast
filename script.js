@@ -58,9 +58,9 @@ goBtn.addEventListener('click', () => {
     const transformedUrl = transformUrl(userInput);
     if (transformedUrl) {
         if (transformedUrl.endsWith('.m3u8')) {
+            // m3u8 플레이어 URL을 iframe의 src로 설정
             const playerUrl = `https://lc2122.github.io/m3u8-player/player/#${encodeURIComponent(transformedUrl)}`;
-            // window.open 대신 window.location.href 사용
-            window.location.href = playerUrl;
+            videoIframe.src = playerUrl;
         } else {
             videoIframe.src = transformedUrl;
         }
