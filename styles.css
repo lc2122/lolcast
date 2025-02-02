@@ -122,6 +122,15 @@ body {
     background-color: #218838; 
 }
 
+#close-btn {
+    background-color: #dc3545; /* Red color */
+    transition: background-color 0.3s;
+}
+
+#close-btn:hover {
+    background-color: #a71d2a; /* Darker red on hover */
+}
+
 /* Top section styles */
 .top-section {
     flex: 2;
