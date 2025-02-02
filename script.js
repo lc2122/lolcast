@@ -18,7 +18,7 @@ const CHANNELS = {
         url: () => 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html'
     }
 };
- 
+
 // Get the video iframe
 const videoIframe = document.getElementById('video-iframe');
 
@@ -59,7 +59,7 @@ function loadTwitchChannel() {
     const hash = window.location.hash;
     if (hash.startsWith('#/twitch/')) {
         const channelId = hash.split('/')[2];
-        const twitchUrl = `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
+        const twitchUrl = `https://player.twitch.tv/?channel=${channelId}&parent=insagirl-toto.appspot.com`;
         videoIframe.src = twitchUrl;
     }
 }
@@ -74,7 +74,7 @@ window.addEventListener('load', () => {
 const message = { type: 'example', data: 'Hello, world!' };
 
 // Ensure the target origin matches the recipient window's origin
-const targetOrigin = 'https://insagirl-toto.appspot.com';
+const targetOrigin = 'https://insagirl-toto.appspot.com'; 
 
 // Send the message
 window.postMessage(message, targetOrigin);
