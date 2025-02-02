@@ -18,7 +18,7 @@ const CHANNELS = {
         url: () => 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html'
     }
 };
-
+ 
 // Get the video iframe
 const videoIframe = document.getElementById('video-iframe');
 
