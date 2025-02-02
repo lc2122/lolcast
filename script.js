@@ -43,12 +43,7 @@ flowBtn.addEventListener('click', () => {
 
 // "Input" 버튼 클릭 시
 inputBtn.addEventListener('click', () => {
-    const inputModal = document.getElementById('input-modal');
-    if (inputModal.style.display === 'block') {
-        inputModal.style.display = 'none';
-    } else {
-        inputModal.style.display = 'block';
-    }
+    document.getElementById('input-modal').style.display = 'block';
 });
 
 
