@@ -35,16 +35,27 @@ document.getElementById('youtube-btn').addEventListener('click', () => {
     videoIframe.src = youtubeUrl;
     setButtonColor(document.getElementById('youtube-btn'), CHANNELS.youtube.color);
     handleFallback();
+    console.log('YouTube button clicked', youtubeUrl);
 });
 
 document.getElementById('forest-btn').addEventListener('click', () => {
     videoIframe.src = CHANNELS.forest.url();
     setButtonColor(document.getElementById('forest-btn'), CHANNELS.forest.color);
+    console.log('Forest button clicked', CHANNELS.forest.url());
 });
 
 document.getElementById('flow-btn').addEventListener('click', () => {
     videoIframe.src = CHANNELS.flow.url();
     setButtonColor(document.getElementById('flow-btn'), CHANNELS.flow.color);
+    console.log('Flow button clicked', CHANNELS.flow.url());
+});
+
+videoIframe.addEventListener('load', () => {
+    console.log('Video iframe loaded');
+});
+
+videoIframe.addEventListener('error', () => {
+    console.error('Video iframe failed to load');
 });
 
 // Load Twitch channel
