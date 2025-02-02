@@ -47,11 +47,14 @@
         </div>
     </div>
     
-    <div id="input-modal" style="display: none;">
+<div id="input-modal" style="display: none;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
         <input type="text" id="url-input" class="url-input" placeholder="URL 입력" />
         <button id="go-btn" class="menu-button">Go</button>
+        <button id="close-btn" class="menu-button" style="background-color: #dc3545; color: white;">X</button>
     </div>
-
+</div>
+    
     <script>
         // SameSite=None 쿠키 설정 함수
         function setSameSiteNoneCookie(name, value, days) {
