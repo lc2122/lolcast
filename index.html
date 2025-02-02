@@ -142,7 +142,7 @@ refreshBtn.addEventListener('click', () => {
     if (chatIframe) {
         const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
         const hash = window.location.hash; // 현재 해시 값을 가져옴
-        chatIframe.src = lgicurl + hash; // 해시를 포함한 새로운 URL로 업데이트
+        chatIframe.src = lgicurl + hash + '?cache=' + Math.random(); // 해시를 포함한 새로운 URL로 업데이트
     }
 });
     </script>
