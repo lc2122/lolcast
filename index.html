@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>모바일 페이지</title>
+    <title>롤캐 모바일용</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         /* 버튼 크기 조정 */
@@ -23,6 +23,7 @@
             <button id="forest-btn" class="menu-button">숲</button>
             <button id="flow-btn" class="menu-button">flow</button>
             <button id="refresh-btn" class="menu-button">F5</button>
+            <button id="input-btn" class="menu-button">입력</button>
         </div>
         
         <!-- 중간: 영상 표시 -->
@@ -45,7 +46,12 @@
             ></iframe>
         </div>
     </div>
-
+    
+    <div id="input-modal" style="display: none; margin-top: 10px;">
+        <input type="text" id="url-input" placeholder="URL 입력" />
+        <button id="go-btn" class="menu-button">Go</button>
+    </div>
+    
     <script>
         // SameSite=None 쿠키 설정 함수
         function setSameSiteNoneCookie(name, value, days) {
