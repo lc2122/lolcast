@@ -58,7 +58,6 @@ goBtn.addEventListener('click', () => {
     }
 });
 
-// URL 
 function transformUrl(url) {
     if (!url) {
         alert('URL을 입력해주세요.');
@@ -68,21 +67,34 @@ function transformUrl(url) {
         alert('유효한 URL을 입력해주세요.');
         return;
     }
-    
-    if (url.startsWith('https://lolcast.kr/#/player/chzzk/')) {
-        return url.replace('https://lolcast.kr/#/player/chzzk/', 'https://lc2122.github.io/lolcast/#/chzzk/');
-    } else if (url.startsWith('https://lolcast.kr/#/player/afreeca/')) {
-        return url.replace('https://lolcast.kr/#/player/afreeca/', 'https://lc2122.github.io/lolcast/#/soop/');
-    } else if (url.startsWith('https://www.youtube.com/embed/live_stream?channel=')) {
-        const channelId = url.split('channel=')[1];
+
+    // YouTube
+    if (url.startsWith('https://lolcast.kr/#/player/youtube/')) {
+        const channelId = url.split('/').pop();
         return `https://www.youtube.com/embed/${channelId}`;
-    } else if (url.startsWith('https://player.twitch.tv/?channel=')) {
-        const channelId = url.split('channel=')[1];
+    }
+    // Twitch
+    else if (url.startsWith('https://lolcast.kr/#/player/twitch/')) {
+        const channelId = url.split('/').pop();
         return `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
-    } else if (url.startsWith('https://player.kick.com/')) {
+    }
+    // CHZZK
+    else if (url.startsWith('https://lolcast.kr/#/player/chzzk/')) {
+        const channelId = url.split('/').pop();
+        return `https://chzzk.naver.com/live/${channelId}`;
+    }
+    // Kick
+    else if (url.startsWith('https://lolcast.kr/#/player/kick/')) {
         const channelId = url.split('/').pop();
         return `https://player.kick.com/${channelId}`;
-    } else {
+    }
+    // AfreecaTV
+    else if (url.startsWith('https://lolcast.kr/#/player/afreeca/')) {
+        const channelId = url.split('/').pop();
+        return `https://play.sooplive.co.kr/${channelId}/embed`;
+    }
+    // 기타 지원하지 않는 URL
+    else {
         alert('지원하지 않는 URL 형식입니다.');
     }
 }
