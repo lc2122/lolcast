@@ -4,7 +4,7 @@ const CHANNELS = {
         buttonLabel: '유튜브',
         color: '#FF0000',
         url: (id) => `https://www.youtube.com/embed/live_stream?channel=${id}`,
-        fallbackUrl: 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html'  // 备用视频 URL
+        fallbackUrl: 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html'  // 대체 영상 URL
     },
     forest: {
         buttonLabel: '숲',
@@ -23,7 +23,7 @@ const youtubeBtn = document.getElementById('youtube-btn');
 const forestBtn = document.getElementById('forest-btn');
 const flowBtn = document.getElementById('flow-btn');
 
-// Function to handle fallback URL
+// 대체 URL 처리 함수
 const handleFallback = (iframe) => {
     iframe.onload = () => {
         if (iframe.contentWindow.document.body.innerHTML.includes('This video is unavailable')) {
@@ -32,7 +32,7 @@ const handleFallback = (iframe) => {
     };
 };
 
-// 动态创建并插入 iframe
+// iframe 생성 및 삽입
 function createIframe(src) {
     const iframe = document.createElement('iframe');
     iframe.src = src;
@@ -44,9 +44,9 @@ function createIframe(src) {
     return iframe;
 }
 
-// 处理视频加载
+// 영상 로드 처리
 function handleVideoRedirect(url) {
-    // 清空当前视频区域
+    // 현재 영상 영역 초기화
     while (videoSection.firstChild) {
         videoSection.removeChild(videoSection.firstChild);
     }
@@ -88,7 +88,7 @@ function handleVideoRedirect(url) {
         const iframe = createIframe(m3u8Url);
         videoSection.appendChild(iframe);
     }
-    // CHANNELS 中的固定视频源
+    // CHANNELS에 정의된 고정 영상 소스
     else if (url.includes('forest')) {
         const iframe = createIframe(CHANNELS.forest.url());
         videoSection.appendChild(iframe);
@@ -99,23 +99,23 @@ function handleVideoRedirect(url) {
     }
 }
 
-// YouTube 按钮点击时
+// YouTube 버튼 클릭 시
 youtubeBtn.addEventListener('click', () => {
     const youtubeUrl = CHANNELS.youtube.url(CHANNELS.youtube.id);
     handleVideoRedirect(youtubeUrl);
 });
 
-// Forest 按钮点击时
+// Forest 버튼 클릭 시
 forestBtn.addEventListener('click', () => {
     handleVideoRedirect('forest');
 });
 
-// Flow 按钮点击时
+// Flow 버튼 클릭 시
 flowBtn.addEventListener('click', () => {
     handleVideoRedirect('flow');
 });
 
-// 页面加载时，默认加载 Flow 频道的视频
+// 페이지 로드 시, 기본으로 Flow 채널 영상 로드
 window.addEventListener('load', () => {
     handleVideoRedirect('flow');
 });
