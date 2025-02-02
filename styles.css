@@ -92,9 +92,9 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%; /* 设置宽度为屏幕宽度的90% */
-    max-width: 400px; /* 最大宽度限制 */
-    margin: 20px auto; /* 水平居中 */
+    width: 90%; 
+    max-width: 400px; 
+    margin: 20px auto; 
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -103,7 +103,7 @@ body {
 }
 
 .url-input {
-    width: calc(100% - 120px); /* 输入框宽度自适应 */
+    width: calc(100% - 120px); 
     padding: 8px;
     font-size: 14px;
     border: 1px solid #ccc;
@@ -112,7 +112,7 @@ body {
 }
 
 #go-btn, #close-btn {
-    width: 50px; /* 按钮宽度固定 */
+    width: 50px; 
     padding: 8px;
     font-size: 12px;
 }
