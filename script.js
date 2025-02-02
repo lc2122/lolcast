@@ -64,6 +64,20 @@ closeBtn.addEventListener('click', () => {
     document.getElementById('input-modal').style.display = 'none';
 });
 
+const urlInput = document.getElementById('url-input');
+const currentUrlDisplay = document.getElementById('current-url-display');
+
+urlInput.addEventListener('input', () => {
+    const userInput = urlInput.value;
+    if (userInput) {
+        // 如果输入框有内容，显示当前输入的地址
+        currentUrlDisplay.textContent = userInput;
+    } else {
+        // 如果输入框为空，显示默认的示例地址
+        currentUrlDisplay.textContent = 'https://lolcast.kr/#/player/twitch/아이디, twitch/아이디  입력';
+    }
+});
+
 function transformUrl(url) {
     if (!url) {
         alert('URL을 입력해주세요.');
