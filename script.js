@@ -140,17 +140,18 @@ function transformUrl(url) {
 }
 
 function playHlsStream(url) {
+    const videoElement = document.getElementById('video-iframe');
     if (Hls.isSupported()) {
         const hls = new Hls();
         hls.loadSource(url);
-        hls.attachMedia(videoIframe);
-        hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-            videoIframe.play();
+        hls.attachMedia(videoElement);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            videoElement.play();
         });
-    } else if (videoIframe.canPlayType('application/vnd.apple.mpegurl')) {
-        videoIframe.src = url;
-        videoIframe.addEventListener('loadedmetadata', () => {
-            videoIframe.play();
+    } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+        videoElement.src = url;
+        videoElement.addEventListener('loadedmetadata', () => {
+            videoElement.play();
         });
     } else {
         alert('HLS is not supported on this browser.');
