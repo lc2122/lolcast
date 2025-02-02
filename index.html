@@ -124,13 +124,12 @@
             
             design(); // 초기 레이아웃 설정
         };
-
-        // "흐름" 버튼 클릭 이벤트 추가
-        const hrmBtn = document.getElementById('hrm-btn');
-        hrmBtn.addEventListener('click', () => {
-            const url = 'https://insagirl-toto.appspot.com/hrm/?where=1';
-            window.open(url, '_blank');
-        });
+            // "흐름" 버튼 클릭 이벤트 추가
+            const hrmBtn = document.getElementById('hrm-btn');
+            hrmBtn.addEventListener('click', () => {
+                const url = 'https://insagirl-toto.appspot.com/hrm/?where=1';
+                window.open(url, '_blank');
+            });
 
         // 화면 크기 변경시 레이아웃 조정
         window.onresize = design;
@@ -142,15 +141,6 @@
             const currentSrc = chatIframe.src;
             chatIframe.src = currentSrc; // 해시 포함된 URL 유지
         });
-
-        // Twitch 채널 ID 추출 및 iframe 설정
-        const videoIframe = document.getElementById('video-iframe');
-        const path = window.location.hash;
-        if (path.startsWith('#/twitch/')) {
-            const channelId = path.split('/')[2];
-            const twitchUrl = `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
-            videoIframe.src = twitchUrl;
-        }
     </script>
     <script src="script.js"></script>
 </body>
