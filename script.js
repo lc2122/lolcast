@@ -9,7 +9,7 @@ const CHANNELS = {
     forest: {
         buttonLabel: '숲',
         color: '#00aaff',
-        url: () => 'https://play.sooplive.co.kr/aflol/280920430/embed'
+        url: () => 'https://play.sooplive.co.kr/aflol/embed'
     },
     flow: {
         buttonLabel: 'flow',
@@ -57,11 +57,56 @@ function loadTwitchChannel() {
     }
 }
 
+// Load YouTube channel
+function loadYouTubeChannel() {
+    const hash = window.location.hash;
+    if (hash.startsWith('#/youtube/')) {
+        const channelId = hash.split('/')[2];
+        const youtubeUrl = `https://www.youtube.com/embed/${channelId}`;
+        videoIframe.src = youtubeUrl;
+    }
+}
+
+// Load CHZZK channel
+function loadCHZZKChannel() {
+    const hash = window.location.hash;
+    if (hash.startsWith('#/chzzk/')) {
+        const channelId = hash.split('/')[2];
+        const chzzkUrl = `https://chzzk.naver.com/live/${channelId}`;
+        videoIframe.src = chzzkUrl;
+    }
+}
+
+// Load SOOP channel
+function loadSOOPChannel() {
+    const hash = window.location.hash;
+    if (hash.startsWith('#/soop/')) {
+        const channelId = hash.split('/')[2];
+        const soopUrl = `https://play.sooplive.co.kr/${channelId}/embed`;
+        videoIframe.src = soopUrl;
+    }
+}
+
+// Load Kick channel
+function loadKickChannel() {
+    const hash = window.location.hash;
+    if (hash.startsWith('#/kick/')) {
+        const channelId = hash.split('/')[2];
+        const kickUrl = `https://player.kick.com/${channelId}`;
+        videoIframe.src = kickUrl;
+    }
+}
+
 // Initial load
 window.addEventListener('load', () => {
     videoIframe.src = CHANNELS.flow.url();
     loadTwitchChannel();
+    loadYouTubeChannel();
+    loadCHZZKChannel();
+    loadSOOPChannel();
+    loadKickChannel();
 });
+
 
 // Example message to be sent
 const message = { type: 'example', data: 'Hello, world!' };
