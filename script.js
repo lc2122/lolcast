@@ -47,9 +47,7 @@ flowBtn.addEventListener('click', () => {
     videoIframe.src = CHANNELS.flow.url();
 });
 
-// 초기 로드 시 유튜브 라이브 영상 표시
+// 초기 로드 시 flow 영상 표시
 window.addEventListener('load', () => {
-    const youtubeUrl = CHANNELS.youtube.url(CHANNELS.youtube.id);
-    videoIframe.src = youtubeUrl;
-    videoIframe.onload = handleFallback;
+    videoIframe.src = CHANNELS.flow.url();
 });
