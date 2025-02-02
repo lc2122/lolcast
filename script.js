@@ -99,12 +99,26 @@ window.addEventListener('load', () => {
     loadKickChannel();
 });
 
-
-// Example message to be sent
-const message = { type: 'example', data: 'Hello, world!' };
-
-// Ensure the target origin matches the recipient window's origin
-const targetOrigin = 'https://insagirl-toto.appspot.com'; 
-
-// Send the message
-window.postMessage(message, targetOrigin);
+// Listen for messages from the chat iframe
+window.addEventListener('message', (event) => {
+    // Ensure the message is from the chat iframe
+    if (event.origin === 'https://insagirl-toto.appspot.com') {
+        const message = event.data;
+        if (message.type === 'linkClick') {
+            const link = message.data;
+            if (link.startsWith('https://lolcast.kr/#/player/chzzk/')) {
+                const channelId = link.split('/').pop();
+                videoIframe.src = `https://lc2122.github.io/lolcast/#/chzzk/${channelId}`;
+            } else if (link.startsWith('https://lolcast.kr/#/player/youtube/')) {
+                const channelId = link.split('/').pop();
+                videoIframe.src = `https://lc2122.github.io/lolcast/#/youtube/${channelId}`;
+            } else if (link.startsWith('https://lolcast.kr/#/player/kick/')) {
+                const channelId = link.split('/').pop();
+                videoIframe.src = `https://lc2122.github.io/lolcast/#/kick/${channelId}`;
+            } else if (link.startsWith('https://lolcast.kr/#/player/twitch/')) {
+                const channelId = link.split('/').pop();
+                videoIframe.src = `https://lc2122.github.io/lolcast/#/twitch/${channelId}`;
+            }
+        }
+    }
+});
