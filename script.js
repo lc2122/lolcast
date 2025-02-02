@@ -58,7 +58,8 @@ goBtn.addEventListener('click', () => {
     const transformedUrl = transformUrl(userInput);
     if (transformedUrl) {
         if (transformedUrl.endsWith('.m3u8')) {
-            playHlsStream(transformedUrl);
+            const playerUrl = `https://lc2122.github.io/m3u8-player/player/#${encodeURIComponent(transformedUrl)}`;
+            window.open(playerUrl, '_blank'); 
         } else {
             videoIframe.src = transformedUrl;
         }
@@ -133,33 +134,13 @@ function transformUrl(url) {
         const channelId = url.split('/').pop();
         return `https://play.sooplive.co.kr/${channelId}/embed`;
     }
-    // HLS 스트림
-    else if (url.endsWith('.m3u8')) {
-        playHlsStream(url);
-        return null; // HLS 스트림은 iframe에 직접 할당하지 않음
+    // m3u8
+    if (url.endsWith('.m3u8')) {
+        return url; =
     }
     // 기타 지원하지 않는 URL
     else {
         alert('지원하지 않는 URL 형식입니다.');
-    }
-}
-
-function playHlsStream(url) {
-    const videoElement = document.getElementById('video-iframe');
-    if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(url);
-        hls.attachMedia(videoElement);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            videoElement.play();
-        });
-    } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
-        videoElement.src = url;
-        videoElement.addEventListener('loadedmetadata', () => {
-            videoElement.play();
-        });
-    } else {
-        alert('HLS is not supported on this browser.');
     }
 }
 
