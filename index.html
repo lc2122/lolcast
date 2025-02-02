@@ -13,12 +13,21 @@
             font-size: 14px; /* 폰트 크기 줄임 */
             margin: 2px; /* 버튼 간격 조정 */
         }
+
+        /* 채팅 iframe 확대 */
+        #chat-iframe {
+            zoom: 1.2; /* 120%로 확대 */
+            /* 또는 */
+            transform: scale(1.2);
+            transform-origin: 0 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- 상단: 버튼 메뉴 -->
         <div class="menu-section" id="menu-section">
+            <button id="hrm-btn" class="menu-button">흐름</button> <!-- 추가된 버튼 -->
             <button id="youtube-btn" class="menu-button">유튜브</button>
             <button id="forest-btn" class="menu-button">숲</button>
             <button id="flow-btn" class="menu-button">flow</button>
@@ -198,6 +207,13 @@
 
                 // URL을 분석하여 영상 재생
                 handleVideoRedirect(url);
+            });
+
+            // "흐름" 버튼 클릭 이벤트 추가
+            const hrmBtn = document.getElementById('hrm-btn');
+            hrmBtn.addEventListener('click', () => {
+                const url = 'https://insagirl-toto.appspot.com/hrm/?where=1';
+                window.open(url, '_blank'); // 새 창 또는 새 탭에서 열기
             });
 
             design(); // 초기 레이아웃 설정
