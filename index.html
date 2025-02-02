@@ -5,21 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>모바일 페이지</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script> <!-- hls.js 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         /* 버튼 크기 조정 */
         .menu-button {
-            padding: 5px 10px; /* 버튼 크기 줄임 */
-            font-size: 14px; /* 폰트 크기 줄임 */
-            margin: 2px; /* 버튼 간격 조정 */
-        }
-
-        /* 채팅 iframe 확대 */
-        #chat-iframe {
-            zoom: 1.2; /* 120%로 확대 */
-            /* 또는 */
-            transform: scale(1.2);
-            transform-origin: 0 0;
+            padding: 5px 10px;
+            font-size: 14px;
+            margin: 2px;
         }
     </style>
 </head>
@@ -27,7 +19,7 @@
     <div class="container">
         <!-- 상단: 버튼 메뉴 -->
         <div class="menu-section" id="menu-section">
-            <button id="hrm-btn" class="menu-button">흐름</button> <!-- 추가된 버튼 -->
+            <button id="hrm-btn" class="menu-button">흐름</button>
             <button id="youtube-btn" class="menu-button">유튜브</button>
             <button id="forest-btn" class="menu-button">숲</button>
             <button id="flow-btn" class="menu-button">flow</button>
@@ -69,13 +61,12 @@
 
         // 레이아웃 조정 함수
         function design() {
-            const isMobile = window.innerWidth <= 768; // 모바일 화면 기준 (768px 이하)
+            const isMobile = window.innerWidth <= 768;
             const menuSection = document.getElementById('menu-section');
             const videoSection = document.querySelector('.video-section');
             const chatSection = document.querySelector('.chat-section');
 
             if (isMobile) {
-                // 모바일: 상하 레이아웃
                 menuSection.style.position = "relative";
                 menuSection.style.width = "100%";
                 menuSection.style.height = "auto";
@@ -84,34 +75,33 @@
                 menuSection.style.padding = "10px 0";
 
                 videoSection.style.width = "100%";
-                videoSection.style.height = "60vh"; // 영상 영역 높이
+                videoSection.style.height = "60vh";
                 videoSection.style.position = "relative";
 
                 chatSection.style.width = "100%";
-                chatSection.style.height = "30vh"; // 채팅 영역 높이
+                chatSection.style.height = "30vh";
                 chatSection.style.position = "relative";
             } else {
-                // PC: 좌우 레이아웃
                 menuSection.style.position = "absolute";
                 menuSection.style.top = "0";
                 menuSection.style.right = "0";
-                menuSection.style.width = "20%"; // 우측 20% 너비
+                menuSection.style.width = "20%";
                 menuSection.style.height = "auto";
                 menuSection.style.display = "flex";
-                menuSection.style.flexDirection = "row"; // 버튼을 가로로 배치
-                menuSection.style.justifyContent = "space-around"; // 버튼 간격 조정
-                menuSection.style.alignItems = "center"; // 버튼을 중앙 정렬
-                menuSection.style.paddingTop = "10px"; // 상단 여백 추가
+                menuSection.style.flexDirection = "row";
+                menuSection.style.justifyContent = "space-around";
+                menuSection.style.alignItems = "center";
+                menuSection.style.paddingTop = "10px";
 
-                videoSection.style.width = "80%"; // 좌측 80% 너비
-                videoSection.style.height = "100vh"; // 영상 영역 높이
+                videoSection.style.width = "80%";
+                videoSection.style.height = "100vh";
                 videoSection.style.position = "absolute";
                 videoSection.style.left = "0";
 
-                chatSection.style.width = "20%"; // 우측 20% 너비
-                chatSection.style.height = "calc(100vh - 60px)"; // 채팅 영역 높이 (버튼 메뉴 높이 제외)
+                chatSection.style.width = "20%";
+                chatSection.style.height = "calc(100vh - 60px)";
                 chatSection.style.position = "absolute";
-                chatSection.style.top = "60px"; // 버튼 메뉴 높이만큼 아래로 이동
+                chatSection.style.top = "60px";
                 chatSection.style.right = "0";
             }
         }
@@ -122,32 +112,32 @@
 
             // YouTube
             if (url.includes('https://lolcast.kr/#/player/youtube/')) {
-                const videoId = url.split('/').pop(); // YouTube 동영상 ID 추출
+                const videoId = url.split('/').pop();
                 videoIframe.src = `https://www.youtube.com/embed/${videoId}`;
             }
             // 치지직 (Chzzk)
             else if (url.includes('https://lolcast.kr/#/player/chzzk/')) {
-                const channelId = url.split('/').pop(); // 치지직 채널 ID 추출
+                const channelId = url.split('/').pop();
                 videoIframe.src = `https://chzzk.naver.com/live/${channelId}`;
             }
             // 아프리카TV (Afreeca)
             else if (url.includes('https://lolcast.kr/#/player/afreeca/')) {
-                const channelId = url.split('/').pop(); // 아프리카TV 채널 ID 추출
+                const channelId = url.split('/').pop();
                 videoIframe.src = `https://play.sooplive.co.kr/${channelId}/280495766/embed`;
             }
             // Twitch
             else if (url.includes('https://lolcast.kr/#/player/twitch/')) {
-                const channelId = url.split('/').pop(); // Twitch 채널 ID 추출
+                const channelId = url.split('/').pop();
                 videoIframe.src = `https://player.twitch.tv/?channel=${channelId}&parent=https://lc2122.github.io/lolcast/`;
             }
             // Kick
             else if (url.includes('https://lolcast.kr/#/player/kick/')) {
-                const channelId = url.split('/').pop(); // Kick 채널 ID 추출
+                const channelId = url.split('/').pop();
                 videoIframe.src = `https://player.kick.com/${channelId}`;
             }
             // m3u8 (HLS)
             else if (url.includes('.m3u8')) {
-                playHlsVideo(url); // hls.js를 사용하여 재생
+                playHlsVideo(url);
             }
         }
 
@@ -171,7 +161,6 @@
                     videoElement.play();
                 });
             } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
-                // Safari 등 네이티브 HLS 지원 브라우저
                 videoElement.src = url;
                 videoElement.addEventListener('loadedmetadata', () => {
                     videoElement.play();
@@ -188,7 +177,7 @@
             const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
             
             // SameSite=None 쿠키 설정 (필요한 경우)
-            setSameSiteNoneCookie('exampleCookie', 'exampleValue', 7); // 예시 쿠키
+            setSameSiteNoneCookie('exampleCookie', 'exampleValue', 7);
 
             // 해시 전달 방식으로 채팅창 로드
             if(location.hash && location.hash.substring(1)) {
@@ -199,13 +188,9 @@
 
             // 채팅창 iframe에서 메시지 수신을 위한 이벤트 리스너
             window.addEventListener('message', (event) => {
-                // 메시지가 올바른 출처에서 온 것인지 확인
                 if (event.origin !== 'https://insagirl-toto.appspot.com') return;
 
-                // 메시지 데이터에서 URL 추출
                 const url = event.data;
-
-                // URL을 분석하여 영상 재생
                 handleVideoRedirect(url);
             });
 
@@ -213,10 +198,10 @@
             const hrmBtn = document.getElementById('hrm-btn');
             hrmBtn.addEventListener('click', () => {
                 const url = 'https://insagirl-toto.appspot.com/hrm/?where=1';
-                window.open(url, '_blank'); // 새 창 또는 새 탭에서 열기
+                window.open(url, '_blank');
             });
 
-            design(); // 초기 레이아웃 설정
+            design();
         };
 
         // 화면 크기 변경시 레이아웃 조정
@@ -227,7 +212,7 @@
         refreshBtn.addEventListener('click', () => {
             const chatIframe = document.getElementById('chat-iframe');
             const currentSrc = chatIframe.src;
-            chatIframe.src = currentSrc; // 해시 포함된 URL 유지
+            chatIframe.src = currentSrc;
         });
     </script>
     <script src="script.js"></script>
