@@ -47,11 +47,6 @@ flowBtn.addEventListener('click', () => {
     videoIframe.src = CHANNELS.flow.url();
 });
 
-// 초기 로드 시 flow 영상 표시
-window.onload = function() {
-    videoIframe.src = CHANNELS.flow.url();
-};
-
 // Load Twitch channel
 function loadTwitchChannel() {
     const hash = window.location.hash;
