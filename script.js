@@ -1,4 +1,3 @@
-// Define the channels and their properties
 const CHANNELS = {
     youtube: {
         id: 'UCw1DsweY9b2AKGjV4kGJP1A',
@@ -19,22 +18,18 @@ const CHANNELS = {
     }
 };
 
-// Get the video iframe
 const videoIframe = document.getElementById('video-iframe');
 
-// Function to handle fallback URL
 const handleFallback = () => {
-    videoIframe.onerror = () => {
+    videoIframe.addEventListener('error', () => {
         videoIframe.src = CHANNELS.youtube.fallbackUrl;
-    };
+    });
 };
 
-// Function to set button color
 const setButtonColor = (button, color) => {
     button.style.backgroundColor = color;
 };
 
-// YouTube button click event
 document.getElementById('youtube-btn').addEventListener('click', () => {
     const youtubeUrl = CHANNELS.youtube.url(CHANNELS.youtube.id);
     videoIframe.src = youtubeUrl;
@@ -42,13 +37,11 @@ document.getElementById('youtube-btn').addEventListener('click', () => {
     handleFallback();
 });
 
-// Forest button click event
 document.getElementById('forest-btn').addEventListener('click', () => {
     videoIframe.src = CHANNELS.forest.url();
     setButtonColor(document.getElementById('forest-btn'), CHANNELS.forest.color);
 });
 
-// Flow button click event
 document.getElementById('flow-btn').addEventListener('click', () => {
     videoIframe.src = CHANNELS.flow.url();
     setButtonColor(document.getElementById('flow-btn'), CHANNELS.flow.color);
