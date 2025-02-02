@@ -19,44 +19,38 @@ const CHANNELS = {
 };
 
 const videoIframe = document.getElementById('video-iframe');
+const youtubeBtn = document.getElementById('youtube-btn');
+const forestBtn = document.getElementById('forest-btn');
+const flowBtn = document.getElementById('flow-btn');
 
+// Function to handle fallback URL
 const handleFallback = () => {
     videoIframe.addEventListener('error', () => {
         videoIframe.src = CHANNELS.youtube.fallbackUrl;
     });
 };
 
-const setButtonColor = (button, color) => {
-    button.style.backgroundColor = color;
-};
-
-document.getElementById('youtube-btn').addEventListener('click', () => {
+// YouTube 버튼 클릭 시
+youtubeBtn.addEventListener('click', () => {
     const youtubeUrl = CHANNELS.youtube.url(CHANNELS.youtube.id);
     videoIframe.src = youtubeUrl;
-    setButtonColor(document.getElementById('youtube-btn'), CHANNELS.youtube.color);
     handleFallback();
-    console.log('YouTube button clicked', youtubeUrl);
 });
 
-document.getElementById('forest-btn').addEventListener('click', () => {
+// 숲 버튼 클릭 시
+forestBtn.addEventListener('click', () => {
     videoIframe.src = CHANNELS.forest.url();
-    setButtonColor(document.getElementById('forest-btn'), CHANNELS.forest.color);
-    console.log('Forest button clicked', CHANNELS.forest.url());
 });
 
-document.getElementById('flow-btn').addEventListener('click', () => {
+// flow 버튼 클릭 시
+flowBtn.addEventListener('click', () => {
     videoIframe.src = CHANNELS.flow.url();
-    setButtonColor(document.getElementById('flow-btn'), CHANNELS.flow.color);
-    console.log('Flow button clicked', CHANNELS.flow.url());
 });
 
-videoIframe.addEventListener('load', () => {
-    console.log('Video iframe loaded');
-});
-
-videoIframe.addEventListener('error', () => {
-    console.error('Video iframe failed to load');
-});
+// 초기 로드 시 flow 영상 표시
+window.onload = function() {
+    videoIframe.src = CHANNELS.flow.url();
+};
 
 // Load Twitch channel
 function loadTwitchChannel() {
