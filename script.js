@@ -65,6 +65,7 @@ urlInput.value = '';
 document.getElementById('input-modal').style.display = 'none';
 }
 }); 
+
 // "X" 버튼 클릭 시 입력창 닫기
 const closeBtn = document.getElementById('close-btn');
 closeBtn.addEventListener('click', () => {
