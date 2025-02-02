@@ -23,6 +23,7 @@ const forestBtn = document.getElementById('forest-btn');
 const flowBtn = document.getElementById('flow-btn');
 const inputBtn = document.getElementById('input-btn');
 const goBtn = document.getElementById('go-btn');
+const urlInput = document.getElementById('url-input');
 
 // YouTube 버튼 클릭 시
 youtubeBtn.addEventListener('click', () => {
@@ -44,15 +45,21 @@ flowBtn.addEventListener('click', () => {
 // "Input" 버튼 클릭 시
 inputBtn.addEventListener('click', () => {
     document.getElementById('input-modal').style.display = 'block';
+    // 입력창이 열릴 때 localStorage에서 저장된 URL을 불러옴
+    const lastInputValue = localStorage.getItem('lastInputValue');
+    if (lastInputValue) {
+        urlInput.value = lastInputValue;
+    }
 });
 
 // "Go" 버튼 클릭 시
 goBtn.addEventListener('click', () => {
-    const urlInput = document.getElementById('url-input');
     const userInput = urlInput.value;
     const transformedUrl = transformUrl(userInput);
     if (transformedUrl) {
         videoIframe.src = transformedUrl;
+        // 입력된 URL을 localStorage에 저장
+        localStorage.setItem('lastInputValue', userInput);
         urlInput.value = ''; 
         document.getElementById('input-modal').style.display = 'none'; 
     }
@@ -128,6 +135,7 @@ function transformUrl(url) {
         alert('지원하지 않는 URL 형식입니다.');
     }
 }
+
 // Load Twitch channel
 function loadTwitchChannel() {
     const hash = window.location.hash;
