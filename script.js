@@ -59,6 +59,7 @@ goBtn.addEventListener('click', () => {
     if (transformedUrl) {
         if (transformedUrl.endsWith('.m3u8')) {
             const playerUrl = `https://lc2122.github.io/m3u8-player/player/#${encodeURIComponent(transformedUrl)}`;
+            window.open(playerUrl, '_blank'); // 在新标签页中打开播放器页面
         } else {
             videoIframe.src = transformedUrl;
         }
@@ -67,7 +68,6 @@ goBtn.addEventListener('click', () => {
         document.getElementById('input-modal').style.display = 'none';
     }
 });
-
 // "X" 버튼 클릭 시 입력창 닫기
 const closeBtn = document.getElementById('close-btn');
 closeBtn.addEventListener('click', () => {
@@ -107,7 +107,9 @@ function transformUrl(url) {
         alert('유효한 URL을 입력해주세요.');
         return;
     }
-
+    if (url.endsWith('.m3u8')) {
+        return url;
+    }
     // YouTube
     if (url.startsWith('https://lolcast.kr/#/player/youtube/')) {
         const channelId = url.split('/').pop();
@@ -132,10 +134,6 @@ function transformUrl(url) {
     else if (url.startsWith('https://lolcast.kr/#/player/afreeca/')) {
         const channelId = url.split('/').pop();
         return `https://play.sooplive.co.kr/${channelId}/embed`;
-    }
-    // m3u8
-    if (url.endsWith('.m3u8')) {
-        return url; =
     }
     // 기타 지원하지 않는 URL
     else {
