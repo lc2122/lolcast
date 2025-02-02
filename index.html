@@ -111,33 +111,34 @@
             const videoIframe = document.getElementById('video-iframe');
 
             // YouTube
-            if (url.includes('https://lolcast.kr/#/player/youtube/')) {
+            if (url.includes('https://lc2122.github.io/lolcast/youtube/')) {
                 const videoId = url.split('/').pop();
                 videoIframe.src = `https://www.youtube.com/embed/${videoId}`;
             }
             // 치지직 (Chzzk)
-            else if (url.includes('https://lolcast.kr/#/player/chzzk/')) {
+            else if (url.includes('https://lc2122.github.io/lolcast/chzzk/')) {
                 const channelId = url.split('/').pop();
                 videoIframe.src = `https://chzzk.naver.com/live/${channelId}`;
             }
             // 아프리카TV (Afreeca)
-            else if (url.includes('https://lolcast.kr/#/player/afreeca/')) {
+            else if (url.includes('https://lc2122.github.io/lolcast/soop/')) {
                 const channelId = url.split('/').pop();
                 videoIframe.src = `https://play.sooplive.co.kr/${channelId}/280495766/embed`;
             }
             // Twitch
-            else if (url.includes('https://lolcast.kr/#/player/twitch/')) {
+            else if (url.includes('https://lc2122.github.io/lolcast/twitch/')) {
                 const channelId = url.split('/').pop();
                 videoIframe.src = `https://player.twitch.tv/?channel=${channelId}&parent=https://lc2122.github.io/lolcast/`;
             }
             // Kick
-            else if (url.includes('https://lolcast.kr/#/player/kick/')) {
+            else if (url.includes('https://lc2122.github.io/lolcast/kick/')) {
                 const channelId = url.split('/').pop();
                 videoIframe.src = `https://player.kick.com/${channelId}`;
             }
             // m3u8 (HLS)
-            else if (url.includes('.m3u8')) {
-                playHlsVideo(url);
+            else if (url.includes('https://lc2122.github.io/lolcast/m3u8/')) {
+                const m3u8Url = url.split('/').pop();
+                playHlsVideo(m3u8Url);
             }
         }
 
@@ -175,7 +176,7 @@
         window.onload = function() {
             const chatIframe = document.getElementById('chat-iframe');
             const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
-            
+
             // SameSite=None 쿠키 설정 (필요한 경우)
             setSameSiteNoneCookie('exampleCookie', 'exampleValue', 7);
 
