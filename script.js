@@ -46,7 +46,6 @@ inputBtn.addEventListener('click', () => {
     document.getElementById('input-modal').style.display = 'block';
 });
 
-
 // "Go" 버튼 클릭 시
 goBtn.addEventListener('click', () => {
     const urlInput = document.getElementById('url-input');
@@ -57,6 +56,12 @@ goBtn.addEventListener('click', () => {
         urlInput.value = ''; 
         document.getElementById('input-modal').style.display = 'none'; 
     }
+});
+
+// "X" 버튼 클릭 시 입력창 닫기
+const closeBtn = document.getElementById('close-btn');
+closeBtn.addEventListener('click', () => {
+    document.getElementById('input-modal').style.display = 'none';
 });
 
 function transformUrl(url) {
