@@ -74,7 +74,7 @@ body {
 }
 
 #chat-iframe {
-    width: 80%;
+    width: 100%;
     height: 100%;
     border: none;
     zoom: 1.2; /* 120%로 확대 */
