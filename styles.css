@@ -170,4 +170,5 @@ body {
     height: 100%;
     border: none;
     zoom: 1.2; /* 120% zoom */
+    overflow: hidden; /*  This line hides the scrollbars */
 }
