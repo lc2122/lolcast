@@ -4,7 +4,7 @@ const CHANNELS = {
         buttonLabel: '유튜브',
         color: '#FF0000',
         url: (id) => `https://www.youtube.com/embed/live_stream?channel=${id}`,
-        fallbackUrl: 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html' // 대체 영상 URL
+        fallbackUrl: 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html'  
     },
     forest: {
         buttonLabel: '숲',
@@ -30,24 +30,67 @@ const handleFallback = () => {
     }
 };
 
-// YouTube 버튼 클릭 시
+function handleVideoRedirect(url) {
+    const videoIframe = document.getElementById('video-iframe');
+
+    // YouTube
+    if (url.includes('https://lc2122.github.io/lolcast/youtube/')) {
+        const videoId = url.split('/').pop();
+        videoIframe.src = `https://www.youtube.com/embed/${videoId}`;
+        videoIframe.onload = handleFallback;
+    }
+    // 치지직 (Chzzk)
+    else if (url.includes('https://lc2122.github.io/lolcast/chzzk/')) {
+        const channelId = url.split('/').pop();
+        videoIframe.src = `https://chzzk.naver.com/live/${channelId}`;
+    }
+    // 아프리카TV (Afreeca)
+    else if (url.includes('https://lc2122.github.io/lolcast/soop/')) {
+        const channelId = url.split('/').pop();
+        videoIframe.src = `https://play.sooplive.co.kr/${channelId}/280495766/embed`;
+    }
+    // Twitch
+    else if (url.includes('https://lc2122.github.io/lolcast/twitch/')) {
+        const channelId = url.split('/').pop();
+        videoIframe.src = `https://player.twitch.tv/?channel=${channelId}&parent=https://lc2122.github.io/lolcast/`;
+    }
+    // Kick
+    else if (url.includes('https://lc2122.github.io/lolcast/kick/')) {
+        const channelId = url.split('/').pop();
+        videoIframe.src = `https://player.kick.com/${channelId}`;
+    }
+    // m3u8 (HLS)
+    else if (url.includes('https://lc2122.github.io/lolcast/m3u8/')) {
+        const m3u8Url = url.split('/').pop();
+        playHlsVideo(m3u8Url);
+    }
+    // CHANNELS 
+    else if (url.includes('forest')) {
+        videoIframe.src = CHANNELS.forest.url();
+    }
+    else if (url.includes('flow')) {
+        videoIframe.src = CHANNELS.flow.url();
+    }
+}
+
+// YouTube
 youtubeBtn.addEventListener('click', () => {
     const youtubeUrl = CHANNELS.youtube.url(CHANNELS.youtube.id);
     videoIframe.src = youtubeUrl;
     videoIframe.onload = handleFallback;
 });
 
-// 숲 버튼 클릭 시
+// Forest 
 forestBtn.addEventListener('click', () => {
     videoIframe.src = CHANNELS.forest.url();
 });
 
-// flow 버튼 클릭 시
+// Flow 
 flowBtn.addEventListener('click', () => {
     videoIframe.src = CHANNELS.flow.url();
 });
 
-// 초기 로드 시 flow 영상 표시
+//
 window.addEventListener('load', () => {
     videoIframe.src = CHANNELS.flow.url();
 });
