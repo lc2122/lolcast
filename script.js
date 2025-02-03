@@ -111,7 +111,13 @@ function transformUrl(url) {
     if (url.startsWith('https://lolcast.kr/#/player/youtube/')) {
         const channelId = url.split('/').pop();
         return `https://www.youtube.com/embed/${channelId}`;
-    }
+    } 
+
+    // 추가된 로직: 유튜브 주소 형식 처리
+    if (url.includes('youtu.be') || url.includes('youtube.com/watch?v=')) {
+        const videoId = url.match(/youtu.be\/([a-zA-Z0-9_-]+)|youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/)[1] || url.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/)[1];
+        return `https://www.youtube.com/embed/${videoId}`;
+    } 
     // Twitch
     else if (url.startsWith('https://lolcast.kr/#/player/twitch/')) {
         const channelId = url.split('/').pop();
