@@ -29,60 +29,7 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
-
-#hrm-btn {
-    background-color: #4CAF50; /* Darker green color */
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
-}
-
-#hrm-btn:hover {
-    background-color: #45a049; /* Darker shade on hover */
-}
-
-#youtube-btn {
-    background-color: #FF0000;
-    transition: background-color 0.3s;
-}
-
-#youtube-btn:hover {
-    background-color: #cc0000; /* Darker shade on hover */
-}
-
-#forest-btn {
-    background-color: #00aaff;
-    transition: background-color 0.3s;
-}
-
-#forest-btn:hover {
-    background-color: #0088cc; /* Darker shade on hover */
-}
-
-#flow-btn {
-    background-color: #00FFA3;
-    transition: background-color 0.3s;
-}
-
-#flow-btn:hover {
-    background-color: #00cc88; /* Darker shade on hover */
-}
-
-#refresh-btn {
-    background-color: #FFA500; /* Orange */
-    transition: background-color 0.3s;
-}
-
-#refresh-btn:hover {
-    background-color: #FF8C00; /* Darker orange on hover */
-}
-
-#input-btn {
-    background-color: #007BFF; 
-    transition: background-color 0.3s;
-}
-
-#input-btn:hover {
-    background-color: #0056b3;
+    background-color: #555; /* Darker gray color */
 }
 
 /* Input modal styles */
@@ -118,29 +65,19 @@ body {
 }
 
 #go-btn {
-    background-color: #28a745; 
+    background-color: #555; /* Darker gray color */
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#go-btn:hover {
-    background-color: #218838; 
 }
 
 #close-btn {
-    background-color: #dc3545; /* Red color */
+    background-color: #555; /* Darker gray color */
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#close-btn:hover {
-    background-color: #a71d2a; /* Darker red on hover */
 }
 
 /* Top section styles */
