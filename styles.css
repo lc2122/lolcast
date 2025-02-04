@@ -179,11 +179,6 @@ body {
     margin-bottom: 10px;
 }
 
-#add-favorite-btn,
-#close-favorite-modal {
-    background-color: #555; /* 추가 버튼의 배경색 (예시) */
-    color: white;
-}
 
 /* 닫기 버튼을 가운데 정렬하기 위한 컨테이너 */
 .button-container {
