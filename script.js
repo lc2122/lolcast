@@ -202,34 +202,61 @@ function transformUrl(url) {
     if (url.startsWith('https://lolcast.kr/#/player/youtube/')) {
         const channelId = url.split('/').pop();
         return `https://www.youtube.com/embed/${channelId}`;
-    } 
+    }
 
-    // 추가된 로직: 유튜브 주소 형식 처리
+
+    // 추가된 로직: 유튜브 주소 형식 처리 (기존 로직 유지)
     if (url.includes('youtu.be') || url.includes('youtube.com/watch?v=')) {
-        const videoId = url.match(/youtu.be\/([a-zA-Z0-9_-]+)|youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/)[1] || url.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/)[1];
-        return `https://www.youtube.com/embed/${videoId}`;
-    } 
-    // Twitch
+        const videoIdMatch1 = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+        const videoIdMatch2 = url.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/);
+        const videoId = (videoIdMatch1 && videoIdMatch1[1]) || (videoIdMatch2 && videoIdMatch2[1]);
+        if (videoId) { // videoId가 null 또는 undefined가 아닐 때만 반환
+            return `https://www.youtube.com/embed/${videoId}`;
+        }
+    }
+
+    // 추가된 로직: 직접 플랫폼 주소 처리
+    if (url.startsWith('https://twitch.tv/')) {
+        const channelId = url.split('/').pop();
+        return `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
+    }
+    else if (url.startsWith('https://chzzk.naver.com/live/')) {
+        const channelId = url.split('/').pop();
+        return `https://chzzk.naver.com/live/${channelId}`;
+    }
+    else if (url.startsWith('https://kick.com/')) {
+        const channelId = url.split('/').pop();
+        return `https://player.kick.com/${channelId}`;
+    }
+    else if (url.startsWith('https://play.sooplive.co.kr/')) {
+         // afreecatv는 id 뒤에 user_id가 붙는 경우가 있어서 더 정확한 처리가 필요할 수 있지만,
+         // 일단 id만 추출하는 것으로 가정하고 작성. 필요시 추가 수정
+        const channelId = url.split('/').pop();
+        return `https://play.sooplive.co.kr/${channelId}/embed`;
+    }
+
+
+    // Twitch (lolcast.kr) - 기존 로직 유지
     else if (url.startsWith('https://lolcast.kr/#/player/twitch/')) {
         const channelId = url.split('/').pop();
         return `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
     }
-    // CHZZK
+    // CHZZK (lolcast.kr) - 기존 로직 유지
     else if (url.startsWith('https://lolcast.kr/#/player/chzzk/')) {
         const channelId = url.split('/').pop();
         return `https://chzzk.naver.com/live/${channelId}`;
     }
-    // Kick
+    // Kick (lolcast.kr) - 기존 로직 유지
     else if (url.startsWith('https://lolcast.kr/#/player/kick/')) {
         const channelId = url.split('/').pop();
         return `https://player.kick.com/${channelId}`;
     }
-    // AfreecaTV
+    // AfreecaTV (lolcast.kr) - 기존 로직 유지
     else if (url.startsWith('https://lolcast.kr/#/player/afreeca/')) {
         const channelId = url.split('/').pop();
         return `https://play.sooplive.co.kr/${channelId}/embed`;
     }
-    // 기타 지원하지 않는 URL
+    // 기타 지원하지 않는 URL - 기존 로직 유지
     else {
         alert('지원하지 않는 URL 형식입니다.');
     }
