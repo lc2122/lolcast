@@ -70,7 +70,88 @@ const closeBtn = document.getElementById('close-btn');
 closeBtn.addEventListener('click', () => {
     document.getElementById('input-modal').style.display = 'none';
 });
+// 즐겨찾기 목록을 저장할 배열
+let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
+// '즐찾' 버튼 클릭 시 즐겨찾기 목록 표시
+const favoriteBtn = document.getElementById('favorite-btn');
+favoriteBtn.addEventListener('click', () => {
+    const favoriteModal = document.getElementById('favorite-modal');
+    const favoriteList = document.getElementById('favorite-list');
+
+    // 기존 목록 초기화
+    favoriteList.innerHTML = '';
+
+    // 즐겨찾기 목록을 동적으로 추가
+    favorites.forEach((favorite, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span>${favorite.name || favorite.url}</span>
+            <button onclick="deleteFavorite(${index})">삭제</button>
+        `;
+        li.addEventListener('click', () => {
+            const transformedUrl = transformUrl(favorite.url);
+            if (transformedUrl) {
+                videoIframe.src = transformedUrl;
+                favoriteModal.style.display = 'none'; // 모달 닫기
+            }
+        });
+        favoriteList.appendChild(li);
+    });
+
+    // 모달 표시
+    favoriteModal.style.display = 'block';
+});
+
+// '닫기' 버튼 클릭 시 모달 닫기
+const closeFavoriteModal = document.getElementById('close-favorite-modal');
+closeFavoriteModal.addEventListener('click', () => {
+    document.getElementById('favorite-modal').style.display = 'none';
+});
+
+// 즐겨찾기 추가 함수
+function addFavorite(url, name) {
+    if (!url) {
+        alert('URL을 입력해주세요.');
+        return;
+    }
+    if (!name) {
+        name = `즐겨찾기 ${favorites.length + 1}`; // 기본 이름 설정
+    }
+    favorites.push({ url, name });
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    alert('즐겨찾기에 추가되었습니다.');
+}
+
+// 즐겨찾기 삭제 함수
+function deleteFavorite(index) {
+    if (confirm('정말로 삭제하시겠습니까?')) {
+        favorites.splice(index, 1); // 해당 항목 삭제
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        favoriteBtn.click(); // 목록 새로고침
+    }
+}
+
+// '추가' 버튼 클릭 시 즐겨찾기 추가
+const addFavoriteBtn = document.getElementById('add-favorite-btn');
+addFavoriteBtn.addEventListener('click', () => {
+    const url = urlInput.value.trim();
+    const name = document.getElementById('favorite-name-input').value.trim();
+    addFavorite(url, name);
+    document.getElementById('favorite-name-input').value = ''; // 입력 필드 초기화
+    urlInput.value = ''; // URL 입력 필드 초기화
+});
+
+// 'Go' 버튼 클릭 시 즐겨찾기 추가
+goBtn.addEventListener('click', () => {
+    const userInput = urlInput.value.trim();
+    const transformedUrl = transformUrl(userInput);
+    if (transformedUrl) {
+        addFavorite(userInput, `즐겨찾기 ${favorites.length + 1}`); // 기본 이름으로 추가
+        urlInput.value = '';
+        document.getElementById('input-modal').style.display = 'none';
+    }
+});
 function transformUrl(url) {
     if (!url) {
         alert('URL을 입력해주세요.');
