@@ -40,6 +40,7 @@
             <button id="youtube-btn" class="menu-button">숙제1</button>
             <button id="forest-btn" class="menu-button">숙제2</button>
             <button id="flow-btn" class="menu-button">flow</button>
+            <button id="favorite-btn" class="menu-button">즐찾</button>
             <button id="refresh-btn" class="menu-button">F5</button>
             <button id="input-btn" class="menu-button">입력</button>
         </div>
@@ -149,6 +150,20 @@
             design(); // 초기 레이아웃 설정
         };
 
+        <!-- 기존 버튼들 사이에 '즐찾' 버튼 추가 -->
+<button id="favorite-btn" class="menu-button">즐찾</button>
+
+<!-- 즐겨찾기 목록을 표시할 모달 창 추가 -->
+<div id="favorite-modal" style="display: none;">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <h3>즐겨찾기 목록</h3>
+        <ul id="favorite-list" style="list-style-type: none; padding: 0;">
+            <!-- 즐겨찾기 항목이 여기에 동적으로 추가됩니다 -->
+        </ul>
+        <button id="close-favorite-modal" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
+    </div>
+</div>
+        
         // "흐름" 버튼 클릭 이벤트 추가
         const hrmBtn = document.getElementById('hrm-btn');
         hrmBtn.addEventListener('click', () => {
