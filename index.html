@@ -80,7 +80,6 @@
 <div id="favorite-modal" style="display: none;">
   <div style="display: flex; flex-direction: column; align-items: center;">
     <h3>즐겨찾기 목록</h3>
-    <!-- 이름 입력 -->
     <input
       type="text"
       id="favorite-name-input"
@@ -88,7 +87,6 @@
       class="favorite-input"
       style="flex: 1;"
     />
-    <!-- 주소 입력 -->
     <div class="input-row">
       <input
         type="text"
@@ -97,13 +95,14 @@
         class="favorite-input"
       />
     </div>
-    <!-- 추가 버튼 -->
     <button id="add-favorite-btn" class="menu-button">추가</button>
   </div>
   <ul id="favorite-list" style="list-style-type: none; padding: 0; width: 100%;">
     <!-- 즐겨찾기 항목이 여기에 동적으로 추가됩니다 -->
   </ul>
-  <button id="close-favorite-modal" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
+  <div class="button-container">
+    <button id="close-favorite-modal" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
+  </div>
 </div>
     
     <script>
