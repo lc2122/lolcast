@@ -136,11 +136,11 @@ function deleteFavorite(index) {
 // '추가' 버튼 클릭 시 즐겨찾기 추가
 const addFavoriteBtn = document.getElementById('add-favorite-btn');
 addFavoriteBtn.addEventListener('click', () => {
-    const url = urlInput.value.trim();
+    const url = document.getElementById('favorite-url-input').value.trim();
     const name = document.getElementById('favorite-name-input').value.trim();
     addFavorite(url, name);
     document.getElementById('favorite-name-input').value = ''; // 입력 필드 초기화
-    urlInput.value = ''; // URL 입력 필드 초기화
+    document.getElementById('favorite-url-input').value = ''; // URL 입력 필드 초기화
 });
 
 function transformUrl(url) {
