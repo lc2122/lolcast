@@ -122,7 +122,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     max-width: 90%; /* 모바일에서 가로 너비 제한 */
-    width: 400px; /* 데스크탑에서 고정 너비 */
+    width: 600px; /* 데스크탑에서 고정 너비 */
     box-sizing: border-box;
 }
 
