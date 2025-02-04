@@ -190,7 +190,7 @@ function transformUrl(url) {
         }
     }
 
-   // 기존의 전체 URL 처리 로직
+    // 기존의 전체 URL 처리 로직
     if (!url.startsWith('http')) {
         alert('유효한 URL을 입력해주세요.');
         return;
@@ -221,6 +221,11 @@ function transformUrl(url) {
         return `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
     }
     else if (url.startsWith('https://chzzk.naver.com/live/')) {
+        const channelId = url.split('/').pop();
+        return `https://chzzk.naver.com/live/${channelId}`;
+    }
+    // 추가된 CHZZK 로직: https://chzzk.naver.com/id 처리
+    else if (url.startsWith('https://chzzk.naver.com/')) {
         const channelId = url.split('/').pop();
         return `https://chzzk.naver.com/live/${channelId}`;
     }
