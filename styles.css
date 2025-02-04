@@ -179,13 +179,9 @@ body {
     margin-bottom: 10px;
 }
 
-#add-favorite-btn {
-    background-color: #007bff; /* 추가 버튼의 배경색 (예시) */
-    color: white;
-}
-
+#add-favorite-btn,
 #close-favorite-modal {
-    background-color: #dc3545;
+    background-color: #555; /* 추가 버튼의 배경색 (예시) */
     color: white;
 }
 
