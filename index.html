@@ -80,17 +80,15 @@
 <div id="favorite-modal" style="display: none;">
   <div style="display: flex; flex-direction: column; align-items: center;">
     <h3>즐겨찾기 목록</h3>
-    <!-- 이름 입력 필드가 가능한 넓게 확장되도록 flex: 1;을 적용 -->
-<input
-  type="text"
-  id="favorite-name-input"
-  placeholder="이름 입력"
-  class="favorite-input"
-  style="flex: 1;"
-/>
-      <button id="add-favorite-btn" class="menu-button">추가</button>
-    </div>
-    <!-- 주소 입력은 별도의 행 -->
+    <!-- 이름 입력 -->
+    <input
+      type="text"
+      id="favorite-name-input"
+      placeholder="이름 입력"
+      class="favorite-input"
+      style="flex: 1;"
+    />
+    <!-- 주소 입력 -->
     <div class="input-row">
       <input
         type="text"
@@ -99,11 +97,13 @@
         class="favorite-input"
       />
     </div>
-    <ul id="favorite-list" style="list-style-type: none; padding: 0; width: 100%;">
-      <!-- 즐겨찾기 항목이 여기에 동적으로 추가됩니다 -->
-    </ul>
-    <button id="close-favorite-modal" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
+    <!-- 추가 버튼 -->
+    <button id="add-favorite-btn" class="menu-button">추가</button>
   </div>
+  <ul id="favorite-list" style="list-style-type: none; padding: 0; width: 100%;">
+    <!-- 즐겨찾기 항목이 여기에 동적으로 추가됩니다 -->
+  </ul>
+  <button id="close-favorite-modal" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
 </div>
     
     <script>
