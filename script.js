@@ -71,101 +71,94 @@ closeBtn.addEventListener('click', () => {
     document.getElementById('input-modal').style.display = 'none';
 });
 
-    // 즐겨찾기 목록을 저장할 배열
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+// 즐겨찾기 목록을 저장할 배열
+let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-    // '즐찾' 버튼 클릭 시 즐겨찾기 목록 표시
-    const favoriteBtn = document.getElementById('favorite-btn');
-    favoriteBtn.addEventListener('click', () => {
-        const favoriteModal = document.getElementById('favorite-modal');
-        const favoriteList = document.getElementById('favorite-list');
+// 즐겨찾기 목록 표시 함수
+function renderFavorites() {
+    const favoriteModal = document.getElementById('favorite-modal');
+    const favoriteList = document.getElementById('favorite-list');
 
-        // 기존 목록 초기화
-        favoriteList.innerHTML = '';
+    // 기존 목록 초기화
+    favoriteList.innerHTML = '';
 
-        // 즐겨찾기 목록을 동적으로 추가
-        favorites.forEach((favorite, index) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span>${favorite.name}</span>
-                <button onclick="deleteFavorite(${index})">삭제</button>
-            `;
-            li.addEventListener('click', (e) => {
-                if (e.target.tagName !== 'BUTTON') {
-                    const transformedUrl = transformUrl(favorite.url);
-                    if (transformedUrl) {
-                        videoIframe.src = transformedUrl;
-                        favoriteModal.style.display = 'none'; // 모달 닫기
-                    }
+    // 즐겨찾기 목록을 동적으로 추가
+    favorites.forEach((favorite, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span>${favorite.name}</span>
+            <button onclick="deleteFavorite(${index})">삭제</button>
+        `;
+        li.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'BUTTON') {
+                const transformedUrl = transformUrl(favorite.url);
+                if (transformedUrl) {
+                    videoIframe.src = transformedUrl;
+                    favoriteModal.style.display = 'none'; // 모달 닫기
                 }
-            });
-            favoriteList.appendChild(li);
+            }
         });
-
-        // 모달 표시
-        favoriteModal.style.display = 'block';
+        favoriteList.appendChild(li);
     });
 
-    // '닫기' 버튼 클릭 시 모달 닫기
-    const closeFavoriteModal = document.getElementById('close-favorite-modal');
-    closeFavoriteModal.addEventListener('click', () => {
-        document.getElementById('favorite-modal').style.display = 'none';
-    });
+    // 모달 표시
+    favoriteModal.style.display = 'block';
+}
 
-    // 즐겨찾기 추가 함수
-    function addFavorite(url, name) {
-        if (!url || !name) {
-            alert('URL과 이름을 입력해주세요.');
-            return;
-        }
-        favorites.push({ url, name });
+// '즐찾' 버튼 클릭 시 즐겨찾기 목록 표시
+const favoriteBtn = document.getElementById('favorite-btn');
+favoriteBtn.addEventListener('click', () => {
+    renderFavorites();
+});
+
+// '닫기' 버튼 클릭 시 모달 닫기
+const closeFavoriteModal = document.getElementById('close-favorite-modal');
+closeFavoriteModal.addEventListener('click', () => {
+    document.getElementById('favorite-modal').style.display = 'none';
+});
+
+// 즐겨찾기 추가 함수
+function addFavorite(url, name) {
+    if (!url || !name) {
+        alert('URL과 이름을 입력해주세요.');
+        return;
+    }
+
+    // 중복 체크
+    if (favorites.some(fav => fav.url === url)) {
+        alert('이미 등록된 URL입니다.');
+        return;
+    }
+
+    // 즐겨찾기에 추가
+    favorites.push({ url, name });
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    alert('즐겨찾기에 추가되었습니다.');
+
+    // 목록 새로고침
+    renderFavorites();
+
+    // 입력 필드 초기화
+    document.getElementById('favorite-name-input').value = '';
+    document.getElementById('favorite-url-input').value = '';
+}
+
+// 즐겨찾기 삭제 함수
+function deleteFavorite(index) {
+    if (confirm('정말로 삭제하시겠습니까?')) {
+        favorites.splice(index, 1); // 해당 항목 삭제
         localStorage.setItem('favorites', JSON.stringify(favorites));
-        alert('즐겨찾기에 추가되었습니다.');
-        updateFavoriteList(); // 목록 새로고침
+        renderFavorites(); // 목록 새로고침
     }
+}
 
-    // 즐겨찾기 삭제 함수
-    function deleteFavorite(index) {
-        if (confirm('정말로 삭제하시겠습니까?')) {
-            favorites.splice(index, 1); // 해당 항목 삭제
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            updateFavoriteList(); // 목록 새로고침
-        }
-    }
-
-    // 즐겨찾기 목록 업데이트 함수
-    function updateFavoriteList() {
-        const favoriteList = document.getElementById('favorite-list');
-        favoriteList.innerHTML = '';
-
-        favorites.forEach((favorite, index) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span>${favorite.name}</span>
-                <button onclick="deleteFavorite(${index})">삭제</button>
-            `;
-            li.addEventListener('click', (e) => {
-                if (e.target.tagName !== 'BUTTON') {
-                    const transformedUrl = transformUrl(favorite.url);
-                    if (transformedUrl) {
-                        videoIframe.src = transformedUrl;
-                        document.getElementById('favorite-modal').style.display = 'none'; // 모달 닫기
-                    }
-                }
-            });
-            favoriteList.appendChild(li);
-        });
-    }
-
-    // '추가' 버튼 클릭 시 즐겨찾기 추가
-    const addFavoriteBtn = document.getElementById('add-favorite-btn');
-    addFavoriteBtn.addEventListener('click', () => {
-        const url = document.getElementById('favorite-url-input').value.trim();
-        const name = document.getElementById('favorite-name-input').value.trim();
-        addFavorite(url, name);
-        document.getElementById('favorite-name-input').value = ''; // 입력 필드 초기화
-        document.getElementById('favorite-url-input').value = ''; // URL 입력 필드 초기화
-    });
+// '추가' 버튼 클릭 시 즐겨찾기 추가
+const addFavoriteBtn = document.getElementById('add-favorite-btn');
+addFavoriteBtn.addEventListener('click', () => {
+    const url = document.getElementById('favorite-url-input').value.trim();
+    const name = document.getElementById('favorite-name-input').value.trim();
+    addFavorite(url, name);
+});
 
 
 
