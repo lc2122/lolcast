@@ -77,19 +77,23 @@
     </div>
 </div>
 
-    <div id="favorite-modal" style="display: none;">
-    <div style="display: flex; flex-direction: column; align-items: center;">
-        <h3>즐겨찾기 목록</h3>
-        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-            <input type="text" id="favorite-name-input" placeholder="이름 입력" />
-            <input type="text" id="favorite-url-input" placeholder="주소 입력" />
-            <button id="add-favorite-btn" class="menu-button">추가</button>
-        </div>
-        <ul id="favorite-list" style="list-style-type: none; padding: 0;">
-            <!-- 즐겨찾기 항목이 여기에 동적으로 추가됩니다 -->
-        </ul>
-        <button id="close-favorite-modal" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
+<div id="favorite-modal" style="display: none;">
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <h3>즐겨찾기 목록</h3>
+    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; width: 100%;">
+      <!-- 첫 번째 줄: 이름 입력과 추가 버튼 -->
+      <div style="display: flex; gap: 10px; width: 100%;">
+        <input type="text" id="favorite-name-input" placeholder="이름 입력" style="flex: 1;" />
+        <button id="add-favorite-btn" class="menu-button">추가</button>
+      </div>
+      <!-- 두 번째 줄: 주소 입력 -->
+      <input type="text" id="favorite-url-input" placeholder="주소 입력" style="width: 100%;" />
     </div>
+    <ul id="favorite-list" style="list-style-type: none; padding: 0; width: 100%;">
+      <!-- 즐겨찾기 항목이 여기에 동적으로 추가됩니다 -->
+    </ul>
+    <button id="close-favorite-modal" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
+  </div>
 </div>
     
     <script>
