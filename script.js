@@ -70,47 +70,6 @@ const closeBtn = document.getElementById('close-btn');
 closeBtn.addEventListener('click', () => {
     document.getElementById('input-modal').style.display = 'none';
 });
-// 즐겨찾기 목록을 저장할 배열
-let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
-// '즐찾' 버튼 클릭 시 즐겨찾기 목록 표시
-const favoriteBtn = document.getElementById('favorite-btn');
-favoriteBtn.addEventListener('click', () => {
-    const favoriteModal = document.getElementById('favorite-modal');
-    const favoriteList = document.getElementById('favorite-list');
-
-    // 기존 목록 초기화
-    favoriteList.innerHTML = '';
-
-    // 즐겨찾기 목록을 동적으로 추가
-    favorites.forEach((favorite, index) => {
-        const li = document.createElement('li');
-        li.textContent = favorite.name || favorite.url; // 이름이 없으면 URL 표시
-        li.addEventListener('click', () => {
-            const transformedUrl = transformUrl(favorite.url);
-            if (transformedUrl) {
-                videoIframe.src = transformedUrl;
-                favoriteModal.style.display = 'none'; // 모달 닫기
-            }
-        });
-        favoriteList.appendChild(li);
-    });
-
-    // 모달 표시
-    favoriteModal.style.display = 'block';
-});
-
-// '닫기' 버튼 클릭 시 모달 닫기
-const closeFavoriteModal = document.getElementById('close-favorite-modal');
-closeFavoriteModal.addEventListener('click', () => {
-    document.getElementById('favorite-modal').style.display = 'none';
-});
-
-// 즐겨찾기 추가 함수 (예: URL 입력 후 저장)
-function addFavorite(url, name) {
-    favorites.push({ url, name });
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-}
 
 function transformUrl(url) {
     if (!url) {
