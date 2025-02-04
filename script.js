@@ -50,17 +50,19 @@ inputBtn.addEventListener('click', () => {
 
 // "Go" 버튼 클릭 시
 goBtn.addEventListener('click', () => {
-    const userInput = urlInput.value.trim(); // 앞뒤 공백 제거
+    const userInput = urlInput.value.trim();
     const transformedUrl = transformUrl(userInput);
     if (transformedUrl) {
         if (transformedUrl.endsWith('.m3u8')) {
-            // m3u8 플레이어 URL을 iframe의 src로 설정
             const playerUrl = `https://lc2122.github.io/m3u8-player/player/#${encodeURIComponent(transformedUrl)}`;
             videoIframe.src = playerUrl;
         } else {
             videoIframe.src = transformedUrl;
         }
         localStorage.setItem('lastInputValue', userInput);
+        // 즐겨찾기 추가 (원하는 시점에 호출, 여기서는 비디오 로드 성공 후 추가)
+        addFavorite(userInput, `즐겨찾기 ${favorites.length + 1}`);
+
         urlInput.value = '';
         document.getElementById('input-modal').style.display = 'none';
     }
@@ -142,18 +144,6 @@ addFavoriteBtn.addEventListener('click', () => {
     document.getElementById('favorite-name-input').value = ''; // 입력 필드 초기화
     urlInput.value = ''; // URL 입력 필드 초기화
 });
-
-// 'Go' 버튼 클릭 시 즐겨찾기 추가
-goBtn.addEventListener('click', () => {
-    const userInput = urlInput.value.trim();
-    const transformedUrl = transformUrl(userInput);
-    if (transformedUrl) {
-        addFavorite(userInput, `즐겨찾기 ${favorites.length + 1}`); // 기본 이름으로 추가
-        urlInput.value = '';
-        document.getElementById('input-modal').style.display = 'none';
-    }
-});
-
 
 function transformUrl(url) {
     if (!url) {
