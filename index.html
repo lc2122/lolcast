@@ -80,15 +80,14 @@
 <div id="favorite-modal" style="display: none;">
   <div style="display: flex; flex-direction: column; align-items: center;">
     <h3>즐겨찾기 목록</h3>
-    <!-- 이름 입력과 버튼을 가진 행 -->
-    <div class="input-row">
-      <input
-        type="text"
-        id="favorite-name-input"
-        placeholder="이름 입력"
-        class="favorite-input"
-        style="flex: 1;"  <!-- 이 속성으로 입력필드가 가능한 넓게 확장됨 -->
-      />
+    <!-- 이름 입력 필드가 가능한 넓게 확장되도록 flex: 1;을 적용 -->
+<input
+  type="text"
+  id="favorite-name-input"
+  placeholder="이름 입력"
+  class="favorite-input"
+  style="flex: 1;"
+/>
       <button id="add-favorite-btn" class="menu-button">추가</button>
     </div>
     <!-- 주소 입력은 별도의 행 -->
