@@ -179,17 +179,6 @@ body {
     margin-bottom: 10px;
 }
 
-/* 추가 버튼과 닫기 버튼의 크기를 동일하게 설정 */
-.menu-button {
-    height: 40px; /* 입력 필드와 동일한 높이 */
-    width: 100px; /* 버튼의 너비를 고정하여 크기를 동일하게 */
-    padding: 0 20px;
-    font-size: 14px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 #add-favorite-btn {
     background-color: #007bff; /* 추가 버튼의 배경색 (예시) */
     color: white;
