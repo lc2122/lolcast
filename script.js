@@ -112,17 +112,6 @@ function addFavorite(url, name) {
     localStorage.setItem('favorites', JSON.stringify(favorites));
 }
 
-// 예시: URL 입력 후 즐겨찾기 추가
-goBtn.addEventListener('click', () => {
-    const userInput = urlInput.value.trim();
-    const transformedUrl = transformUrl(userInput);
-    if (transformedUrl) {
-        addFavorite(userInput, `즐겨찾기 ${favorites.length + 1}`); // 이름은 임의로 지정
-        urlInput.value = '';
-        document.getElementById('input-modal').style.display = 'none';
-    }
-});
-
 function transformUrl(url) {
     if (!url) {
         alert('URL을 입력해주세요.');
