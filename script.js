@@ -60,13 +60,11 @@ goBtn.addEventListener('click', () => {
             videoIframe.src = transformedUrl;
         }
         localStorage.setItem('lastInputValue', userInput);
-        // 즐겨찾기 추가 (원하는 시점에 호출, 여기서는 비디오 로드 성공 후 추가)
-        addFavorite(userInput, `즐겨찾기 ${favorites.length + 1}`);
-
         urlInput.value = '';
         document.getElementById('input-modal').style.display = 'none';
     }
 });
+
 // "X" 버튼 클릭 시 입력창 닫기
 const closeBtn = document.getElementById('close-btn');
 closeBtn.addEventListener('click', () => {
@@ -89,14 +87,16 @@ favoriteBtn.addEventListener('click', () => {
     favorites.forEach((favorite, index) => {
         const li = document.createElement('li');
         li.innerHTML = `
-            <span>${favorite.name || favorite.url}</span>
+            <span>${favorite.name}</span>
             <button onclick="deleteFavorite(${index})">삭제</button>
         `;
-        li.addEventListener('click', () => {
-            const transformedUrl = transformUrl(favorite.url);
-            if (transformedUrl) {
-                videoIframe.src = transformedUrl;
-                favoriteModal.style.display = 'none'; // 모달 닫기
+        li.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'BUTTON') {
+                const transformedUrl = transformUrl(favorite.url);
+                if (transformedUrl) {
+                    videoIframe.src = transformedUrl;
+                    favoriteModal.style.display = 'none'; // 모달 닫기
+                }
             }
         });
         favoriteList.appendChild(li);
@@ -114,16 +114,14 @@ closeFavoriteModal.addEventListener('click', () => {
 
 // 즐겨찾기 추가 함수
 function addFavorite(url, name) {
-    if (!url) {
-        alert('URL을 입력해주세요.');
+    if (!url || !name) {
+        alert('URL과 이름을 입력해주세요.');
         return;
-    }
-    if (!name) {
-        name = `즐겨찾기 ${favorites.length + 1}`; // 기본 이름 설정
     }
     favorites.push({ url, name });
     localStorage.setItem('favorites', JSON.stringify(favorites));
     alert('즐겨찾기에 추가되었습니다.');
+    favoriteBtn.click(); // 목록 새로고침
 }
 
 // 즐겨찾기 삭제 함수
