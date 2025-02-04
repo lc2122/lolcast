@@ -121,8 +121,8 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    max-width: 90%; /* 모바일에서 가로 너비 제한 */
-    width: 400px; /* 데스크탑에서 고정 너비 */
+    width: 90%; /* 모바일에서 가로 너비 제한 */
+    max-width: 400px; /* 데스크탑에서 최대 너비 */
     box-sizing: border-box;
 }
 
@@ -154,29 +154,15 @@ body {
     padding: 5px 10px;
     border-radius: 3px;
     cursor: pointer;
-    font-size: 14px; /* 작은 화면에서도 읽기 쉽게 폰트 크기 조정 */
+    font-size: 14px;
 }
 
 #favorite-list li button:hover {
     background-color: #c82333;
 }
 
-/* 모바일 환경 반응형 스타일 */
-@media (max-width: 768px) {
-    #favorite-modal {
-        width: 90%; /* 모바일에서 가로 너비 자동 조정 */
-        padding: 15px; /* 패딩 줄임 */
-    }
-
-    #favorite-list li {
-        font-size: 14px; /* 작은 화면에서 글씨 크기 줄임 */
-    }
-
-    #favorite-list li button {
-        font-size: 12px; /* 작은 화면에서 버튼 글씨 크기 줄임 */
-    }
-}
-  .favorite-input {
+/* 입력 필드 스타일 */
+.favorite-input {
     height: 40px;
     width: 100%;
     padding: 8px;
@@ -184,17 +170,17 @@ body {
     box-sizing: border-box;
     border: 1px solid #ddd;
     border-radius: 5px;
-  }
+}
 
-  /* 추가 버튼의 높이를 입력 필드와 맞추기 위해 */
-  #add-favorite-btn {
+/* 추가 버튼의 높이를 입력 필드와 맞추기 위해 */
+#add-favorite-btn {
     height: 40px;
-  }
+}
 
-  /* 컨테이너 스타일 (각 입력 필드와 버튼이 들어있는 줄에 대한 스타일) */
-  .input-row {
+/* 컨테이너 스타일 (각 입력 필드와 버튼이 들어있는 줄에 대한 스타일) */
+.input-row {
     display: flex;
     gap: 10px;
     width: 100%;
     margin-bottom: 10px;
-  }
+}
