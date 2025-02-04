@@ -70,6 +70,7 @@ const closeBtn = document.getElementById('close-btn');
 closeBtn.addEventListener('click', () => {
     document.getElementById('input-modal').style.display = 'none';
 });
+
 // 즐겨찾기 목록을 저장할 배열
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
@@ -152,6 +153,8 @@ goBtn.addEventListener('click', () => {
         document.getElementById('input-modal').style.display = 'none';
     }
 });
+
+
 function transformUrl(url) {
     if (!url) {
         alert('URL을 입력해주세요.');
