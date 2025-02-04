@@ -50,7 +50,7 @@ inputBtn.addEventListener('click', () => {
 
 // "Go" 버튼 클릭 시
 goBtn.addEventListener('click', () => {
-    const userInput = urlInput.value;
+    const userInput = urlInput.value.trim(); // 앞뒤 공백 제거
     const transformedUrl = transformUrl(userInput);
     if (transformedUrl) {
         if (transformedUrl.endsWith('.m3u8')) {
