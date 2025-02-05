@@ -50,21 +50,15 @@ inputBtn.addEventListener('click', () => {
 
 // 브라우저에 따라 알맞은 플레이어 URL 접두사를 반환하는 함수
 function getPlayerUrl(m3u8Url) {
-  const ua = navigator.userAgent;
-  console.log("User Agent:", ua);
+const ua = navigator.userAgent;
+console.log("User Agent:", ua);
 
-  // Whale 브라우저 감지
-  if (/Whale/i.test(ua)) {
-    return `whale-extension://dkkdiokeigcbopfigidddbnnnbblehml/player.html#${m3u8Url}`;
-  }
-  // 순수 크롬 브라우저 감지 (Edge와 Whale 제외)
-  else if (/Chrome/i.test(ua) && !/Edg/i.test(ua)) {
-    return `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url}`;
-  }
-  // 그 외의 경우
-  else {
-    return `https://anym3u8player.com/tv/p.php?url=${encodeURIComponent(m3u8Url)}`;
-  }
+// 순수 크롬 브라우저만 감지하도록 수정
+if (/Chrome/i.test(ua) && !/Edg|Whale/i.test(ua)) {
+return chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url};
+} else {
+return https://anym3u8player.com/tv/p.php?url=${encodeURIComponent(m3u8Url)};
+}
 }
 
 goBtn.addEventListener('click', () => {
