@@ -50,29 +50,30 @@ inputBtn.addEventListener('click', () => {
 
 // 모바일 브라우저 여부 확인 함수
 function isMobile() {
-  return /Mobi|Android/i.test(navigator.userAgent);
+  return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 }
 
-// 브라우저에 따라 알맞은 플래이어 URL 접두사를 반환하는 함수 (모바일은 변환 없이 원본 URL 사용)
+// 브라우저에 따라 알맞은 플레이어 URL 접두사를 반환하는 함수 (웨일은 변환 없이 원본 URL 사용)
 function getPlayerUrl(m3u8Url) {
   if (isMobile()) {
     // 모바일에서는 변환 없이 원본 URL 사용
     return m3u8Url;
   }
-  
-  const userAgent = navigator.userAgent;
-  
-  if (userAgent.indexOf("Whale") !== -1) {
-    // 네이버 웨일 브라우저
-    return `whale-extension://dkkdiokeigcbopfigidddbnnnbblehml/player.html#${m3u8Url}`;
-  } else if (userAgent.indexOf("Edg") !== -1 || userAgent.indexOf("Edge") !== -1) {
-    // 마이크로소프트 엣지 브라우저
+
+  const ua = navigator.userAgent;
+  console.log("User Agent:", ua);
+
+  if (/whale/i.test(ua)) {
+    // 웨일 브라우저: 확장 프로그램 없이 기본 재생 기능을 제공하므로 원본 URL 반환
+    return m3u8Url;
+  } else if (/Edg/i.test(ua)) {
+    // 엣지 브라우저
     return `extension://bmmmdhlnijgodpfbhpgjfkpjiigbpcbk/player.html#${m3u8Url}`;
-  } else if (userAgent.indexOf("Chrome") !== -1) {
-    // 크롬 브라우저 (웨일 등이 아닌 크롬)
+  } else if (/Chrome/i.test(ua)) {
+    // 크롬 브라우저
     return `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url}`;
   } else {
-    // 기타 브라우저는 원본 URL 사용
+    // 다른 브라우저는 원본 URL 사용
     return m3u8Url;
   }
 }
@@ -80,15 +81,12 @@ function getPlayerUrl(m3u8Url) {
 goBtn.addEventListener('click', () => {
   const userInput = urlInput.value.trim();
   const transformedUrl = transformUrl(userInput);
-  
+
   if (transformedUrl) {
-    // URL 유효성 검사와 기본 처리 로직은 그대로 둡니다.
     if (!transformedUrl.startsWith('http')) {
       alert('유효한 URL을 입력해주세요.');
       return;
     }
-    
-    // m3u8 스트림인 경우 모바일 여부에 따라 처리 분기
     if (transformedUrl.endsWith('.m3u8')) {
       const playerUrl = getPlayerUrl(transformedUrl);
       videoIframe.src = playerUrl;
