@@ -48,37 +48,40 @@ inputBtn.addEventListener('click', () => {
     // localStorage에서 URL을 불러오는 코드 제거됨
 });
 
-// "Go" 버튼 클릭 시
+// 브라우저에 따라 알맞은 플레이어 URL 접두사를 반환하는 함수
+function getPlayerUrl(m3u8Url) {
+  const userAgent = navigator.userAgent;
+
+  if (userAgent.indexOf("Whale") !== -1) {
+    // 네이버 웨일 브라우저
+    return `whale-extension://dkkdiokeigcbopfigidddbnnnbblehml/player.html#${m3u8Url}`;
+  } else if (userAgent.indexOf("Edg") !== -1 || userAgent.indexOf("Edge") !== -1) {
+    // 마이크로소프트 엣지 브라우저
+    return `extension://bmmmdhlnijgodpfbhpgjfkpjiigbpcbk/player.html#${m3u8Url}`;
+  } else if (userAgent.indexOf("Chrome") !== -1) {
+    // 크롬 브라우저 (크롬 기반이면서 웨일 등이 아닌 경우)
+    return `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url}`;
+  } else {
+    // 특별하게 처리할 브라우저가 아니면 기본적으로 바로 URL을 반환하거나 기본 플레이어 URL 사용
+    return m3u8Url;
+  }
+}
+
 goBtn.addEventListener('click', () => {
-    const userInput = urlInput.value.trim();
-    const transformedUrl = transformUrl(userInput);
-    if (transformedUrl) {
-        if (transformedUrl.endsWith('.m3u8')) {
-            // 브라우저 확인
-            const isChrome = /Chrome/.test(navigator.userAgent) && !/Edg/.test(navigator.userAgent) && !/Whale/.test(navigator.userAgent);
-            const isWhale = /Whale/.test(navigator.userAgent);
-            const isEdge = /Edg/.test(navigator.userAgent);
-            
-            let playerUrl;
-            if (isChrome) {
-                playerUrl = `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${transformedUrl}`;
-            } else if (isWhale) {
-                playerUrl = `whale-extension://dkkdiokeigcbopfigidddbnnnbblehml/player.html#${transformedUrl}`;
-            } else if (isEdge) {
-                playerUrl = `extension://bmmmdhlnijgodpfbhpgjfkpjiigbpcbk/player.html#${transformedUrl}`;
-            } else {
-                // 다른 브라우저의 경우 기존 플레이어 사용
-                playerUrl = `https://lc2122.github.io/m3u8-player/player/#${encodeURIComponent(transformedUrl)}`;
-            }
-            videoIframe.src = playerUrl;
-        } else {
-            videoIframe.src = transformedUrl;
-        }
-        
-        localStorage.setItem('lastInputValue', userInput);
-        urlInput.value = '';
-        document.getElementById('input-modal').style.display = 'none';
+  const userInput = urlInput.value.trim();
+  const transformedUrl = transformUrl(userInput);
+  if (transformedUrl) {
+    if (transformedUrl.endsWith('.m3u8')) {
+      // 각 브라우저에 맞게 m3u8 URL을 변환하여 아이프레임에 할당
+      const playerUrl = getPlayerUrl(transformedUrl);
+      videoIframe.src = playerUrl;
+    } else {
+      videoIframe.src = transformedUrl;
     }
+    localStorage.setItem('lastInputValue', userInput);
+    urlInput.value = '';
+    document.getElementById('input-modal').style.display = 'none';
+  }
 });
 
 // "X" 버튼 클릭 시 입력창 닫기
