@@ -58,7 +58,7 @@ function getPlayerUrl(m3u8Url) {
     return `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url}`;
   } else {
     // 그 외의 경우 (Whale, Edge, Firefox 등)
-    return `https://anym3u8player.com/tv/p.php?url=${encodeURIComponent(m3u8Url)}`;
+    return `https://www.livereacting.com/tools/hls-player-embed?url=${encodeURIComponent(m3u8Url)}`;
   }
 }
 
