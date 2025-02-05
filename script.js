@@ -48,27 +48,17 @@ inputBtn.addEventListener('click', () => {
     // localStorage에서 URL을 불러오는 코드 제거됨
 });
 
-// 모바일 브라우저 여부 확인 함수
-function isMobile() {
-  return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-}
-
-// 브라우저에 따라 알맞은 플레이어 URL 접두사를 반환하는 함수 (웨일은 변환 없이 원본 URL 사용)
+// 브라우저에 따라 알맞은 플레이어 URL 접두사를 반환하는 함수
 function getPlayerUrl(m3u8Url) {
-  if (isMobile()) {
-    // 모바일에서는 변환 없이 원본 URL 사용
-    return m3u8Url;
-  }
-
   const ua = navigator.userAgent;
   console.log("User Agent:", ua);
 
-  if (/Edg/i.test(ua)) {
-    return `extension://bmmmdhlnijgodpfbhpgjfkpjiigbpcbk/player.html#${m3u8Url}`;
-  } else if (/Chrome/i.test(ua)) {
+  if (/Chrome/i.test(ua)) {
+    // 크롬 브라우저인 경우
     return `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url}`;
   } else {
-    return m3u8Url;
+    // 그 외의 경우
+    return `https://anym3u8player.com/tv/p.php?url=${encodeURIComponent(m3u8Url)}`;
   }
 }
 
