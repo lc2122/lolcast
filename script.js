@@ -63,10 +63,7 @@ function getPlayerUrl(m3u8Url) {
   const ua = navigator.userAgent;
   console.log("User Agent:", ua);
 
-  if (/whale/i.test(ua)) {
-    // 여기서 확장 프로그램 설치 여부가 판단된다면
-    return `whale-extension://dkkdiokeigcbopfigidddbnnnbblehml/player.html#${m3u8Url}`;
-  } else if (/Edg/i.test(ua)) {
+  if (/Edg/i.test(ua)) {
     return `extension://bmmmdhlnijgodpfbhpgjfkpjiigbpcbk/player.html#${m3u8Url}`;
   } else if (/Chrome/i.test(ua)) {
     return `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url}`;
