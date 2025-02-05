@@ -53,11 +53,10 @@ function getPlayerUrl(m3u8Url) {
   const ua = navigator.userAgent;
   console.log("User Agent:", ua);
 
-  if (/Chrome/i.test(ua)) {
-    // 크롬 브라우저인 경우
+  // 순수 크롬 브라우저만 감지하도록 수정
+  if (/Chrome/i.test(ua) && !/Edg|Whale/i.test(ua)) {
     return `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url}`;
   } else {
-    // 그 외의 경우
     return `https://anym3u8player.com/tv/p.php?url=${encodeURIComponent(m3u8Url)}`;
   }
 }
