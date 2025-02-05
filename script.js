@@ -54,11 +54,27 @@ goBtn.addEventListener('click', () => {
     const transformedUrl = transformUrl(userInput);
     if (transformedUrl) {
         if (transformedUrl.endsWith('.m3u8')) {
-            const playerUrl = `https://lc2122.github.io/m3u8-player/player/#${encodeURIComponent(transformedUrl)}`;
+            // 브라우저 확인
+            const isChrome = /Chrome/.test(navigator.userAgent) && !/Edg/.test(navigator.userAgent) && !/Whale/.test(navigator.userAgent);
+            const isWhale = /Whale/.test(navigator.userAgent);
+            const isEdge = /Edg/.test(navigator.userAgent);
+            
+            let playerUrl;
+            if (isChrome) {
+                playerUrl = `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${transformedUrl}`;
+            } else if (isWhale) {
+                playerUrl = `whale-extension://dkkdiokeigcbopfigidddbnnnbblehml/player.html#${transformedUrl}`;
+            } else if (isEdge) {
+                playerUrl = `extension://bmmmdhlnijgodpfbhpgjfkpjiigbpcbk/player.html#${transformedUrl}`;
+            } else {
+                // 다른 브라우저의 경우 기존 플레이어 사용
+                playerUrl = `https://lc2122.github.io/m3u8-player/player/#${encodeURIComponent(transformedUrl)}`;
+            }
             videoIframe.src = playerUrl;
         } else {
             videoIframe.src = transformedUrl;
         }
+        
         localStorage.setItem('lastInputValue', userInput);
         urlInput.value = '';
         document.getElementById('input-modal').style.display = 'none';
