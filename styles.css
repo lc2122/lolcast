@@ -14,6 +14,12 @@ body {
     height: 100%;
 }
 
+.video-section iframe {
+    width: 100%;
+    height: 100vh;  /* 화면 높이에 맞추기 */
+    display: block;
+}
+
 /* Menu section styles */
 .menu-section {
     display: flex;
