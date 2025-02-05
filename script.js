@@ -48,17 +48,17 @@ inputBtn.addEventListener('click', () => {
     // localStorage에서 URL을 불러오는 코드 제거됨
 });
 
-// 브라우저에 따라 알맞은 플레이어 URL 접두사를 반환하는 함수
 function getPlayerUrl(m3u8Url) {
   const ua = navigator.userAgent;
   console.log("User Agent:", ua);
 
-  if (/Chrome/i.test(ua)) {
+  // Chrome 브라우저인지 확인 (Whale, Edge 제외)
+  if (/Chrome/i.test(ua) && !/Whale/i.test(ua) && !/Edg/i.test(ua)) {
     // 크롬 브라우저인 경우
     return `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url}`;
   } else {
-    // 그 외의 경우
-    return `https://www.livereacting.com/tools/hls-player-embed?url=${encodeURIComponent(m3u8Url)}`;
+    // 그 외의 경우 (Whale, Edge, Firefox 등)
+    return `https://anym3u8player.com/tv/p.php?url=${encodeURIComponent(m3u8Url)}`;
   }
 }
 
