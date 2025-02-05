@@ -51,17 +51,21 @@ inputBtn.addEventListener('click', () => {
 function getPlayerUrl(m3u8Url) {
   const ua = navigator.userAgent;
   console.log("User Agent:", ua);
+  console.log("m3u8Url:", m3u8Url); // m3u8Url 확인
 
   // 먼저 웨일 브라우저인지 확인 (User Agent에 "Whale" 포함)
   if (/Whale/i.test(ua)) {
+    console.log("Whale browser detected");
     return `whale-extension://dkkdiokeigcbopfigidddbnnnbblehml/player.html#${m3u8Url}`;
   }
   // Chrome 브라우저 (단, Whale과 Edge는 제외)
   else if (/Chrome/i.test(ua) && !/Edg/i.test(ua)) {
+    console.log("Chrome browser detected");
     return `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url}`;
   }
   // 그 외의 경우 (Edge, Firefox 등)
   else {
+    console.log("Other browser detected");
     return `https://www.livereacting.com/tools/hls-player-embed?url=${encodeURIComponent(m3u8Url)}`;
   }
 }
