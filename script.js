@@ -64,16 +64,13 @@ function getPlayerUrl(m3u8Url) {
   console.log("User Agent:", ua);
 
   if (/whale/i.test(ua)) {
-    // 웨일 브라우저: 확장 프로그램 없이 기본 재생 기능을 제공하므로 원본 URL 반환
-    return m3u8Url;
+    // 여기서 확장 프로그램 설치 여부가 판단된다면
+    return `whale-extension://dkkdiokeigcbopfigidddbnnnbblehml/player.html#${m3u8Url}`;
   } else if (/Edg/i.test(ua)) {
-    // 엣지 브라우저
     return `extension://bmmmdhlnijgodpfbhpgjfkpjiigbpcbk/player.html#${m3u8Url}`;
   } else if (/Chrome/i.test(ua)) {
-    // 크롬 브라우저
     return `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url}`;
   } else {
-    // 다른 브라우저는 원본 URL 사용
     return m3u8Url;
   }
 }
