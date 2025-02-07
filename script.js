@@ -253,12 +253,9 @@ function transformUrl(url) {
         return `https://player.kick.com/${channelId}`;
     }
     else if (url.startsWith('https://play.sooplive.co.kr/')) {
-         // afreecatv는 id 뒤에 user_id가 붙는 경우가 있어서 더 정확한 처리가 필요할 수 있지만,
-         // 일단 id만 추출하는 것으로 가정하고 작성. 필요시 추가 수정
         const channelId = url.split('/').pop();
         return `https://play.sooplive.co.kr/${channelId}/embed`;
     }
-
 
     // Twitch (lolcast.kr) - 기존 로직 유지
     else if (url.startsWith('https://lolcast.kr/#/player/twitch/')) {
@@ -279,6 +276,11 @@ function transformUrl(url) {
     else if (url.startsWith('https://lolcast.kr/#/player/afreeca/')) {
         const channelId = url.split('/').pop();
         return `https://play.sooplive.co.kr/${channelId}/embed`;
+    }
+    // 일반 HTTPS 링크 처리 추가
+    else if (url.startsWith('https://')) {
+        // 유효한 HTTPS 링크라면 그대로 반환
+        return url;
     }
     // 기타 지원하지 않는 URL - 기존 로직 유지
     else {
