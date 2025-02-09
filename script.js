@@ -42,6 +42,7 @@ youtubeBtn.addEventListener('click', () => {
     setSingleViewContent(CHANNELS.youtube.url(CHANNELS.youtube.id));
     multiviewCheckbox.checked = false; // Switch to single view mode
     showSingleInput(); // 단일 뷰 입력창 표시
+    inputModal.style.display = 'none'; // Close the modal
 });
 
 // 숲 버튼 클릭 시
@@ -49,6 +50,7 @@ forestBtn.addEventListener('click', () => {
     setSingleViewContent(CHANNELS.forest.url());
     multiviewCheckbox.checked = false; // Switch to single view mode
     showSingleInput(); // 단일 뷰 입력창 표시
+    inputModal.style.display = 'none'; // Close the modal
 });
 
 // flow 버튼 클릭 시
@@ -56,6 +58,7 @@ flowBtn.addEventListener('click', () => {
     setSingleViewContent(CHANNELS.flow.url());
     multiviewCheckbox.checked = false; // Switch to single view mode
     showSingleInput(); // 단일 뷰 입력창 표시
+    inputModal.style.display = 'none'; // Close the modal
 });
 
 // '입력' 버튼 클릭 시
@@ -65,6 +68,7 @@ inputBtn.addEventListener('click', () => {
         showSingleInput(); // 멀티뷰 사용 체크가 안 되어 있으면 단일 뷰 입력창 표시
     } else {
         showMultiviewOptions(); // 멀티뷰 사용 체크가 되어 있으면 멀티뷰 옵션 표시
+        multiviewCheckbox.checked = false; // Uncheck multiview
     }
 });
 
