@@ -163,6 +163,15 @@ function startMultiview() {
                 .join('')}
         </div>
     `;
+
+    // iframe 로드 후 이벤트 리스너 연결
+    const iframes = videoSection.querySelectorAll('iframe');
+    iframes.forEach(iframe => {
+        iframe.addEventListener('load', () => {
+            // iframe 내부 요소에 대한 이벤트 리스너 연결
+            // 예시: iframe.contentDocument.getElementById('someButton').addEventListener('click', ...);
+        });
+    });
 }
 
 // 단일 뷰 시작 함수
