@@ -89,22 +89,26 @@ body {
     margin-bottom: 5px;
 }
 
-#go-btn, #close-btn, #add-multiview-url-btn {
-    padding: 10px;
-    font-size: 16px;
+#go-btn, #close-btn {
+    width: 50px; 
+    padding: 8px;
+    font-size: 12px;
+}
+
+#go-btn {
+    background-color: #555; /* Darker gray color */
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
-#go-btn {
-    background-color: #007bff;
-    color: white;
-}
-
 #close-btn {
-    background-color: #dc3545;
+    background-color: #555; /* Darker gray color */
     color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 #add-multiview-url-btn {
