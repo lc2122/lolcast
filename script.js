@@ -32,7 +32,6 @@ const urlInput = document.getElementById('url-input');
 const multiviewOptions = document.getElementById('multiview-options');
 const multiviewLayoutSelect = document.getElementById('multiview-layout-select');
 const multiviewUrlInputs = document.getElementById('multiview-url-inputs');
-const addMultiviewUrlBtn = document.getElementById('add-multiview-url-btn');
 
 // 멀티뷰 관련 상태 관리
 let currentMultiviewLayout = 1;
@@ -74,11 +73,6 @@ multiviewCheckbox.addEventListener('change', () => {
 multiviewLayoutSelect.addEventListener('change', () => {
     currentMultiviewLayout = parseInt(multiviewLayoutSelect.value);
     updateMultiviewUrlInputs();
-});
-
-// "멀티뷰 URL 추가" 버튼 클릭 시
-addMultiviewUrlBtn.addEventListener('click', () => {
-    addMultiviewInput();
 });
 
 // "Go" 버튼 클릭 시
