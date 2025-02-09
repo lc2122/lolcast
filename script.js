@@ -32,6 +32,7 @@ const urlInput = document.getElementById('url-input');
 const multiviewOptions = document.getElementById('multiview-options');
 const multiviewLayoutSelect = document.getElementById('multiview-layout-select');
 const multiviewUrlInputs = document.getElementById('multiview-url-inputs');
+const addMultiviewUrlBtn = document.getElementById('add-multiview-url-btn');
 
 // 멀티뷰 관련 상태 관리
 let currentMultiviewLayout = 1;
@@ -75,19 +76,24 @@ multiviewLayoutSelect.addEventListener('change', () => {
     updateMultiviewUrlInputs();
 });
 
-// 'Go' 버튼 클릭 시 동작
-goBtn.addEventListener('click', () => {
-    if (multiviewCheckbox.checked) {
-        startMultiview(); // 멀티뷰 시작
-    } else {
-        startSingleView(); // 단일 뷰 시작
-    }
-    inputModal.style.display = 'none'; // 입력창 닫기
+// "멀티뷰 URL 추가" 버튼 클릭 시
+addMultiviewUrlBtn.addEventListener('click', () => {
+    addMultiviewInput();
 });
 
-// '닫기' 버튼 클릭 시 입력창 닫기
+// "Go" 버튼 클릭 시
+goBtn.addEventListener('click', () => {
+    if (multiviewCheckbox.checked) {
+        startMultiview();
+    } else {
+        startSingleView();
+    }
+    inputModal.style.display = 'none';
+});
+
+// "X" 버튼 클릭 시 입력창 닫기
 closeBtn.addEventListener('click', () => {
-    inputModal.style.display = 'none'; // 입력창 닫기
+    inputModal.style.display = 'none';
 });
 
 // 멀티뷰 관련 함수
@@ -172,23 +178,32 @@ function getPlayerUrl(m3u8Url) {
 // 즐겨찾기 목록을 저장할 배열
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-// 즐겨찾기 렌더링 함수
+// 즐겨찾기 목록 표시 함수
 function renderFavorites() {
+    const favoriteModal = document.getElementById('favorite-modal');
     const favoriteList = document.getElementById('favorite-list');
-    favoriteList.innerHTML = ''; // 기존 목록 초기화
 
+    // 기존 목록 초기화
+    favoriteList.innerHTML = '';
+
+    // 즐겨찾기 목록을 동적으로 추가
     favorites.forEach((favorite, index) => {
         const li = document.createElement('li');
         li.innerHTML = `
             <span>${favorite.name}</span>
             <button onclick="deleteFavorite(${index})">삭제</button>
         `;
+        li.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'BUTTON') {
+                const transformedUrl = transformUrl(favorite.url);
+                if (transformedUrl) {
+                    videoIframe.src = transformedUrl;
+                    favoriteModal.style.display = 'none'; // 모달 닫기
+                }
+            }
+        });
         favoriteList.appendChild(li);
     });
-
-    // 즐겨찾기 모달 표시
-    document.getElementById('favorite-modal').style.display = 'block';
-}
 
     // 모달 표시
     favoriteModal.style.display = 'block';
@@ -197,9 +212,8 @@ function renderFavorites() {
 // '즐찾' 버튼 클릭 시 즐겨찾기 목록 표시
 const favoriteBtn = document.getElementById('favorite-btn');
 favoriteBtn.addEventListener('click', () => {
-    renderFavorites(); // 즐겨찾기 목록 렌더링
+    renderFavorites();
 });
-
 
 // '닫기' 버튼 클릭 시 모달 닫기
 const closeFavoriteModal = document.getElementById('close-favorite-modal');
@@ -250,170 +264,40 @@ addFavoriteBtn.addEventListener('click', () => {
     addFavorite(url, name);
 });
 
+// URL 변환 함수 (기존과 동일)
 function transformUrl(url) {
-    if (!url) {
-        alert('URL을 입력해주세요.');
-        return;
-    }
-
-    // 축약된 형식인지 확인 (예: youtube/id, twitch/id)
+    if (!url) return null;
     const isShortForm = /^(youtube|twitch|chzzk|kick|afreeca)\/[^\/]+$/.test(url);
-
     if (isShortForm) {
         const [platform, channelId] = url.split('/');
         switch (platform) {
-            case 'youtube':
-                return `https://www.youtube.com/embed/${channelId}`;
-            case 'twitch':
-                return `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
-            case 'chzzk':
-                return `https://chzzk.naver.com/live/${channelId}`;
-            case 'kick':
-                return `https://player.kick.com/${channelId}`;
-            case 'afreeca':
-                return `https://play.sooplive.co.kr/${channelId}/embed`;
-            default:
-                alert('지원하지 않는 플랫폼입니다.');
-                return;
+            case 'youtube': return `https://www.youtube.com/embed/${channelId}`;
+            case 'twitch': return `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
+            case 'chzzk': return `https://chzzk.naver.com/live/${channelId}`;
+            case 'kick': return `https://player.kick.com/${channelId}`;
+            case 'afreeca': return `https://play.sooplive.co.kr/${channelId}/embed`;
+            default: alert('지원하지 않는 플랫폼입니다.'); return null;
         }
     }
-
-    // 기존의 전체 URL 처리 로직
-    if (!url.startsWith('http')) {
-        alert('유효한 URL을 입력해주세요.');
-        return;
-    }
-    if (url.endsWith('.m3u8')) {
-        return url;
-    }
-    // YouTube
-    if (url.startsWith('https://lolcast.kr/#/player/youtube/')) {
-        const channelId = url.split('/').pop();
-        return `https://www.youtube.com/embed/${channelId}`;
-    }
-
-
-    // 추가된 로직: 유튜브 주소 형식 처리 (기존 로직 유지)
-    if (url.includes('youtu.be') || url.includes('youtube.com/watch?v=')) {
-        const videoIdMatch1 = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
-        const videoIdMatch2 = url.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/);
-        const videoId = (videoIdMatch1 && videoIdMatch1[1]) || (videoIdMatch2 && videoIdMatch2[1]);
-        if (videoId) { // videoId가 null 또는 undefined가 아닐 때만 반환
-            return `https://www.youtube.com/embed/${videoId}`;
-        }
-    }
-
-    // 추가된 로직: 직접 플랫폼 주소 처리
-    if (url.startsWith('https://twitch.tv/')) {
-        const channelId = url.split('/').pop();
-        return `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
-    }
-    else if (url.startsWith('https://chzzk.naver.com/live/')) {
-        const channelId = url.split('/').pop();
-        return `https://chzzk.naver.com/live/${channelId}`;
-    }
-    // 추가된 CHZZK 로직: https://chzzk.naver.com/id 처리
-    else if (url.startsWith('https://chzzk.naver.com/')) {
-        const channelId = url.split('/').pop();
-        return `https://chzzk.naver.com/live/${channelId}`;
-    }
-    else if (url.startsWith('https://kick.com/')) {
-        const channelId = url.split('/').pop();
-        return `https://player.kick.com/${channelId}`;
-    }
-    else if (url.startsWith('https://play.sooplive.co.kr/')) {
-        const channelId = url.split('/').pop();
-        return `https://play.sooplive.co.kr/${channelId}/embed`;
-    }
-
-    // Twitch (lolcast.kr) - 기존 로직 유지
-    else if (url.startsWith('https://lolcast.kr/#/player/twitch/')) {
-        const channelId = url.split('/').pop();
-        return `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
-    }
-    // CHZZK (lolcast.kr) - 기존 로직 유지
-    else if (url.startsWith('https://lolcast.kr/#/player/chzzk/')) {
-        const channelId = url.split('/').pop();
-        return `https://chzzk.naver.com/live/${channelId}`;
-    }
-    // Kick (lolcast.kr) - 기존 로직 유지
-    else if (url.startsWith('https://lolcast.kr/#/player/kick/')) {
-        const channelId = url.split('/').pop();
-        return `https://player.kick.com/${channelId}`;
-    }
-    // AfreecaTV (lolcast.kr) - 기존 로직 유지
-    else if (url.startsWith('https://lolcast.kr/#/player/afreeca/')) {
-        const channelId = url.split('/').pop();
-        return `https://play.sooplive.co.kr/${channelId}/embed`;
-    }
-    // 일반 HTTPS 링크 처리 추가
-    else if (url.startsWith('https://')) {
-        // 유효한 HTTPS 링크라면 그대로 반환
-        return url;
-    }
-    // 기타 지원하지 않는 URL - 기존 로직 유지
-    else {
-        alert('지원하지 않는 URL 형식입니다.');
-    }
+    if (!url.startsWith('http')) { alert('유효한 URL을 입력해주세요.'); return null; }
+    if (url.endsWith('.m3u8')) return url;
+    if (url.startsWith('https://lolcast.kr/#/player/youtube/')) return `https://www.youtube.com/embed/${url.split('/').pop()}`;
+    if (url.includes('youtu.be') || url.includes('youtube.com/watch?v=')) { const match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9_-]+)/); if (match) return `https://www.youtube.com/embed/${match[1]}`; }
+    if (url.startsWith('https://twitch.tv/')) return `https://player.twitch.tv/?channel=${url.split('/').pop()}&parent=lc2122.github.io`;
+    if (url.startsWith('https://chzzk.naver.com/live/') || url.startsWith('https://chzzk.naver.com/')) return `https://chzzk.naver.com/live/${url.split('/').pop()}`;
+    if (url.startsWith('https://kick.com/')) return `https://player.kick.com/${url.split('/').pop()}`;
+    if (url.startsWith('https://play.sooplive.co.kr/')) return `https://play.sooplive.co.kr/${url.split('/').pop()}/embed`;
+    if (url.startsWith('https://')) return url;
+    alert('지원하지 않는 URL 형식입니다.'); return null;
 }
 
-// Load Twitch channel
-function loadTwitchChannel() {
-    const hash = window.location.hash;
-    if (hash.startsWith('#/twitch/')) {
-        const channelId = hash.split('/')[2];
-        const twitchUrl = `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
-        videoIframe.src = twitchUrl;
-    }
-}
-
-// Load YouTube channel
-function loadYouTubeChannel() {
-    const hash = window.location.hash;
-    if (hash.startsWith('#/youtube/')) {
-        const channelId = hash.split('/')[2];
-        const youtubeUrl = `https://www.youtube.com/embed/${channelId}`;
-        videoIframe.src = youtubeUrl;
-    }
-}
-
-// Load CHZZK channel
-function loadCHZZKChannel() {
-    const hash = window.location.hash;
-    if (hash.startsWith('#/chzzk/')) {
-        const channelId = hash.split('/')[2];
-        const chzzkUrl = `https://chzzk.naver.com/live/${channelId}`;
-        videoIframe.src = chzzkUrl;
-    }
-}
-
-// Load SOOP channel
-function loadSOOPChannel() {
-    const hash = window.location.hash;
-    if (hash.startsWith('#/soop/')) {
-        const channelId = hash.split('/')[2];
-        const soopUrl = `https://play.sooplive.co.kr/${channelId}/embed`;
-        videoIframe.src = soopUrl;
-    }
-}
-
-// Load Kick channel
-function loadKickChannel() {
-    const hash = window.location.hash;
-    if (hash.startsWith('#/kick/')) {
-        const channelId = hash.split('/')[2];
-        const kickUrl = `https://player.kick.com/${channelId}`;
-        videoIframe.src = kickUrl;
-    }
-}
-
-// Initial load
+// 초기 로드 및 해시 처리 (기존과 거의 동일)
 window.addEventListener('load', () => {
     videoIframe.src = CHANNELS.flow.url();
-    loadTwitchChannel();
-    loadYouTubeChannel();
-    loadCHZZKChannel();
-    loadSOOPChannel();
-    loadKickChannel();
+    const hash = window.location.hash;
+    if (hash.startsWith('#/twitch/')) setSingleViewContent(`https://player.twitch.tv/?channel=${hash.split('/')[2]}&parent=lc2122.github.io`);
+    else if (hash.startsWith('#/youtube/')) setSingleViewContent(`https://www.youtube.com/embed/${hash.split('/')[2]}`);
+    else if (hash.startsWith('#/chzzk/')) setSingleViewContent(`https://chzzk.naver.com/live/${hash.split('/')[2]}`);
+    else if (hash.startsWith('#/soop/')) setSingleViewContent(`https://play.sooplive.co.kr/${hash.split('/')[2]}/embed`);
+    else if (hash.startsWith('#/kick/')) setSingleViewContent(`https://player.kick.com/${hash.split('/')[2]}`);
 });
-
