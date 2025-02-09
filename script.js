@@ -37,29 +37,21 @@ const multiviewUrlInputs = document.getElementById('multiview-url-inputs');
 let currentMultiviewLayout = 1;
 let multiviewUrlInputCounter = 0;
 
-// 숙제1 버튼 클릭 시
-youtubeBtn.addEventListener('click', () => {
-    setSingleViewContent(CHANNELS.youtube.url(CHANNELS.youtube.id));
-    multiviewCheckbox.checked = false; // Switch to single view mode
-    showSingleInput(); // 단일 뷰 입력창 표시
-    inputModal.style.display = 'none'; // Close the modal
-});
+    // 버튼 이벤트 리스너 연결 (각 버튼에 대해 동일한 방식으로 수정)
+    youtubeBtn.addEventListener('click', () => {
+        setMultiviewContent([CHANNELS.youtube.url(CHANNELS.youtube.id)]);
+        inputModal.style.display = 'none';
+    });
 
-// 숲 버튼 클릭 시
-forestBtn.addEventListener('click', () => {
-    setSingleViewContent(CHANNELS.forest.url());
-    multiviewCheckbox.checked = false; // Switch to single view mode
-    showSingleInput(); // 단일 뷰 입력창 표시
-    inputModal.style.display = 'none'; // Close the modal
-});
+    forestBtn.addEventListener('click', () => {
+        setMultiviewContent([CHANNELS.forest.url()]);
+        inputModal.style.display = 'none';
+    });
 
-// flow 버튼 클릭 시
-flowBtn.addEventListener('click', () => {
-    setSingleViewContent(CHANNELS.flow.url());
-    multiviewCheckbox.checked = false; // Switch to single view mode
-    showSingleInput(); // 단일 뷰 입력창 표시
-    inputModal.style.display = 'none'; // Close the modal
-});
+    flowBtn.addEventListener('click', () => {
+        setMultiviewContent([CHANNELS.flow.url()]);
+        inputModal.style.display = 'none';
+    });
 
 // '입력' 버튼 클릭 시
 inputBtn.addEventListener('click', () => {
@@ -341,4 +333,6 @@ window.addEventListener('load', () => {
     else if (hash.startsWith('#/chzzk/')) setSingleViewContent(`https://chzzk.naver.com/live/${hash.split('/')[2]}`);
     else if (hash.startsWith('#/soop/')) setSingleViewContent(`https://play.sooplive.co.kr/${hash.split('/')[2]}/embed`);
     else if (hash.startsWith('#/kick/')) setSingleViewContent(`https://player.kick.com/${hash.split('/')[2]}`);
+        // flow 화면 표시 (추가)
+    setMultiviewContent([CHANNELS.flow.url()]); // 멀티뷰 1분할로 flow 화면 표시
 });
