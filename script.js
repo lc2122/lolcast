@@ -37,44 +37,55 @@ const multiviewUrlInputs = document.getElementById('multiview-url-inputs');
 let currentMultiviewLayout = 1;
 let multiviewUrlInputCounter = 0;
 
-// YouTube 버튼 클릭 시
+// 멀티뷰 관련 상태 관리
+let currentMultiviewLayout = 1;
+let multiviewUrlInputCounter = 0;
+
+// New functions for handling view modes
+function showSingleView() {
+    videoSection.innerHTML = `
+        <iframe
+            id="video-iframe"
+            src=""
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+        ></iframe>
+    `;
+}
+
+function loadUrlInSingleView(url) {
+    showSingleView();
+    const transformedUrl = transformUrl(url);
+    if (transformedUrl) {
+        const iframe = document.getElementById('video-iframe');
+        iframe.src = transformedUrl;
+    }
+}
+
+// Event listeners for buttons
 youtubeBtn.addEventListener('click', () => {
-    if (multiviewCheckbox.checked) {
-        // 멀티뷰 모드에서 youtube 버튼 클릭 시의 동작
-        const multiviewContainer = videoSection.querySelector('.multiview-container');
-        const iframe = multiviewContainer.querySelector('iframe');
-        iframe.src = CHANNELS.youtube.url(CHANNELS.youtube.id);
-    } else {
-        setSingleViewContent(CHANNELS.youtube.url(CHANNELS.youtube.id));
-    }
+    loadUrlInSingleView(CHANNELS.youtube.url(CHANNELS.youtube.id));
 });
 
-// 숲 버튼 클릭 시
 forestBtn.addEventListener('click', () => {
-    if (multiviewCheckbox.checked) {
-        // 멀티뷰 모드에서 forest 버튼 클릭 시의 동작
-        const multiviewContainer = videoSection.querySelector('.multiview-container');
-        const iframe = multiviewContainer.querySelector('iframe');
-        iframe.src = CHANNELS.forest.url();
-    } else {
-        setSingleViewContent(CHANNELS.forest.url());
-    }
+    loadUrlInSingleView(CHANNELS.forest.url());
 });
 
-// flow 버튼 클릭 시
 flowBtn.addEventListener('click', () => {
-    setSingleViewContent(CHANNELS.flow.url());
+    loadUrlInSingleView(CHANNELS.flow.url());
 });
 
-// "Input" 버튼 클릭 시
+// Input modal events
 inputBtn.addEventListener('click', () => {
     inputModal.style.display = 'block';
-    // 모달 열 때 단일 뷰 모드로 설정
-    multiviewCheckbox.checked = false;
-    showSingleInput();
+    if (multiviewCheckbox.checked) {
+        showMultiviewOptions();
+    } else {
+        showSingleInput();
+    }
 });
 
-// 멀티뷰 체크박스 변경 시
 multiviewCheckbox.addEventListener('change', () => {
     if (multiviewCheckbox.checked) {
         showMultiviewOptions();
@@ -83,13 +94,6 @@ multiviewCheckbox.addEventListener('change', () => {
     }
 });
 
-// 멀티뷰 레이아웃 선택 변경 시
-multiviewLayoutSelect.addEventListener('change', () => {
-    currentMultiviewLayout = parseInt(multiviewLayoutSelect.value);
-    updateMultiviewUrlInputs();
-});
-
-// "Go" 버튼 클릭 시
 goBtn.addEventListener('click', () => {
     if (multiviewCheckbox.checked) {
         startMultiview();
@@ -98,6 +102,11 @@ goBtn.addEventListener('click', () => {
     }
     inputModal.style.display = 'none';
 });
+
+function startSingleView() {
+    const url = urlInput.value.trim();
+    loadUrlInSingleView(url);
+}
 
 // "X" 버튼 클릭 시 입력창 닫기
 closeBtn.addEventListener('click', () => {
