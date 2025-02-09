@@ -83,7 +83,7 @@ body {
     width: 100%;
     padding: 8px;
     font-size: 14px;
-    border: 1px solid #ccc;
+    border: none; /* border 속성 제거 */
     border-radius: 4px;
     box-sizing: border-box;
     margin-bottom: 5px;
