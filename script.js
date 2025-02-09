@@ -37,27 +37,28 @@ const multiviewUrlInputs = document.getElementById('multiview-url-inputs');
 let currentMultiviewLayout = 1;
 let multiviewUrlInputCounter = 0;
 
-// YouTube 버튼 클릭 시
+// 숙제1 버튼 클릭 시
 youtubeBtn.addEventListener('click', () => {
     setSingleViewContent(CHANNELS.youtube.url(CHANNELS.youtube.id));
+    multiviewCheckbox.checked = false; // Switch to single view mode
 });
 
 // 숲 버튼 클릭 시
 forestBtn.addEventListener('click', () => {
     setSingleViewContent(CHANNELS.forest.url());
+    multiviewCheckbox.checked = false; // Switch to single view mode
 });
-
 
 // flow 버튼 클릭 시
 flowBtn.addEventListener('click', () => {
     setSingleViewContent(CHANNELS.flow.url());
+    multiviewCheckbox.checked = false; // Switch to single view mode
 });
 
-// "Input" 버튼 클릭 시
+// '입력' 버튼 클릭 시
 inputBtn.addEventListener('click', () => {
     inputModal.style.display = 'block';
-    // 모달 열 때 단일 뷰 모드로 설정
-    multiviewCheckbox.checked = false;
+    multiviewCheckbox.checked = false; // Switch to single view mode
     showSingleInput();
 });
 
@@ -78,12 +79,10 @@ multiviewLayoutSelect.addEventListener('change', () => {
 
 // "Go" 버튼 클릭 시
 goBtn.addEventListener('click', () => {
-    if (multiviewCheckbox.checked) {
-        // 멀티뷰 모드
-        startMultiview();
-    } else {
-        // 단일 뷰 모드
+    if (!multiviewCheckbox.checked) { // If '멀티뷰 사용' is not checked
         startSingleView();
+    } else {
+        startMultiview();
     }
     inputModal.style.display = 'none'; // 입력 모달 닫기
 });
