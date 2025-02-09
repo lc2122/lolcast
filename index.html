@@ -75,7 +75,25 @@
         ex) https://lolcast.kr/#/player/~~, https://twitch.tv/아이디, m3u8 다 가능
     </div>
 </div>
-
+    
+<div id="multiview-modal" style="display: none;">
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <h3>멀티뷰 설정</h3>
+    <div style="margin-bottom: 10px;">
+      <button class="multiview-layout-btn" data-layout="1">1분할</button>
+      <button class="multiview-layout-btn" data-layout="2">2분할</button>
+      <button class="multiview-layout-btn" data-layout="3">3분할</button>
+      <button class="multiview-layout-btn" data-layout="4">4분할</button>
+    </div>
+    <div id="multiview-url-inputs" style="width: 100%;">
+      <!-- 동적으로 URL 입력 필드가 추가됩니다 -->
+    </div>
+    <div style="margin-top: 10px;">
+      <button id="start-multiview-btn" class="menu-button">시작</button>
+      <button id="close-multiview-btn" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
+    </div>
+  </div>
+</div>
 <div id="favorite-modal" style="display: none;">
   <div style="display: flex; flex-direction: column; align-items: center;">
     <h3>즐겨찾기 목록</h3>
