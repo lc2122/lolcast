@@ -45,7 +45,6 @@ flowBtn.addEventListener('click', () => {
 // "Input" 버튼 클릭 시
 inputBtn.addEventListener('click', () => {
     document.getElementById('input-modal').style.display = 'block';
-    // localStorage에서 URL을 불러오는 코드 제거됨
 });
 
 function getPlayerUrl(m3u8Url) {
@@ -179,8 +178,172 @@ addFavoriteBtn.addEventListener('click', () => {
     addFavorite(url, name);
 });
 
+// 멀티뷰 관련 변수
+let multiviewLayout = 1;
+let multiviewUrls = [];
+let isMultiviewMode = false;
 
+// 멀티뷰 모드 토글 함수
+function toggleMultiview() {
+    isMultiviewMode = !isMultiviewMode;
+    const videoSection = document.querySelector('.video-section');
+    
+    if(isMultiviewMode) {
+        videoSection.innerHTML = `
+            <div class="multiview-container" id="multiview-container">
+                ${Array(multiviewLayout).fill('<div class="multiview-item"><iframe></iframe></div>').join('')}
+            </div>
+        `;
+        updateMultiviewLayout();
+        loadMultiviewContents();
+    } else {
+        videoSection.innerHTML = '<iframe id="video-iframe" src="" frameborder="0" allowfullscreen></iframe>';
+    }
+}
 
+// 멀티뷰 레이아웃 업데이트 함수
+function updateMultiviewLayout() {
+    const container = document.getElementById('multiview-container');
+    if(!container) return;
+
+    switch(multiviewLayout) {
+        case 1:
+            container.style.gridTemplate = '1fr';
+            break;
+        case 2:
+            container.style.gridTemplateColumns = '1fr 1fr';
+            break;
+        case 3:
+            container.style.gridTemplate = 'repeat(2, 1fr) / repeat(2, 1fr)';
+            break;
+        case 4:
+            container.style.gridTemplate = 'repeat(2, 1fr) / repeat(2, 1fr)';
+            break;
+    }
+}
+
+// 멀티뷰 컨텐츠 로드 함수
+function loadMultiviewContents() {
+    const items = document.querySelectorAll('.multiview-item');
+    items.forEach((item, index) => {
+        const url = multiviewUrls[index] || '';
+        item.querySelector('iframe').src = transformUrl(url) || '';
+    });
+}
+
+// 멀티뷰 모달 관련 이벤트 리스너
+document.querySelectorAll('.multiview-layout-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        multiviewLayout = parseInt(btn.dataset.layout);
+        document.querySelectorAll('.multiview-layout-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateUrlInputs();
+    });
+});
+
+function updateUrlInputs() {
+    const container = document.getElementById('multiview-url-inputs');
+    container.innerHTML = '';
+    for(let i = 0; i < multiviewLayout; i++) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'multiview-url-input';
+        input.placeholder = `URL ${i + 1}`;
+        input.value = multiviewUrls[i] || '';
+        container.appendChild(input);
+    }
+}
+
+document.getElementById('start-multiview-btn').addEventListener('click', () => {
+    const inputs = document.querySelectorAll('.multiview-url-input');
+    multiviewUrls = Array.from(inputs).map(input => input.value.trim());
+    document.getElementById('multiview-modal').style.display = 'none';
+    if(isMultiviewMode) toggleMultiview();
+    toggleMultiview();
+});
+
+document.getElementById('close-multiview-btn').addEventListener('click', () => {
+    document.getElementById('multiview-modal').style.display = 'none';
+});
+
+// 즐겨찾기 모달 수정 (멀티뷰 체크박스 추가)
+document.getElementById('favorite-modal').innerHTML = `
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <h3>즐겨찾기 목록</h3>
+    <div style="margin-bottom: 10px;">
+      <label>
+        <input type="checkbox" id="multiview-checkbox"> 멀티뷰 모드
+      </label>
+    </div>
+    <input
+      type="text"
+      id="favorite-name-input"
+      placeholder="이름 입력"
+      class="favorite-input"
+      style="flex: 1;"
+    />
+    <div class="input-row">
+      <input
+        type="text"
+        id="favorite-url-input"
+        placeholder="주소 입력"
+        class="favorite-input"
+      />
+    </div>
+    <button id="add-favorite-btn" class="menu-button">추가</button>
+    <ul id="favorite-list" style="list-style-type: none; padding: 0; width: 100%;"></ul>
+    <div class="button-container">
+      <button id="close-favorite-modal" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
+    </div>
+  </div>
+`;
+
+// 즐겨찾기 클릭 이벤트 수정
+function renderFavorites() {
+    const favoriteModal = document.getElementById('favorite-modal');
+    const favoriteList = document.getElementById('favorite-list');
+
+    // 기존 목록 초기화
+    favoriteList.innerHTML = '';
+
+    // 즐겨찾기 목록을 동적으로 추가
+    favorites.forEach((favorite, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span>${favorite.name}</span>
+            <button onclick="deleteFavorite(${index})">삭제</button>
+        `;
+        li.addEventListener('click', (e) => {
+            if(document.getElementById('multiview-checkbox').checked) {
+                multiviewUrls = [favorite.url];
+                document.getElementById('multiview-modal').style.display = 'block';
+                updateUrlInputs();
+            } else {
+                const transformedUrl = transformUrl(favorite.url);
+                if (transformedUrl) {
+                    videoIframe.src = transformedUrl;
+                    favoriteModal.style.display = 'none'; // 모달 닫기
+                }
+            }
+        });
+        favoriteList.appendChild(li);
+    });
+
+    // 모달 표시
+    favoriteModal.style.display = 'block';
+}
+
+// 멀티뷰 모드 토글 버튼 추가 (기존 메뉴 섹션에)
+document.getElementById('menu-section').innerHTML += `
+    <button id="multiview-btn" class="menu-button">멀티뷰</button>
+`;
+
+document.getElementById('multiview-btn').addEventListener('click', () => {
+    document.getElementById('multiview-modal').style.display = 'block';
+    updateUrlInputs();
+});
+
+// URL 변환 함수
 function transformUrl(url) {
     if (!url) {
         alert('URL을 입력해주세요.');
@@ -222,7 +385,6 @@ function transformUrl(url) {
         const channelId = url.split('/').pop();
         return `https://www.youtube.com/embed/${channelId}`;
     }
-
 
     // 추가된 로직: 유튜브 주소 형식 처리 (기존 로직 유지)
     if (url.includes('youtu.be') || url.includes('youtube.com/watch?v=')) {
