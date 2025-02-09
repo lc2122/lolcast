@@ -4,55 +4,149 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>롤캐 모바일용</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
-        /* 버튼 크기 조정 */
-        .menu-button {
-            padding: 5px 10px; /* 버튼 크기 줄임 */
-            font-size: 14px; /* 폰트 크기 줄임 */
-            margin: 2px; /* 버튼 간격 조정 */
-        }
-                /* 추가 스타일: 전체 레이아웃과 스크롤 방지 */
-        html, body {
-            height: 100%; /* html, body 높이 100% 설정 */
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* body 스크롤 방지 */
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
 
         .container {
             display: flex;
-            flex-direction: column; /* 모바일에서는 세로 배치 */
-            height: 100%; /* container 높이 100% 설정 */
-            overflow: hidden;
-        }
-        .app_banner_container__8\+G2L.app_banner_is_fixed__vD7c- {
-    display: none !important;
-        }
-        /* 멀티뷰 스타일 */
-        .multiview-container {
-            display: grid;
-            gap: 0;
-            width: 100%;
+            flex-direction: column;
             height: 100%;
         }
 
-        .multiview-item {
-            position: relative;
-            width: 100%;
-            height: 100%;
+        .menu-section {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            background-color: #f8f8f8;
         }
 
-        .multiview-item iframe {
-            width: 100%;
-            height: 100%;
+        .menu-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
             border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #555;
+        }
+
+        #input-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        #input-modal > div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .url-input, #multiview-options select {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+        }
+
+        #go-btn, #close-btn {
+            width: 50px;
+            padding: 8px;
+            font-size: 12px;
+            background-color: #555;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #favorite-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 90%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+
+        #favorite-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 5px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            word-break: break-all;
+        }
+
+        #favorite-list li button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #favorite-list li button:hover {
+            background-color: #c82333;
+        }
+
+        .favorite-input {
+            height: 40px;
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 상단: 버튼 메뉴 -->
         <div class="menu-section" id="menu-section">
             <button id="hrm-btn" class="menu-button">흐름</button>
             <button id="youtube-btn" class="menu-button">숙제1</button>
@@ -63,7 +157,6 @@
             <button id="input-btn" class="menu-button">입력</button>
         </div>
 
-        <!-- 중간: 영상 표시 -->
         <div class="video-section" id="video-section">
             <iframe
                 id="video-iframe"
@@ -74,7 +167,6 @@
             ></iframe>
         </div>
 
-        <!-- 하단: 채팅창 -->
         <div class="chat-section">
             <iframe
                 id="chat-iframe"
@@ -84,161 +176,381 @@
         </div>
     </div>
 
-<div id="input-modal" style="display: none;">
-    <div style="display: flex; flex-direction: column;">
-        <div style="display: flex; align-items: center; margin-bottom: 10px;">
-            <input type="checkbox" id="multiview-checkbox" style="margin-right: 5px;">
-            <label for="multiview-checkbox">멀티뷰 사용</label>
-        </div>
-        <div id="single-url-input-container">
-            <input type="text" id="url-input" class="url-input" placeholder="URL 입력" style="width: 100%; margin-bottom: 10px;" />
-        </div>
-        <div id="multiview-options" style="display: none;">
+    <div id="input-modal">
+        <div>
             <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                <label for="multiview-layout-select" style="margin-right: 10px;">분할:</label>
-                <select id="multiview-layout-select">
-                    <option value="1">1분할</option>
-                    <option value="2">2분할</option>
-                    <option value="3">3분할</option>
-                    <option value="4">4분할</option>
-                </select>
+                <input type="checkbox" id="multiview-checkbox" style="margin-right: 5px;">
+                <label for="multiview-checkbox">멀티뷰 사용</label>
             </div>
-            <div id="multiview-url-inputs">
-                <!-- 동적으로 URL 입력 필드가 추가됩니다 -->
+            <div id="single-url-input-container">
+                <input type="text" id="url-input" class="url-input" placeholder="URL 입력" style="width: 100%; margin-bottom: 10px;" />
             </div>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <button id="go-btn" class="menu-button" style="flex-grow: 1; margin-right: 5px;">Go</button>
-            <button id="close-btn" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
-        </div>
-        <div style="margin-top: 10px; color: #666; font-size: 12px; word-wrap: break-word;">
-            ex) 롤캐직링, 기본영상주소, m3u8 다 가능
+            <div id="multiview-options" style="display: none;">
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <label for="multiview-layout-select" style="margin-right: 10px;">분할:</label>
+                    <select id="multiview-layout-select">
+                        <option value="1">1분할</option>
+                        <option value="2">2분할</option>
+                        <option value="3">3분할</option>
+                        <option value="4">4분할</option>
+                    </select>
+                </div>
+                <div id="multiview-url-inputs">
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <button id="go-btn" class="menu-button" style="flex-grow: 1; margin-right: 5px;">Go</button>
+                <button id="close-btn" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
+            </div>
+            <div style="margin-top: 10px; color: #666; font-size: 12px; word-wrap: break-word;">
+                ex) 롤캐직링, 기본영상주소, m3u8 다 가능
+            </div>
         </div>
     </div>
-</div>
 
-<div id="favorite-modal" style="display: none;">
-  <div style="display: flex; flex-direction: column; align-items: center;">
-    <h3>즐겨찾기 목록</h3>
-    <input
-      type="text"
-      id="favorite-name-input"
-      placeholder="이름 입력"
-      class="favorite-input"
-      style="flex: 1;"
-    />
-    <div class="input-row">
-      <input
-        type="text"
-        id="favorite-url-input"
-        placeholder="주소 입력"
-        class="favorite-input"
-      />
+    <div id="favorite-modal">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <h3>즐겨찾기 목록</h3>
+            <div class="input-row">
+                <input
+                    type="text"
+                    id="favorite-name-input"
+                    placeholder="이름 입력"
+                    class="favorite-input"
+                    style="flex: 1;"
+                />
+                <input
+                    type="text"
+                    id="favorite-url-input"
+                    placeholder="주소 입력"
+                    class="favorite-input"
+                />
+            </div>
+            <button id="add-favorite-btn" class="menu-button">추가</button>
+        </div>
+        <ul id="favorite-list">
+        </ul>
+        <div class="button-container">
+            <button id="close-favorite-modal" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
+        </div>
     </div>
-    <button id="add-favorite-btn" class="menu-button">추가</button>
-  </div>
-  <ul id="favorite-list" style="list-style-type: none; padding: 0; width: 100%;">
-    <!-- 즐겨찾기 항목이 여기에 동적으로 추가됩니다 -->
-  </ul>
-  <div class="button-container">
-    <button id="close-favorite-modal" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
-  </div>
-</div>
 
     <script>
-        // SameSite=None 쿠키 설정 함수
-        function setSameSiteNoneCookie(name, value, days) {
-            let expires = "";
-            if (days) {
-                const date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
+        const CHANNELS = {
+            youtube: {
+                id: 'UCw1DsweY9b2AKGjV4kGJP1A',
+                buttonLabel: '숙제1',
+                color: '#FF0000',
+                url: (id) => `https://www.youtube.com/embed/live_stream?channel=${id}`
+            },
+            forest: {
+                buttonLabel: '숙제2',
+                color: '#00aaff',
+                url: () => 'https://play.sooplive.co.kr/aflol/embed'
+            },
+            flow: {
+                buttonLabel: 'flow',
+                color: '#00FFA3',
+                url: () => 'https://insagirl.github.io/syncwatchdemo/syncwatch2.html'
             }
-            document.cookie = `${name}=${value}${expires}; path=/; SameSite=None`;
-        }
-
-        // 레이아웃 조정 함수
-        function design() {
-            const isMobile = window.innerWidth <= 900; // 모바일 화면 기준 (900px 이하)
-            const menuSection = document.getElementById('menu-section');
-            const videoSection = document.getElementById('video-section');
-            const chatSection = document.querySelector('.chat-section');
-
-            if (isMobile) {
-                // 모바일: 상하 레이아웃
-                menuSection.style.position = "relative";
-                menuSection.style.width = "100%";
-                menuSection.style.height = "auto";
-                menuSection.style.display = "flex";
-                menuSection.style.justifyContent = "space-around";
-                menuSection.style.padding = "10px 0";
-
-                videoSection.style.width = "100%";
-                videoSection.style.height = "35vh"; // 영상 영역 높이
-                videoSection.style.position = "relative";
-
-                chatSection.style.width = "100%";
-                chatSection.style.height = "53vh"; // 채팅 영역 높이
-                chatSection.style.position = "relative";
-            } else {
-                // PC: 좌우 레이아웃
-                menuSection.style.position = "absolute";
-                menuSection.style.top = "0";
-                menuSection.style.right = "0";
-                menuSection.style.width = "20%"; // 우측 20% 너비
-                menuSection.style.height = "auto";
-                menuSection.style.display = "flex";
-                menuSection.style.flexDirection = "row"; // 버튼을 가로로 배치
-                menuSection.style.justifyContent = "space-around"; // 버튼 간격 조정
-                menuSection.style.alignItems = "center"; // 버튼을 중앙 정렬
-                menuSection.style.paddingTop = "10px"; // 상단 여백 추가
-
-                videoSection.style.width = "80%"; // 좌측 80% 너비
-                videoSection.style.height = "100vh"; // 영상 영역 높이
-                videoSection.style.position = "absolute";
-                videoSection.style.left = "0";
-
-                chatSection.style.width = "20%"; // 우측 20% 너비
-                chatSection.style.height = "calc(100vh - 60px)"; // 채팅 영역 높이 (버튼 메뉴 높이 제외)
-                chatSection.style.position = "absolute";
-                chatSection.style.top = "60px"; // 버튼 메뉴 높이만큼 아래로 이동
-                chatSection.style.right = "0";
-            }
-        }
-
-        // 초기 로드 시 실행
-        window.onload = function() {
-            const chatIframe = document.getElementById('chat-iframe');
-            const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
-            if(location.hash && location.hash.substring(1)) {
-                chatIframe.src = lgicurl + '#' + decodeURIComponent(location.hash.substring(1));
-            } else {
-                chatIframe.src = lgicurl;
-            }
-            design(); // 초기 레이아웃 설정
         };
 
-        // "흐름" 버튼 클릭 이벤트 추가
-        const hrmBtn = document.getElementById('hrm-btn');
-        hrmBtn.addEventListener('click', () => {
-            const url = 'https://insagirl-toto.appspot.com/hrm/?where=1';
-            window.open(url, '_blank');
+        const videoSection = document.getElementById('video-section');
+        const videoIframe = document.getElementById('video-iframe');
+        const youtubeBtn = document.getElementById('youtube-btn');
+        const forestBtn = document.getElementById('forest-btn');
+        const flowBtn = document.getElementById('flow-btn');
+        const inputBtn = document.getElementById('input-btn');
+        const goBtn = document.getElementById('go-btn');
+        const closeBtn = document.getElementById('close-btn');
+        const inputModal = document.getElementById('input-modal');
+        const multiviewCheckbox = document.getElementById('multiview-checkbox');
+        const singleUrlInputContainer = document.getElementById('single-url-input-container');
+        const urlInput = document.getElementById('url-input');
+        const multiviewOptions = document.getElementById('multiview-options');
+        const multiviewLayoutSelect = document.getElementById('multiview-layout-select');
+        const multiviewUrlInputs = document.getElementById('multiview-url-inputs');
+
+        let currentMultiviewLayout = 1;
+        let multiviewUrlInputCounter = 0;
+
+        function switchToSingleView() {
+            const multiviewContainer = videoSection.querySelector('.multiview-container');
+            if (multiviewContainer) {
+                multiviewContainer.remove();
+            }
+            const existingIframe = document.getElementById('video-iframe');
+            if (!existingIframe) {
+                const newIframe = document.createElement('iframe');
+                newIframe.id = 'video-iframe';
+                newIframe.src = '';
+                newIframe.frameborder = '0';
+                newIframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                newIframe.allowfullscreen = true;
+                videoSection.appendChild(newIframe);
+            }
+            multiviewCheckbox.checked = false;
+        }
+
+        function setSingleViewContent(url) {
+            const videoIframe = document.getElementById('video-iframe');
+            if (!videoIframe) return;
+            const transformedUrl = transformUrl(url);
+            if (transformedUrl) {
+                if (transformedUrl.endsWith('.m3u8')) {
+                    videoIframe.src = getPlayerUrl(transformedUrl);
+                } else {
+                    videoIframe.src = transformedUrl;
+                }
+            }
+        }
+
+        function getPlayerUrl(m3u8Url) {
+            const ua = navigator.userAgent;
+            if (/Chrome/i.test(ua) && !/Whale/i.test(ua) && !/Edg/i.test(ua)) {
+                return `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url}`;
+            } else {
+                return `https://www.livereacting.com/tools/hls-player-embed?url=${encodeURIComponent(m3u8Url)}`;
+            }
+        }
+
+        function transformUrl(url) {
+            if (!url) return null;
+            const isShortForm = /^(youtube|twitch|chzzk|kick|afreeca)\/[^\/]+$/.test(url);
+            if (isShortForm) {
+                const [platform, channelId] = url.split('/');
+                switch (platform) {
+                    case 'youtube': return `https://www.youtube.com/embed/${channelId}`;
+                    case 'twitch': return `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
+                    case 'chzzk': return `https://chzzk.naver.com/live/${channelId}`;
+                    case 'kick': return `https://player.kick.com/${channelId}`;
+                    case 'afreeca': return `https://play.sooplive.co.kr/${channelId}/embed`;
+                    default: alert('지원하지 않는 플랫폼입니다.'); return null;
+                }
+            }
+            if (!url.startsWith('http')) { alert('유효한 URL을 입력해주세요.'); return null; }
+            if (url.endsWith('.m3u8')) return url;
+            if (url.startsWith('https://lolcast.kr/#/player/youtube/')) {
+                return `https://www.youtube.com/embed/${url.split('/').pop()}`;
+            }
+            if (url.startsWith('https://lolcast.kr/#/player/twitch/')) {
+                return `https://player.twitch.tv/?channel=${url.split('/').pop()}&parent=lc2122.github.io`;
+            }
+            if (url.startsWith('https://lolcast.kr/#/player/chzzk/')) {
+                return `https://chzzk.naver.com/live/${url.split('/').pop()}`;
+            }
+            if (url.startsWith('https://lolcast.kr/#/player/kick/')) {
+                return `https://player.kick.com/${url.split('/').pop()}`;
+            }
+            if (url.startsWith('https://lolcast.kr/#/player/afreeca/')) {
+                return `https://play.sooplive.co.kr/${url.split('/').pop()}/embed`;
+            }
+            if (url.includes('youtu.be') || url.includes('youtube.com/watch?v=')) {
+                const match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9_-]+)/);
+                if (match) return `https://www.youtube.com/embed/${match[1]}`;
+            }
+            if (url.startsWith('https://twitch.tv/')) {
+                return `https://player.twitch.tv/?channel=${url.split('/').pop()}&parent=lc2122.github.io`;
+            }
+            if (url.startsWith('https://chzzk.naver.com/live/') || url.startsWith('https://chzzk.naver.com/')) {
+                return `https://chzzk.naver.com/live/${url.split('/').pop()}`;
+            }
+            if (url.startsWith('https://kick.com/')) {
+                return `https://player.kick.com/${url.split('/').pop()}`;
+            }
+            if (url.startsWith('https://play.sooplive.co.kr/')) {
+                return `https://play.sooplive.co.kr/${url.split('/').pop()}/embed`;
+            }
+            if (url.startsWith('https://')) return url;
+            alert('지원하지 않는 URL 형식입니다.'); return null;
+        }
+
+        youtubeBtn.addEventListener('click', () => {
+            switchToSingleView();
+            setSingleViewContent(CHANNELS.youtube.url(CHANNELS.youtube.id));
         });
 
-        // 화면 크기 변경시 레이아웃 조정
-        window.onresize = design;
+        forestBtn.addEventListener('click', () => {
+            switchToSingleView();
+            setSingleViewContent(CHANNELS.forest.url());
+        });
 
-        // F5 버튼 클릭 시 채팅창 새로고침 (해시 유지)
-        const refreshBtn = document.getElementById('refresh-btn');
-        refreshBtn.addEventListener('click', () => {
-            const chatIframe = document.getElementById('chat-iframe');
-            if (chatIframe) {
-                const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
-                const hash = window.location.hash; // 현재 해시 값을 가져옴
-                chatIframe.src = lgicurl + hash + '?cache=' + Math.random(); // 해시를 포함한 새로운 URL로 업데이트
+        flowBtn.addEventListener('click', () => {
+            switchToSingleView();
+            setSingleViewContent(CHANNELS.flow.url());
+        });
+
+        inputBtn.addEventListener('click', () => {
+            inputModal.style.display = 'block';
+        });
+
+        multiviewCheckbox.addEventListener('change', () => {
+            if (multiviewCheckbox.checked) {
+                showMultiviewOptions();
+            } else {
+                showSingleInput();
+            }
+        });
+
+        multiviewLayoutSelect.addEventListener('change', () => {
+            currentMultiviewLayout = parseInt(multiviewLayoutSelect.value);
+            updateMultiviewUrlInputs();
+        });
+
+        function showSingleInput() {
+            singleUrlInputContainer.style.display = 'block';
+            multiviewOptions.style.display = 'none';
+            urlInput.value = '';
+        }
+
+        function showMultiviewOptions() {
+            singleUrlInputContainer.style.display = 'none';
+            multiviewOptions.style.display = 'block';
+            multiviewUrlInputs.innerHTML = '';
+            multiviewUrlInputCounter = 0;
+            for (let i = 0; i < currentMultiviewLayout; i++) {
+                addMultiviewInput();
+            }
+        }
+
+        function updateMultiviewUrlInputs() {
+            const currentInputs = multiviewUrlInputs.querySelectorAll('.multiview-input');
+            const diff = currentMultiviewLayout - currentInputs.length;
+            if (diff > 0) {
+                for (let i = 0; i < diff; i++) {
+                    addMultiviewInput();
+                }
+            } else if (diff < 0) {
+                for (let i = 0; i < -diff; i++) {
+                    multiviewUrlInputs.removeChild(multiviewUrlInputs.lastChild);
+                    multiviewUrlInputCounter--;
+                }
+            }
+        }
+
+        function addMultiviewInput() {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'multiview-input';
+            input.placeholder = `URL ${multiviewUrlInputCounter + 1}`;
+            multiviewUrlInputs.appendChild(input);
+            multiviewUrlInputCounter++;
+        }
+
+        function startSingleView() {
+            const url = urlInput.value.trim();
+            switchToSingleView();
+            setSingleViewContent(url);
+        }
+
+        function startMultiview() {
+            const inputs = multiviewUrlInputs.querySelectorAll('.multiview-input');
+            const urls = Array.from(inputs).map(input => input.value.trim());
+            videoSection.innerHTML = `<div class="multiview-container" style="display: grid; grid-template-columns: repeat(${currentMultiviewLayout}, 1fr);">${urls.map(url => `<div class="multiview-item"><iframe src="${transformUrl(url) || ''}" frameborder="0" allowfullscreen></iframe></div>`).join('')}</div>`;
+            const multiviewContainer = videoSection.querySelector('.multiview-container');
+            multiviewContainer.addEventListener('click', (e) => {
+                if (e.target.tagName === 'IFRAME') {
+                    const iframe = e.target;
+                    const url = iframe.src;
+                }
+            });
+        }
+
+        goBtn.addEventListener('click', () => {
+            if (multiviewCheckbox.checked) {
+                startMultiview();
+            } else {
+                startSingleView();
+            }
+            inputModal.style.display = 'none';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            inputModal.style.display = 'none';
+        });
+
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+        function renderFavorites() {
+            const favoriteModal = document.getElementById('favorite-modal');
+            const favoriteList = document.getElementById('favorite-list');
+            favoriteList.innerHTML = '';
+            favorites.forEach((favorite, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${favorite.name}</span>
+                    <button onclick="deleteFavorite(${index})">삭제</button>
+                `;
+                li.addEventListener('click', (e) => {
+                    if (e.target.tagName !== 'BUTTON') {
+                        switchToSingleView();
+                        setSingleViewContent(favorite.url);
+                        favoriteModal.style.display = 'none';
+                    }
+                });
+                favoriteList.appendChild(li);
+            });
+            favoriteModal.style.display = 'block';
+        }
+
+        const favoriteBtn = document.getElementById('favorite-btn');
+        favoriteBtn.addEventListener('click', () => {
+            renderFavorites();
+        });
+
+        const closeFavoriteModal = document.getElementById('close-favorite-modal');
+        closeFavoriteModal.addEventListener('click', () => {
+            document.getElementById('favorite-modal').style.display = 'none';
+        });
+
+        function addFavorite(url, name) {
+            if (!url || !name) {
+                alert('URL과 이름을 입력해주세요.');
+                return;
+            }
+            if (favorites.some(fav => fav.url === url)) {
+                alert('이미 등록된 URL입니다.');
+                return;
+            }
+            favorites.push({ url, name });
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            alert('즐겨찾기에 추가되었습니다.');
+            renderFavorites();
+            document.getElementById('favorite-name-input').value = '';
+            document.getElementById('favorite-url-input').value = '';
+        }
+
+        function deleteFavorite(index) {
+            if (confirm('정말로 삭제하시겠습니까?')) {
+                favorites.splice(index, 1);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                renderFavorites();
+            }
+        }
+
+        const addFavoriteBtn = document.getElementById('add-favorite-btn');
+        addFavoriteBtn.addEventListener('click', () => {
+            const url = document.getElementById('favorite-url-input').value.trim();
+            const name = document.getElementById('favorite-name-input').value.trim();
+            addFavorite(url, name);
+        });
+
+        window.addEventListener('load', () => {
+            const hash = window.location.hash;
+            if (hash.startsWith('#/twitch/')) {
+                setSingleViewContent(`https://player.twitch.tv/?channel=${hash.split('/')[2]}&parent=lc2122.github.io`);
+            } else if (hash.startsWith('#/youtube/')) {
+                setSingleViewContent(`https://www.youtube.com/embed/${hash.split('/')[2]}`);
+            } else if (hash.startsWith('#/chzzk/')) {
+                setSingleViewContent(`https://chzzk.naver.com/live/${hash.split('/')[2]}`);
+            } else if (hash.startsWith('#/soop/')) {
+                setSingleViewContent(`https://play.sooplive.co.kr/${hash.split('/')[2]}/embed`);
+            } else if (hash.startsWith('#/kick/')) {
+                setSingleViewContent(`https://player.kick.com/${hash.split('/')[2]}`);
+            } else {
+                setSingleViewContent(CHANNELS.flow.url());
             }
         });
     </script>
-    <script src="script.js"></script>
 </body>
 </html>
