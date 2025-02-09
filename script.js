@@ -137,6 +137,14 @@ function addMultiviewInput() {
     multiviewUrlInputCounter++;
 }
 
+// 멀티뷰 시작 함수
+function startMultiview() {
+    const inputs = multiviewUrlInputs.querySelectorAll('.multiview-input');
+    const urls = Array.from(inputs).map(input => input.value.trim());
+    videoSection.innerHTML = `<div class="multiview-container" style="grid-template-columns: repeat(${getMultiviewColumns(currentMultiviewLayout)}, 1fr);">${urls.map(url => `<div class="multiview-item"><iframe src="${transformUrl(url) || ''}" frameborder="0" allowfullscreen></iframe></div>`).join('')}</div>`;
+}
+
+// 단일 뷰 시작 함수
 function startSingleView() {
     const url = urlInput.value.trim();
     setSingleViewContent(url);
@@ -154,34 +162,6 @@ function setSingleViewContent(url) {
     }
 }
 
-// 멀티뷰 시작 함수
-function startMultiview() {
-    const inputs = multiviewUrlInputs.querySelectorAll('.multiview-input');
-    const urls = Array.from(inputs).map(input => input.value.trim());
-    videoSection.innerHTML = `<div class="multiview-container" style="grid-template-columns: repeat(${getMultiviewColumns(currentMultiviewLayout)}, 1fr);">${urls.map(url => `<div class="multiview-item"><iframe src="${transformUrl(url) || ''}" frameborder="0" allowfullscreen></iframe></div>`).join('')}</div>`;
-}
-
-    // 멀티뷰 모드에서 버튼에 대한 이벤트 리스너를 새로 등록
-    const multiviewContainer = videoSection.querySelector('.multiview-container');
-    multiviewContainer.addEventListener('click', (e) => {
-        if (e.target.tagName === 'IFRAME') {
-            const iframe = e.target;
-            const url = iframe.src;
-            // 버튼 클릭 시의 동작을 여기에 구현
-            if (url.includes('youtube')) {
-                // youtube 버튼 클릭 시의 동작
-            } else if (url.includes('twitch')) {
-                // twitch 버튼 클릭 시의 동작
-            } else if (url.includes('chzzk')) {
-                // chzzk 버튼 클릭 시의 동작
-            } else if (url.includes('kick')) {
-                // kick 버튼 클릭 시의 동작
-            } else if (url.includes('afreeca')) {
-                // afreeca 버튼 클릭 시의 동작
-            }
-        }
-    });
-}
 
 function getMultiviewColumns(layout) {
     return layout > 2 ? 2 : layout;
