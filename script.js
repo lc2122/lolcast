@@ -39,27 +39,14 @@ let multiviewUrlInputCounter = 0;
 
 // YouTube 버튼 클릭 시
 youtubeBtn.addEventListener('click', () => {
-    if (multiviewCheckbox.checked) {
-        // 멀티뷰 모드에서 youtube 버튼 클릭 시의 동작
-        const multiviewContainer = videoSection.querySelector('.multiview-container');
-        const iframe = multiviewContainer.querySelector('iframe');
-        iframe.src = CHANNELS.youtube.url(CHANNELS.youtube.id);
-    } else {
-        setSingleViewContent(CHANNELS.youtube.url(CHANNELS.youtube.id));
-    }
+    setSingleViewContent(CHANNELS.youtube.url(CHANNELS.youtube.id));
 });
 
 // 숲 버튼 클릭 시
 forestBtn.addEventListener('click', () => {
-    if (multiviewCheckbox.checked) {
-        // 멀티뷰 모드에서 forest 버튼 클릭 시의 동작
-        const multiviewContainer = videoSection.querySelector('.multiview-container');
-        const iframe = multiviewContainer.querySelector('iframe');
-        iframe.src = CHANNELS.forest.url();
-    } else {
-        setSingleViewContent(CHANNELS.forest.url());
-    }
+    setSingleViewContent(CHANNELS.forest.url());
 });
+
 
 // flow 버튼 클릭 시
 flowBtn.addEventListener('click', () => {
@@ -95,6 +82,8 @@ goBtn.addEventListener('click', () => {
         startMultiview();
     } else {
         startSingleView();
+        // 멀티뷰 사용 체크를 하지 않은 경우, 1분할 화면으로 전환
+        videoSection.innerHTML = `<iframe id="video-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     }
     inputModal.style.display = 'none';
 });
@@ -153,6 +142,7 @@ function startSingleView() {
     setSingleViewContent(url);
 }
 
+// 단일 뷰 설정 함수
 function setSingleViewContent(url) {
     const transformedUrl = transformUrl(url);
     if (transformedUrl) {
@@ -164,10 +154,12 @@ function setSingleViewContent(url) {
     }
 }
 
+// 멀티뷰 시작 함수
 function startMultiview() {
     const inputs = multiviewUrlInputs.querySelectorAll('.multiview-input');
     const urls = Array.from(inputs).map(input => input.value.trim());
     videoSection.innerHTML = `<div class="multiview-container" style="grid-template-columns: repeat(${getMultiviewColumns(currentMultiviewLayout)}, 1fr);">${urls.map(url => `<div class="multiview-item"><iframe src="${transformUrl(url) || ''}" frameborder="0" allowfullscreen></iframe></div>`).join('')}</div>`;
+}
 
     // 멀티뷰 모드에서 버튼에 대한 이벤트 리스너를 새로 등록
     const multiviewContainer = videoSection.querySelector('.multiview-container');
