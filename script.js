@@ -62,88 +62,26 @@ function getPlayerUrl(m3u8Url) {
   }
 }
 
-// 멀티뷰 관련 요소
-const multiViewCheckbox = document.getElementById('multi-view-checkbox');
-const splitCountSelect = document.getElementById('split-count');
-const multiViewContainer = document.getElementById('multi-view-container');
-const singleVideoContainer = document.getElementById('single-video-container');
-const addUrlBtn = document.getElementById('add-url-btn');
-
-let multiViewUrls = []; // 여러개의 URL을 저장하는 배열
-let currentSplitCount = 1;
-
-splitCountSelect.addEventListener('change', () => {
-  currentSplitCount = parseInt(splitCountSelect.value);
-  updateMultiViewLayout(); // 분할 개수 변경 시 레이아웃 업데이트
-});
-
-function updateMultiViewLayout() {
-    multiViewContainer.className = 'multi-view-container';
-    multiViewContainer.classList.add(`split-${currentSplitCount}`);
-}
-
-function displayMultiView() {
-  singleVideoContainer.style.display = 'none';
-  multiViewContainer.style.display = 'flex'; // 멀티 뷰 컨테이너 표시
-  multiViewContainer.innerHTML = ''; // 기존 내용 비우기
-
-  // multiViewUrls에 저장된 URL들을 기반으로 iframe 생성
-  multiViewUrls.forEach((url, index) => {
-      const multiViewItem = document.createElement('div');
-      multiViewItem.classList.add('multi-view-item');
-
-      const iframe = document.createElement('iframe');
-      iframe.src = url;
-      iframe.frameborder = '0';
-      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-      iframe.allowFullscreen = true;
-
-      multiViewItem.appendChild(iframe);
-      multiViewContainer.appendChild(multiViewItem);
-  });
-
-  updateMultiViewLayout();
-}
-
-addUrlBtn.addEventListener('click', () => {
-    const userInput = urlInput.value.trim();
-    const transformedUrl = transformUrl(userInput);
-
-    if (transformedUrl) {
-      multiViewUrls.push(transformedUrl);
-      urlInput.value = ''; // 입력 필드 초기화
-    }
-});
-
 goBtn.addEventListener('click', () => {
-    const userInput = urlInput.value.trim();
-    const transformedUrl = transformUrl(userInput);
+  const userInput = urlInput.value.trim();
+  const transformedUrl = transformUrl(userInput);
 
-    if (multiViewCheckbox.checked) {
-        // 멀티뷰가 체크된 경우
-        if (transformedUrl) {
-            multiViewUrls.push(transformedUrl); // URL을 배열에 추가
-            displayMultiView(); // 멀티뷰 표시
-        }
-    } else {
-        // 멀티뷰가 체크되지 않은 경우 (단일 뷰)
-        if (transformedUrl) {
-            if (!transformedUrl.startsWith('http')) {
-                alert('유효한 URL을 입력해주세요.');
-                return;
-            }
-            if (transformedUrl.endsWith('.m3u8')) {
-                const playerUrl = getPlayerUrl(transformedUrl);
-                videoIframe.src = playerUrl;
-            } else {
-                videoIframe.src = transformedUrl;
-            }
-
-            localStorage.setItem('lastInputValue', userInput);
-            urlInput.value = '';
-            document.getElementById('input-modal').style.display = 'none';
-        }
+  if (transformedUrl) {
+    if (!transformedUrl.startsWith('http')) {
+      alert('유효한 URL을 입력해주세요.');
+      return;
     }
+    if (transformedUrl.endsWith('.m3u8')) {
+      const playerUrl = getPlayerUrl(transformedUrl);
+      videoIframe.src = playerUrl;
+    } else {
+      videoIframe.src = transformedUrl;
+    }
+    
+    localStorage.setItem('lastInputValue', userInput);
+    urlInput.value = '';
+    document.getElementById('input-modal').style.display = 'none';
+  }
 });
 
 // "X" 버튼 클릭 시 입력창 닫기
