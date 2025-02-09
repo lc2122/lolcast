@@ -175,143 +175,94 @@ function getPlayerUrl(m3u8Url) {
     }
 }
 
-// 즐겨찾기 기능
+// 즐겨찾기 목록을 저장할 배열
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-const favoriteBtn = document.getElementById('favorite-btn');
-const favoriteModal = document.getElementById('favorite-modal');
-const closeFavoriteModal = document.getElementById('close-favorite-modal');
-const favoriteList = document.getElementById('favorite-list');
-const favoriteMultiviewCheckbox = document.getElementById('favorite-multiview-checkbox');
-const favoriteSingleUrlInputContainer = document.getElementById('favorite-single-url-input-container');
-const favoriteUrlInput = document.getElementById('favorite-url-input');
-const favoriteMultiviewOptions = document.getElementById('favorite-multiview-options');
-const favoriteMultiviewLayoutSelect = document.getElementById('favorite-multiview-layout-select');
-const favoriteMultiviewUrlInputs = document.getElementById('favorite-multiview-url-inputs');
-const addFavoriteBtn = document.getElementById('add-favorite-btn');
-const addFavoriteMultiviewUrlBtn = document.getElementById('add-favorite-multiview-url-btn');
-const favoriteNameInput = document.getElementById('favorite-name-input');
 
-let currentFavoriteMultiviewLayout = 1;
-let favoriteMultiviewUrlCounter = 0;
-
-favoriteBtn.addEventListener('click', () => {
-    renderFavorites();
-    favoriteModal.style.display = 'block';
-    // 모달 열 때 단일 뷰 모드로 설정
-    favoriteMultiviewCheckbox.checked = false;
-    showFavoriteSingleInput();
-});
-
-closeFavoriteModal.addEventListener('click', () => {
-    favoriteModal.style.display = 'none';
-});
-
-favoriteMultiviewCheckbox.addEventListener('change', () => {
-    if (favoriteMultiviewCheckbox.checked) {
-        showFavoriteMultiviewOptions();
-    } else {
-        showFavoriteSingleInput();
-    }
-});
-
-favoriteMultiviewLayoutSelect.addEventListener('change', () => {
-    currentFavoriteMultiviewLayout = parseInt(favoriteMultiviewLayoutSelect.value);
-    updateFavoriteMultiviewUrlInputs();
-});
-
-addFavoriteMultiviewUrlBtn.addEventListener('click', () => {
-    addFavoriteMultiviewInput();
-});
-
-addFavoriteBtn.addEventListener('click', () => {
-    const name = favoriteNameInput.value.trim();
-    if (favoriteMultiviewCheckbox.checked) {
-        const urls = Array.from(favoriteMultiviewUrlInputs.querySelectorAll('.favorite-multiview-url-input')).map(input => input.value.trim()).filter(url => url !== '');
-        addFavorite({ name: name, urls: urls, isMultiview: true, layout: currentFavoriteMultiviewLayout });
-    } else {
-        const url = favoriteUrlInput.value.trim();
-        addFavorite({ name: name, url: url, isMultiview: false });
-    }
-});
-
-function showFavoriteSingleInput() {
-    favoriteSingleUrlInputContainer.style.display = 'block';
-    favoriteMultiviewOptions.style.display = 'none';
-    favoriteUrlInput.value = '';
-}
-
-function showFavoriteMultiviewOptions() {
-    favoriteSingleUrlInputContainer.style.display = 'none';
-    favoriteMultiviewOptions.style.display = 'block';
-    favoriteMultiviewUrlInputs.innerHTML = '';
-    favoriteMultiviewUrlCounter = 0;
-    for (let i = 0; i < currentFavoriteMultiviewLayout; i++) {
-        addFavoriteMultiviewInput();
-    }
-}
-
-function updateFavoriteMultiviewUrlInputs() {
-    const currentInputs = favoriteMultiviewUrlInputs.querySelectorAll('.favorite-multiview-url-input');
-    const diff = currentFavoriteMultiviewLayout - currentInputs.length;
-    if (diff > 0) {
-        for (let i = 0; i < diff; i++) {
-            addFavoriteMultiviewInput();
-        }
-    } else if (diff < 0) {
-        for (let i = 0; i < -diff; i++) {
-            if (favoriteMultiviewUrlInputs.lastChild) {
-                favoriteMultiviewUrlInputs.removeChild(favoriteMultiviewUrlInputs.lastChild);
-                favoriteMultiviewUrlCounter--;
-            }
-        }
-    }
-}
-
-function addFavoriteMultiviewInput() {
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.className = 'favorite-multiview-url-input';
-    input.placeholder = `URL ${favoriteMultiviewUrlCounter + 1}`;
-    favoriteMultiviewUrlInputs.appendChild(input);
-    favoriteMultiviewUrlCounter++;
-}
-
-function addFavorite(fav) {
-    if (!fav.name || (!fav.isMultiview && !fav.url) || (fav.isMultiview && fav.urls.length === 0)) {
-        alert('이름과 URL을 모두 입력해주세요.');
-        return;
-    }
-    favorites.push(fav);
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-    renderFavorites();
-    favoriteNameInput.value = '';
-    if (!fav.isMultiview) favoriteUrlInput.value = ''; else favoriteMultiviewUrlInputs.innerHTML = '';
-}
-
-function deleteFavorite(index) {
-    if (confirm('정말로 삭제하시겠습니까?')) {
-        favorites.splice(index, 1);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        renderFavorites();
-    }
-}
-
+// 즐겨찾기 목록 표시 함수
 function renderFavorites() {
+    const favoriteModal = document.getElementById('favorite-modal');
+    const favoriteList = document.getElementById('favorite-list');
+
+    // 기존 목록 초기화
     favoriteList.innerHTML = '';
-    favorites.forEach((fav, index) => {
+
+    // 즐겨찾기 목록을 동적으로 추가
+    favorites.forEach((favorite, index) => {
         const li = document.createElement('li');
-        li.innerHTML = `<span>${fav.name}</span><button onclick="deleteFavorite(${index})">삭제</button>`;
-        li.addEventListener('click', () => {
-            favoriteModal.style.display = 'none';
-            if (fav.isMultiview) {
-                videoSection.innerHTML = `<div class="multiview-container" style="grid-template-columns: repeat(${getMultiviewColumns(fav.layout)}, 1fr);">${fav.urls.map(url => `<div class="multiview-item"><iframe src="${transformUrl(url) || ''}" frameborder="0" allowfullscreen></iframe></div>`).join('')}</div>`;
-            } else {
-                setSingleViewContent(fav.url);
+        li.innerHTML = `
+            <span>${favorite.name}</span>
+            <button onclick="deleteFavorite(${index})">삭제</button>
+        `;
+        li.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'BUTTON') {
+                const transformedUrl = transformUrl(favorite.url);
+                if (transformedUrl) {
+                    videoIframe.src = transformedUrl;
+                    favoriteModal.style.display = 'none'; // 모달 닫기
+                }
             }
         });
         favoriteList.appendChild(li);
     });
+
+    // 모달 표시
+    favoriteModal.style.display = 'block';
 }
+
+// '즐찾' 버튼 클릭 시 즐겨찾기 목록 표시
+const favoriteBtn = document.getElementById('favorite-btn');
+favoriteBtn.addEventListener('click', () => {
+    renderFavorites();
+});
+
+// '닫기' 버튼 클릭 시 모달 닫기
+const closeFavoriteModal = document.getElementById('close-favorite-modal');
+closeFavoriteModal.addEventListener('click', () => {
+    document.getElementById('favorite-modal').style.display = 'none';
+});
+
+// 즐겨찾기 추가 함수
+function addFavorite(url, name) {
+    if (!url || !name) {
+        alert('URL과 이름을 입력해주세요.');
+        return;
+    }
+
+    // 중복 체크
+    if (favorites.some(fav => fav.url === url)) {
+        alert('이미 등록된 URL입니다.');
+        return;
+    }
+
+    // 즐겨찾기에 추가
+    favorites.push({ url, name });
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    alert('즐겨찾기에 추가되었습니다.');
+
+    // 목록 새로고침
+    renderFavorites();
+
+    // 입력 필드 초기화
+    document.getElementById('favorite-name-input').value = '';
+    document.getElementById('favorite-url-input').value = '';
+}
+
+// 즐겨찾기 삭제 함수
+function deleteFavorite(index) {
+    if (confirm('정말로 삭제하시겠습니까?')) {
+        favorites.splice(index, 1); // 해당 항목 삭제
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        renderFavorites(); // 목록 새로고침
+    }
+}
+
+// '추가' 버튼 클릭 시 즐겨찾기 추가
+const addFavoriteBtn = document.getElementById('add-favorite-btn');
+addFavoriteBtn.addEventListener('click', () => {
+    const url = document.getElementById('favorite-url-input').value.trim();
+    const name = document.getElementById('favorite-name-input').value.trim();
+    addFavorite(url, name);
+});
 
 // URL 변환 함수 (기존과 동일)
 function transformUrl(url) {
