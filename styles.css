@@ -111,13 +111,6 @@ body {
     cursor: pointer;
 }
 
-#add-multiview-url-btn {
-    background-color: #28a745;
-    color: white;
-    width: fit-content;
-    align-self: flex-start;
-}
-
 #input-modal > div > div:last-child {
     display: flex;
     justify-content: space-between;
