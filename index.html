@@ -118,54 +118,33 @@
         </div>
     </div>
 
-    <div id="favorite-modal" style="display: none;">
-        <div style="display: flex; flex-direction: column; align-items: center;">
-            <h3>즐겨찾기 목록</h3>
-            <div style="margin-bottom: 10px;">
-                <label>
-                    <input type="checkbox" id="favorite-multiview-checkbox"> 멀티뷰 모드로 추가
-                </label>
-            </div>
-            <input
-                type="text"
-                id="favorite-name-input"
-                placeholder="이름 입력"
-                class="favorite-input"
-                style="flex: 1; margin-bottom: 10px;"
-            />
-            <div id="favorite-single-url-input-container">
-                <input
-                    type="text"
-                    id="favorite-url-input"
-                    placeholder="주소 입력"
-                    class="favorite-input"
-                    style="width: 100%; margin-bottom: 10px;"
-                />
-            </div>
-            <div id="favorite-multiview-options" style="display: none; width: 100%;">
-                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                    <label for="favorite-multiview-layout-select" style="margin-right: 10px;">분할:</label>
-                    <select id="favorite-multiview-layout-select" style="margin-right: 10px;">
-                        <option value="1">1분할</option>
-                        <option value="2">2분할</option>
-                        <option value="3">3분할</option>
-                        <option value="4">4분할</option>
-                    </select>
-                    <button type="button" id="add-favorite-multiview-url-btn" class="menu-button" style="padding: 5px 10px; font-size: 12px;">URL 추가</button>
-                </div>
-                <div id="favorite-multiview-url-inputs">
-                    <!-- 즐겨찾기 멀티뷰 URL 입력 필드 -->
-                </div>
-            </div>
-            <button id="add-favorite-btn" class="menu-button">추가</button>
-            <ul id="favorite-list" style="list-style-type: none; padding: 0; width: 100%;">
-                <!-- 즐겨찾기 항목이 여기에 동적으로 추가됩니다 -->
-            </ul>
-            <div class="button-container">
-                <button id="close-favorite-modal" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
-            </div>
-        </div>
+<div id="favorite-modal" style="display: none;">
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <h3>즐겨찾기 목록</h3>
+    <input
+      type="text"
+      id="favorite-name-input"
+      placeholder="이름 입력"
+      class="favorite-input"
+      style="flex: 1;"
+    />
+    <div class="input-row">
+      <input
+        type="text"
+        id="favorite-url-input"
+        placeholder="주소 입력"
+        class="favorite-input"
+      />
     </div>
+    <button id="add-favorite-btn" class="menu-button">추가</button>
+  </div>
+  <ul id="favorite-list" style="list-style-type: none; padding: 0; width: 100%;">
+    <!-- 즐겨찾기 항목이 여기에 동적으로 추가됩니다 -->
+  </ul>
+  <div class="button-container">
+    <button id="close-favorite-modal" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
+  </div>
+</div>
 
     <script>
         // SameSite=None 쿠키 설정 함수
