@@ -29,41 +29,6 @@
         .app_banner_container__8\+G2L.app_banner_is_fixed__vD7c- {
     display: none !important;
         }
-                /* 멀티뷰 관련 스타일 */
-        .multi-view-container {
-            display: flex;
-            flex-wrap: wrap;
-            width: 100%;
-            height: 35vh; /* 모바일 기준, 필요에 따라 조정 */
-        }
-
-        .multi-view-item {
-            width: 100%; /* 기본적으로 1개만 표시 */
-            height: 100%;
-            box-sizing: border-box; /* padding, border가 width, height에 포함되도록 */
-        }
-
-        /* 분할 설정에 따른 스타일 */
-        .multi-view-container.split-2 .multi-view-item {
-            width: 50%;
-        }
-
-        .multi-view-container.split-3 .multi-view-item {
-            width: 50%; /* 3개는 2/3 분할 후 마지막은 100% */
-        }
-        .multi-view-container.split-3 .multi-view-item:nth-child(3) {
-            width: 100%;
-        }
-
-        .multi-view-container.split-4 .multi-view-item {
-            width: 50%;
-            height: 50%;
-        }
-
-        .multi-view-item iframe {
-            width: 100%;
-            height: 100%;
-        }
     </style>
 </head> 
 <body> 
@@ -81,18 +46,13 @@
         
         <!-- 중간: 영상 표시 -->
         <div class="video-section">
-            <div id="single-video-container">
-              <iframe
-                  id="video-iframe"
-                  src=""
-                  frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
-              ></iframe>
-            </div>
-            <div id="multi-view-container" class="multi-view-container" style="display: none;">
-                <!-- 멀티뷰 아이템들이 동적으로 추가됩니다. -->
-            </div>
+            <iframe
+                id="video-iframe"
+                src=""
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+            ></iframe>
         </div>
         
         <!-- 하단: 채팅창 -->
@@ -105,28 +65,16 @@
         </div>
     </div>
     
-       <!-- 입력 모달 수정 -->
-        <div id="input-modal" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <input type="text" id="url-input" class="url-input" placeholder="URL 입력" />
-                <button id="add-url-btn" class="menu-button">추가</button>
-                <button id="go-btn" class="menu-button">Go</button>
-                <button id="close-btn" class="menu-button" style="background-color: #dc3545; color: white;">X</button>
-            </div>
-            <div>
-              <label for="multi-view-checkbox">멀티뷰:</label>
-              <input type="checkbox" id="multi-view-checkbox">
-              <select id="split-count">
-                  <option value="1">1분할</option>
-                  <option value="2">2분할</option>
-                  <option value="3">3분할</option>
-                  <option value="4">4분할</option>
-              </select>
-            </div>
-            <div style="margin-top: 10px; color: #666; font-size: 12px; word-wrap: break-word;">
-                ex) https://lolcast.kr/#/player/~~, https://twitch.tv/아이디, m3u8 다 가능
-            </div>
-        </div>
+<div id="input-modal" style="display: none;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <input type="text" id="url-input" class="url-input" placeholder="URL 입력" />
+        <button id="go-btn" class="menu-button">Go</button>
+        <button id="close-btn" class="menu-button" style="background-color: #dc3545; color: white;">X</button>
+    </div>
+    <div style="margin-top: 10px; color: #666; font-size: 12px; word-wrap: break-word;"> 
+        ex) https://lolcast.kr/#/player/~~, https://twitch.tv/아이디, m3u8 다 가능
+    </div>
+</div>
 
 <div id="favorite-modal" style="display: none;">
   <div style="display: flex; flex-direction: column; align-items: center;">
@@ -246,8 +194,7 @@ refreshBtn.addEventListener('click', () => {
     if (chatIframe) {
         const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
         const hash = window.location.hash; // 현재 해시 값을 가져옴
-        // 쿼리 파라미터를 해시 앞에 위치시킴
-        chatIframe.src = lgicurl + '?cache=' + Math.random() + hash;
+        chatIframe.src = lgicurl + hash + '?cache=' + Math.random(); // 해시를 포함한 새로운 URL로 업데이트
     }
 });
     </script>
