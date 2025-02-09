@@ -75,24 +75,19 @@ multiviewLayoutSelect.addEventListener('change', () => {
     updateMultiviewUrlInputs();
 });
 
-// "멀티뷰 URL 추가" 버튼 클릭 시
-addMultiviewUrlBtn.addEventListener('click', () => {
-    addMultiviewInput();
-});
-
-// "Go" 버튼 클릭 시
+// 'Go' 버튼 클릭 시 동작
 goBtn.addEventListener('click', () => {
     if (multiviewCheckbox.checked) {
-        startMultiview();
+        startMultiview(); // 멀티뷰 시작
     } else {
-        startSingleView();
+        startSingleView(); // 단일 뷰 시작
     }
-    inputModal.style.display = 'none';
+    inputModal.style.display = 'none'; // 입력창 닫기
 });
 
-// "X" 버튼 클릭 시 입력창 닫기
+// '닫기' 버튼 클릭 시 입력창 닫기
 closeBtn.addEventListener('click', () => {
-    inputModal.style.display = 'none';
+    inputModal.style.display = 'none'; // 입력창 닫기
 });
 
 // 멀티뷰 관련 함수
@@ -177,32 +172,23 @@ function getPlayerUrl(m3u8Url) {
 // 즐겨찾기 목록을 저장할 배열
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-// 즐겨찾기 목록 표시 함수
+// 즐겨찾기 렌더링 함수
 function renderFavorites() {
-    const favoriteModal = document.getElementById('favorite-modal');
     const favoriteList = document.getElementById('favorite-list');
+    favoriteList.innerHTML = ''; // 기존 목록 초기화
 
-    // 기존 목록 초기화
-    favoriteList.innerHTML = '';
-
-    // 즐겨찾기 목록을 동적으로 추가
     favorites.forEach((favorite, index) => {
         const li = document.createElement('li');
         li.innerHTML = `
             <span>${favorite.name}</span>
             <button onclick="deleteFavorite(${index})">삭제</button>
         `;
-        li.addEventListener('click', (e) => {
-            if (e.target.tagName !== 'BUTTON') {
-                const transformedUrl = transformUrl(favorite.url);
-                if (transformedUrl) {
-                    videoIframe.src = transformedUrl;
-                    favoriteModal.style.display = 'none'; // 모달 닫기
-                }
-            }
-        });
         favoriteList.appendChild(li);
     });
+
+    // 즐겨찾기 모달 표시
+    document.getElementById('favorite-modal').style.display = 'block';
+}
 
     // 모달 표시
     favoriteModal.style.display = 'block';
@@ -211,8 +197,9 @@ function renderFavorites() {
 // '즐찾' 버튼 클릭 시 즐겨찾기 목록 표시
 const favoriteBtn = document.getElementById('favorite-btn');
 favoriteBtn.addEventListener('click', () => {
-    renderFavorites();
+    renderFavorites(); // 즐겨찾기 목록 렌더링
 });
+
 
 // '닫기' 버튼 클릭 시 모달 닫기
 const closeFavoriteModal = document.getElementById('close-favorite-modal');
