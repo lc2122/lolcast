@@ -146,7 +146,7 @@ function addMultiviewInput() {
     multiviewUrlInputCounter++;
 }
 
-// 멀티뷰 시작 함수
+// 멀티뷰 시작 함수 (수정)
 function startMultiview() {
     const inputs = multiviewUrlInputs.querySelectorAll('.multiview-input');
     const urls = Array.from(inputs).map(input => input.value.trim()).filter(Boolean); // 빈 URL 제외
@@ -155,11 +155,16 @@ function startMultiview() {
         return;
     }
 
+    setMultiviewContent(urls); // 멀티뷰 컨텐츠 설정 함수 호출 (URL 배열 전달)
+}
+
+// 멀티뷰 컨텐츠 설정 함수 (추가)
+function setMultiviewContent(urls) {
     // 멀티뷰 그리드 레이아웃 생성
     videoSection.innerHTML = `
-        <div class="multiview-container" style="display: grid; grid-template-columns: repeat(${getMultiviewColumns(currentMultiviewLayout)}, 1fr); gap: 10px;">
+        <div class="multiview-container" style="display: grid; grid-template-columns: repeat(${getMultiviewColumns(urls.length)}, 1fr); gap: 10px; width: 100%; height: 100%;">
             ${urls
-                .map(url => `<div class="multiview-item"><iframe src="${transformUrl(url)}" frameborder="0" allowfullscreen></iframe></div>`)
+                .map(url => `<div class="multiview-item" style="position: relative; width: 100%; height: 100%;"><iframe src="${transformUrl(url)}" frameborder="0" allowfullscreen style="width: 100%; height: 100%; border: none;"></iframe></div>`)
                 .join('')}
         </div>
     `;
@@ -174,32 +179,25 @@ function startMultiview() {
     });
 }
 
-// 단일 뷰 시작 함수
+    // iframe 로드 후 이벤트 리스너 연결
+    const iframes = videoSection.querySelectorAll('iframe');
+    iframes.forEach(iframe => {
+        iframe.addEventListener('load', () => {
+            // iframe 내부 요소에 대한 이벤트 리스너 연결
+            // 예시: iframe.contentDocument.getElementById('someButton').addEventListener('click', ...);
+        });
+    });
+}
+
+// 단일 뷰 시작 함수 (수정)
 function startSingleView() {
     const url = urlInput.value.trim();
     if (url) {
-        setSingleViewContent(url);
+        setMultiviewContent([url]); // 멀티뷰 컨텐츠 설정 함수 호출 (1개의 URL 배열 전달)
     } else {
         alert('URL을 입력해주세요.');
     }
 }
-
-// 단일 뷰 설정 함수
-function setSingleViewContent(url) {
-    const transformedUrl = transformUrl(url);
-    if (transformedUrl) {
-        if (transformedUrl.endsWith('.m3u8')) {
-            // HLS 스트림 URL 처리
-            videoIframe.src = getPlayerUrl(transformedUrl);
-        } else {
-            // 일반 URL 처리
-            videoIframe.src = transformedUrl;
-        }
-    } else {
-        alert('유효한 URL을 입력해주세요.');
-    }
-}
-
 
 function getMultiviewColumns(layout) {
     return layout > 2 ? 2 : layout;
