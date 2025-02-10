@@ -60,10 +60,25 @@ flowBtn.addEventListener('click', () => {
 
 // "Input" 버튼 클릭 시
 inputBtn.addEventListener('click', () => {
-    inputModal.style.display = 'block';
-    // 모달 열 때 단일 뷰 모드로 설정
-    multiviewCheckbox.checked = false;
-    showSingleInput();
+    // 멀티뷰 모드 해제
+    if (isMultiview) {
+        isMultiview = false;
+        multiviewCheckbox.checked = false;
+        videoSection.innerHTML = `
+            <iframe
+                id="video-iframe"
+                src=""
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+            ></iframe>
+        `;
+        videoIframe = document.getElementById('video-iframe'); // 새로 생성된 iframe 참조
+    }
+
+    // 모달 열기
+    inputModal.style.display = 'block'; 
+    showSingleInput(); // 싱글 입력 모드로 설정
 });
 
 // 멀티뷰 체크박스 변경 시
@@ -141,19 +156,11 @@ function addMultiviewInput() {
 }
 
 function startSingleView() {
+    isMultiview = false;
+    multiviewCheckbox.checked = false;
     const url = urlInput.value.trim();
     setSingleViewContent(url);
-}
-
-function setSingleViewContent(url) {
-    const transformedUrl = transformUrl(url);
-    if (transformedUrl) {
-        if (transformedUrl.endsWith('.m3u8')) {
-            videoIframe.src = getPlayerUrl(transformedUrl);
-        } else {
-            videoIframe.src = transformedUrl;
-        }
-    }
+    design(); // 레이아웃 재설정
 }
 
 function startMultiview() {
@@ -165,11 +172,15 @@ function startMultiview() {
 
     // 1분할 예외 처리
     if (currentMultiviewLayout === 1) {
+        isMultiview = false;
         multiviewCheckbox.checked = false;
         showSingleInput();
         startSingleView();
         return;
     }
+
+    // 멀티뷰 모드 활성화
+    isMultiview = true;
 
     // 멀티뷰 컨테이너 생성
     videoSection.innerHTML = `
@@ -182,6 +193,9 @@ function startMultiview() {
             `).join('')}
         </div>
     `;
+
+    design(); // 레이아웃 재설정
+}
 
     // 멀티뷰 모드에서 버튼에 대한 이벤트 리스너를 새로 등록
     const multiviewContainer = videoSection.querySelector('.multiview-container');
