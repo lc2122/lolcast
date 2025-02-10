@@ -213,17 +213,23 @@ function design() {
         videoSection.style.display = "flex"; // display 속성을 flex로 변경
     }
 }
-        // 초기 로드 시 실행
-        window.onload = function() {
-            const chatIframe = document.getElementById('chat-iframe');
-            const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
-            if(location.hash && location.hash.substring(1)) {
-                chatIframe.src = lgicurl + '#' + decodeURIComponent(location.hash.substring(1));
-            } else {
-                chatIframe.src = lgicurl;
-            }
-            design(); // 초기 레이아웃 설정
-        };
+        // 싱글 뷰 콘텐츠 설정 함수 정의
+function setSingleViewContent(url) {
+    const videoIframe = document.getElementById('video-iframe');
+    if (videoIframe) {
+        videoIframe.src = url;
+    }
+}
+
+// 초기 로드 통합
+window.onload = function() {
+    const chatIframe = document.getElementById('chat-iframe');
+    const lgicurl = 'https://insagirl-toto.appspot.com/chatting/lgic/';
+    if (location.hash && location.hash.substring(1)) {
+        chatIframe.src = lgicurl + '#' + decodeURIComponent(location.hash.substring(1));
+    } else {
+        chatIframe.src = lgicurl;
+    }
 
         // "흐름" 버튼 클릭 이벤트 추가
         const hrmBtn = document.getElementById('hrm-btn');
