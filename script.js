@@ -37,32 +37,24 @@ const multiviewUrlInputs = document.getElementById('multiview-url-inputs');
 let currentMultiviewLayout = 1;
 let multiviewUrlInputCounter = 0;
 
-// YouTube 버튼 클릭 시
+// YouTube 버튼
 youtubeBtn.addEventListener('click', () => {
-    if (multiviewCheckbox.checked) {
-        // 멀티뷰 모드에서 youtube 버튼 클릭 시의 동작
-        const multiviewContainer = videoSection.querySelector('.multiview-container');
-        const iframe = multiviewContainer.querySelector('iframe');
-        iframe.src = CHANNELS.youtube.url(CHANNELS.youtube.id);
-    } else {
-        setSingleViewContent(CHANNELS.youtube.url(CHANNELS.youtube.id));
-    }
+    multiviewCheckbox.checked = false;
+    showSingleInput();
+    setSingleViewContent(CHANNELS.youtube.url(CHANNELS.youtube.id));
 });
 
-// 숲 버튼 클릭 시
+// 숲 버튼
 forestBtn.addEventListener('click', () => {
-    if (multiviewCheckbox.checked) {
-        // 멀티뷰 모드에서 forest 버튼 클릭 시의 동작
-        const multiviewContainer = videoSection.querySelector('.multiview-container');
-        const iframe = multiviewContainer.querySelector('iframe');
-        iframe.src = CHANNELS.forest.url();
-    } else {
-        setSingleViewContent(CHANNELS.forest.url());
-    }
+    multiviewCheckbox.checked = false;
+    showSingleInput();
+    setSingleViewContent(CHANNELS.forest.url());
 });
 
-// flow 버튼 클릭 시
+// flow 버튼
 flowBtn.addEventListener('click', () => {
+    multiviewCheckbox.checked = false;
+    showSingleInput();
     setSingleViewContent(CHANNELS.flow.url());
 });
 
@@ -166,8 +158,30 @@ function setSingleViewContent(url) {
 
 function startMultiview() {
     const inputs = multiviewUrlInputs.querySelectorAll('.multiview-input');
-    const urls = Array.from(inputs).map(input => input.value.trim());
-    videoSection.innerHTML = `<div class="multiview-container" style="grid-template-columns: repeat(${getMultiviewColumns(currentMultiviewLayout)}, 1fr);">${urls.map(url => `<div class="multiview-item"><iframe src="${transformUrl(url) || ''}" frameborder="0" allowfullscreen></iframe></div>`).join('')}</div>`;
+    const urls = Array.from(inputs).map(input => {
+        const transformed = transformUrl(input.value.trim());
+        return transformed.endsWith('.m3u8') ? getPlayerUrl(transformed) : transformed;
+    });
+
+    // 1분할 예외 처리
+    if (currentMultiviewLayout === 1) {
+        multiviewCheckbox.checked = false;
+        showSingleInput();
+        startSingleView();
+        return;
+    }
+
+    // 멀티뷰 컨테이너 생성
+    videoSection.innerHTML = `
+        <div class="multiview-container" 
+             style="grid-template-columns: repeat(${getMultiviewColumns(currentMultiviewLayout)}, 1fr);">
+            ${urls.map(url => `
+                <div class="multiview-item">
+                    <iframe src="${url}" frameborder="0" allowfullscreen></iframe>
+                </div>
+            `).join('')}
+        </div>
+    `;
 
     // 멀티뷰 모드에서 버튼에 대한 이벤트 리스너를 새로 등록
     const multiviewContainer = videoSection.querySelector('.multiview-container');
@@ -189,8 +203,17 @@ function startMultiview() {
             }
         }
     });
-}
 
+    // 멀티뷰 모드에서 iframe 크기 조정
+    const multiviewItems = videoSection.querySelectorAll('.multiview-item');
+    multiviewItems.forEach(item => {
+        const iframe = item.querySelector('iframe');
+        if (iframe) {
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+        }
+    });
+}
 function getMultiviewColumns(layout) {
     return layout > 2 ? 2 : layout;
 }
@@ -222,15 +245,20 @@ function renderFavorites() {
             <span>${favorite.name}</span>
             <button onclick="deleteFavorite(${index})">삭제</button>
         `;
-        li.addEventListener('click', (e) => {
-            if (e.target.tagName !== 'BUTTON') {
-                const transformedUrl = transformUrl(favorite.url);
-                if (transformedUrl) {
-                    videoIframe.src = transformedUrl;
-                    favoriteModal.style.display = 'none'; // 모달 닫기
-                }
-            }
-        });
+// 즐겨찾기 클릭 핸들러
+li.addEventListener('click', (e) => {
+    if (e.target.tagName !== 'BUTTON') {
+        multiviewCheckbox.checked = false;
+        showSingleInput();
+        const transformedUrl = transformUrl(favorite.url);
+        if (transformedUrl) {
+            videoIframe.src = transformedUrl.endsWith('.m3u8') 
+                ? getPlayerUrl(transformedUrl) 
+                : transformedUrl;
+            favoriteModal.style.display = 'none';
+        }
+    }
+});
         favoriteList.appendChild(li);
     });
 
