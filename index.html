@@ -30,13 +30,12 @@
     display: none !important;
         }
         /* 멀티뷰 스타일 */
-.multiview-container {
-    display: grid;
-    gap: 10px;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-}
+        .multiview-container {
+            display: grid;
+            gap: 0;
+            width: 100%;
+            height: 100%;
+        }
 
         .multiview-item {
             position: relative;
@@ -44,12 +43,11 @@
             height: 100%;
         }
 
-.multiview-item iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    border-radius: 5px;
-}
+        .multiview-item iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -86,31 +84,36 @@
         </div>
     </div>
 
-<!-- Input Modal -->
-<div id="input-modal">
-    <div>
-        <label for="multiview-checkbox">
-            <input type="checkbox" id="multiview-checkbox">
-            멀티뷰 사용
-        </label>
-    </div>
-    <div id="single-url-input-container">
-        <label for="url-input">싱글 뷰 URL 입력:</label>
-        <input type="text" id="url-input" class="url-input" placeholder="URL을 입력하세요">
-    </div>
-    <div id="multiview-options" style="display: none;">
-        <label for="multiview-layout-select">분할: </label>
-        <select id="multiview-layout-select">
-            <option value="1">1분할</option>
-            <option value="2">2분할</option>
-            <option value="3">3분할</option>
-            <option value="4">4분할</option>
-        </select>
-        <div id="multiview-url-inputs"></div>
-    </div>
-    <div class="button-container">
-        <button id="go-btn">Go</button>
-        <button id="close-btn">닫기</button>
+<div id="input-modal" style="display: none;">
+    <div style="display: flex; flex-direction: column;">
+        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+            <input type="checkbox" id="multiview-checkbox" style="margin-right: 5px;">
+            <label for="multiview-checkbox">멀티뷰 사용</label>
+        </div>
+        <div id="single-url-input-container">
+            <input type="text" id="url-input" class="url-input" placeholder="URL 입력" style="width: 100%; margin-bottom: 10px;" />
+        </div>
+        <div id="multiview-options" style="display: none;">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <label for="multiview-layout-select" style="margin-right: 10px;">분할:</label>
+                <select id="multiview-layout-select">
+                    <option value="1">1분할</option>
+                    <option value="2">2분할</option>
+                    <option value="3">3분할</option>
+                    <option value="4">4분할</option>
+                </select>
+            </div>
+            <div id="multiview-url-inputs">
+                <!-- 동적으로 URL 입력 필드가 추가됩니다 -->
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <button id="go-btn" class="menu-button" style="flex-grow: 1; margin-right: 5px;">Go</button>
+            <button id="close-btn" class="menu-button" style="background-color: #dc3545; color: white;">닫기</button>
+        </div>
+        <div style="margin-top: 10px; color: #666; font-size: 12px; word-wrap: break-word;">
+            ex) 롤캐직링, 기본영상주소, m3u8 다 가능
+        </div>
     </div>
 </div>
 
@@ -154,65 +157,55 @@
             document.cookie = `${name}=${value}${expires}; path=/; SameSite=None`;
         }
 
-let isMultiview = false; // 멀티뷰 상태 추적
+        // 레이아웃 조정 함수
+        function design() {
+            const isMobile = window.innerWidth <= 900; // 모바일 화면 기준 (900px 이하)
+            const menuSection = document.getElementById('menu-section');
+            const videoSection = document.getElementById('video-section');
+            const chatSection = document.querySelector('.chat-section');
 
-function design() {
-    const isMobile = window.innerWidth <= 900; // 모바일 화면 기준 (900px 이하)
-    const menuSection = document.getElementById('menu-section');
-    const videoSection = document.getElementById('video-section');
-    const chatSection = document.querySelector('.chat-section');
+            if (isMobile) {
+                // 모바일: 상하 레이아웃
+                menuSection.style.position = "relative";
+                menuSection.style.width = "100%";
+                menuSection.style.height = "auto";
+                menuSection.style.display = "flex";
+                menuSection.style.justifyContent = "space-around";
+                menuSection.style.padding = "10px 0";
 
-    if (isMobile) {
-        // 모바일: 상하 레이아웃
-        menuSection.style.position = "relative";
-        menuSection.style.width = "100%";
-        menuSection.style.height = "auto";
-        menuSection.style.display = "flex";
-        menuSection.style.justifyContent = "space-around";
-        menuSection.style.padding = "10px 0";
+                videoSection.style.width = "100%";
+                videoSection.style.height = "35vh"; // 영상 영역 높이
+                videoSection.style.position = "relative";
 
-        videoSection.style.width = "100%";
-        videoSection.style.height = "35vh"; // 영상 영역 높이
-        videoSection.style.position = "relative";
+                chatSection.style.width = "100%";
+                chatSection.style.height = "53vh"; // 채팅 영역 높이
+                chatSection.style.position = "relative";
+            } else {
+                // PC: 좌우 레이아웃
+                menuSection.style.position = "absolute";
+                menuSection.style.top = "0";
+                menuSection.style.right = "0";
+                menuSection.style.width = "20%"; // 우측 20% 너비
+                menuSection.style.height = "auto";
+                menuSection.style.display = "flex";
+                menuSection.style.flexDirection = "row"; // 버튼을 가로로 배치
+                menuSection.style.justifyContent = "space-around"; // 버튼 간격 조정
+                menuSection.style.alignItems = "center"; // 버튼을 중앙 정렬
+                menuSection.style.paddingTop = "10px"; // 상단 여백 추가
 
-        chatSection.style.width = "100%";
-        chatSection.style.height = "53vh"; // 채팅 영역 높이
-        chatSection.style.position = "relative";
-    } else {
-        // PC: 좌우 레이아웃
-        menuSection.style.position = "absolute";
-        menuSection.style.top = "0";
-        menuSection.style.right = "0";
-        menuSection.style.width = "20%"; // 우측 20% 너비
-        menuSection.style.height = "auto";
-        menuSection.style.display = "flex";
-        menuSection.style.flexDirection = "row"; // 버튼을 가로로 배치
-        menuSection.style.justifyContent = "space-around"; // 버튼 간격 조정
-        menuSection.style.alignItems = "center"; // 버튼을 중앙 정렬
-        menuSection.style.paddingTop = "10px"; // 상단 여백 추가
+                videoSection.style.width = "80%"; // 좌측 80% 너비
+                videoSection.style.height = "100vh"; // 영상 영역 높이
+                videoSection.style.position = "absolute";
+                videoSection.style.left = "0";
 
-        videoSection.style.width = "80%"; // 좌측 80% 너비
-        videoSection.style.height = "100vh"; // 영상 영역 높이
-        videoSection.style.position = "absolute";
-        videoSection.style.left = "0";
+                chatSection.style.width = "20%"; // 우측 20% 너비
+                chatSection.style.height = "calc(100vh - 60px)"; // 채팅 영역 높이 (버튼 메뉴 높이 제외)
+                chatSection.style.position = "absolute";
+                chatSection.style.top = "60px"; // 버튼 메뉴 높이만큼 아래로 이동
+                chatSection.style.right = "0";
+            }
+        }
 
-        chatSection.style.width = "20%"; // 우측 20% 너비
-        chatSection.style.height = "calc(100vh - 60px)"; // 채팅 영역 높이 (버튼 메뉴 높이 제외)
-        chatSection.style.position = "absolute";
-        chatSection.style.top = "60px"; // 버튼 메뉴 높이만큼 아래로 이동
-        chatSection.style.right = "0";
-    }
-
-    // 멀티뷰 모드일 경우 추가 스타일 적용
-    if (isMultiview) {
-        // 멀티뷰 설정에 따른 레이아웃 조정(예: grid layout)
-        videoSection.style.display = "grid";
-        videoSection.style.gridTemplateColumns = `repeat(${currentMultiviewLayout}, 1fr)`;
-    } else {
-        // 싱글 뷰 설정
-        videoSection.style.display = "flex"; // display 속성을 flex로 변경
-    }
-}
         // 초기 로드 시 실행
         window.onload = function() {
             const chatIframe = document.getElementById('chat-iframe');
@@ -248,4 +241,4 @@ function design() {
     </script>
     <script src="script.js"></script>
 </body>
-</html> 
+</html>
