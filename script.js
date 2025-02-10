@@ -159,7 +159,11 @@ function startSingleView() {
     isMultiview = false;
     multiviewCheckbox.checked = false;
     const url = urlInput.value.trim();
-    setSingleViewContent(url);
+    if (url) { // URL이 입력되었을 경우
+        setSingleViewContent(url);
+    } else { // URL이 입력되지 않았을 경우 flow 화면 표시
+        videoIframe.src = CHANNELS.flow.url();
+    }
     design(); // 레이아웃 재설정
 }
 
