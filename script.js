@@ -1,4 +1,4 @@
-const CHANNELS = {
+ const CHANNELS = {
     youtube: {
         id: 'UCw1DsweY9b2AKGjV4kGJP1A',
         buttonLabel: '숙제1',
