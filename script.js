@@ -8,7 +8,7 @@ const CHANNELS = {
     forest: {
         buttonLabel: '숙제2',
         color: '#00aaff',
-        url: () => 'https://play.sooplive.co.kr/aflol/embed'
+        url: () => 'https://play.sooplive.co.kr/aflol/281494910/embed'
     },
     flow: {
         buttonLabel: 'flow',
