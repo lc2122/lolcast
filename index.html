@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>롤캐 모바일용</title>
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -12,7 +12,7 @@
             font-size: 14px; /* 폰트 크기 줄임 */
             margin: 2px; /* 버튼 간격 조정 */
         }
-        
+
         /* 추가 스타일: 전체 레이아웃과 스크롤 방지 */
         html, body {
             height: 100%; /* html, body 높이 100% 설정 */
@@ -177,9 +177,20 @@
                 return w * w * hr / wr;
             }
         }
-        
+
         function getUtility(x, n){
             return x/(x+n);
+        }
+
+        // 디바운스 함수
+        function debounce(func, delay) {
+            let timeoutId;
+            return function(...args) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    func.apply(this, args);
+                }, delay);
+            };
         }
 
         // 레이아웃 조정 함수 (수정됨)
@@ -271,15 +282,9 @@
             design(); // 초기 레이아웃 설정
         };
 
-        // "흐름" 버튼 클릭 이벤트 추가
-        const hrmBtn = document.getElementById('hrm-btn');
-        hrmBtn.addEventListener('click', () => {
-            const url = 'https://insagirl-toto.appspot.com/hrm/?where=1';
-            window.open(url, '_blank');
-        });
-
-        // 화면 크기 변경시 레이아웃 조정
-        window.onresize = design;
+        // 디바운스된 design 함수를 resize 이벤트에 연결
+        const debouncedDesign = debounce(design, 200); // 200ms 동안 추가 이벤트 없으면 실행
+        window.onresize = debouncedDesign;
 
         // F5 버튼 클릭 시 채팅창 새로고침 (해시 유지)
         const refreshBtn = document.getElementById('refresh-btn');
