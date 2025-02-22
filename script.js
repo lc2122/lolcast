@@ -247,15 +247,12 @@ function getMultiviewColumns(layout) {
 }
 
 function getPlayerUrl(m3u8Url) {
-  if (typeof window.whale !== "undefined") {
-    return `https://www.livereacting.com/tools/hls-player-embed?url=${encodeURIComponent(m3u8Url)}`;
-  }    
-  if (/Edg/i.test(navigator.userAgent)) {
+  const ua = navigator.userAgent;
+  // Chrome, Whale, Edge에서는 chrome-extension URL 사용
+  if (/Chrome/i.test(ua) || /Whale/i.test(ua) || /Edg/i.test(ua)) {
     return `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url}`;
   }
-  if (/Chrome/i.test(navigator.userAgent)) {
-    return `chrome-extension://eakdijdofmnclopcffkkgmndadhbjgka/player.html#${m3u8Url}`;
-  }
+  // 그 외의 브라우저에서는 Livereacting 플레이어를 사용
   return `https://www.livereacting.com/tools/hls-player-embed?url=${encodeURIComponent(m3u8Url)}`;
 }
 
