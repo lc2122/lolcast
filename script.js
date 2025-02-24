@@ -346,11 +346,11 @@ function transformUrl(url) {
     
     // m3u8 URL 처리
     if (url.includes('.m3u8')) {
-        return getPlayerUrl(url); // m3u8 URL은 HLS 플레이어로 변환
+        return url; // m3u8 URL은 그대로 반환
     }
 
     // 기존 로직 (단축 URL 및 기타 URL 처리)
-    const isShortForm = /^(youtube|twitch|chzzk|kick|afreeca)/.test(url);
+    const isShortForm = /^(youtube|twitch|chzzk|kick|afreeca)\/[^\/]+$/.test(url);
     if (url === 'https://play.sooplive.co.kr/aflol/281494910/embed') {
         return url;
     }
@@ -383,11 +383,6 @@ function transformUrl(url) {
     alert('지원하지 않는 URL 형식입니다.'); return null;
 }
 
-// HLS 플레이어 URL 생성 함수
-function getPlayerUrl(m3u8Url) {
-    return `https://lc2122.github.io/hls-player/?src=${encodeURIComponent(m3u8Url)}`;
-}
-
 // 초기 로드 및 해시 처리
 window.addEventListener('load', () => {
     videoIframe.src = CHANNELS.flow.url();
@@ -398,9 +393,9 @@ window.addEventListener('load', () => {
     else if (hash.startsWith('#/soop/')) setSingleViewContent(`https://play.sooplive.co.kr/${hash.split('/')[2]}/embed`);
     else if (hash.startsWith('#/kick/')) setSingleViewContent(`https://player.kick.com/${hash.split('/')[2]}`);
     else if (hash.startsWith('#/hls/')) {
-        const m3u8Url = decodeURIComponent(hash.split('#/hls/')[1]); // URL 디코딩
-        if (m3u8Url.includes('.m3u8')) { // m3u8 포함 여부 확인
-            setSingleViewContent(getPlayerUrl(m3u8Url));
-        }
+    const m3u8Url = decodeURIComponent(hash.split('#/hls/')[1]);
+    if (m3u8Url.includes('.m3u8')) {
+        setSingleViewContent(m3u8Url); // getPlayerUrl()를 미리 호출하지 않음
     }
+}
 });
