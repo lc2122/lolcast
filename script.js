@@ -349,38 +349,43 @@ function transformUrl(url) {
         return url; // m3u8 URL은 그대로 반환
     }
 
-    // 기존 로직 (단축 URL 및 기타 URL 처리)
-    const isShortForm = /^(youtube|twitch|chzzk|kick|afreeca)\/[^\/]+$/.test(url);
-    if (url === 'https://play.sooplive.co.kr/aflol/281494910/embed') {
-        return url;
+// 기존 로직 (단축 URL 및 기타 URL 처리)
+const isShortForm = /^(youtube|twitch|chzzk|kick|afreeca)/.test(url);
+if (url === 'https://play.sooplive.co.kr/aflol/281494910/embed') {
+    return url;
+}
+if (isShortForm) {
+    const [platform, channelId] = url.split('/');
+    switch (platform) {
+        case 'youtube': return `https://www.youtube.com/embed/${channelId}`;
+        case 'twitch': return `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
+        case 'chzzk': return `https://chzzk.naver.com/live/${channelId}`;
+        case 'kick': return `https://player.kick.com/${channelId}`;
+        case 'afreeca': return `https://play.sooplive.co.kr/${channelId}/embed`;
+        default: alert('지원하지 않는 플랫폼입니다.'); return null;
     }
-    if (isShortForm) {
-        const [platform, channelId] = url.split('/');
-        switch (platform) {
-            case 'youtube': return `https://www.youtube.com/embed/${channelId}`;
-            case 'twitch': return `https://player.twitch.tv/?channel=${channelId}&parent=lc2122.github.io`;
-            case 'chzzk': return `https://chzzk.naver.com/live/${channelId}`;
-            case 'kick': return `https://player.kick.com/${channelId}`;
-            case 'afreeca': return `https://play.sooplive.co.kr/${channelId}/embed`;
-            default: alert('지원하지 않는 플랫폼입니다.'); return null;
-        }
-    }
-    if (!url.startsWith('http')) { alert('유효한 URL을 입력해주세요.'); return null; }
-    if (url.startsWith('https://lolcast.kr/#/player/youtube/')) return `https://www.youtube.com/embed/${url.split('/').pop()}`;
-    if (url.startsWith('https://lolcast.kr/#/player/twitch/')) return `https://player.twitch.tv/?channel=${url.split('/').pop()}&parent=lc2122.github.io`;
-    if (url.startsWith('https://lolcast.kr/#/player/chzzk/')) return `https://chzzk.naver.com/live/${url.split('/').pop()}`;
-    if (url.startsWith('https://lolcast.kr/#/player/kick/')) return `https://player.kick.com/${url.split('/').pop()}`;
-    if (url.startsWith('https://lolcast.kr/#/player/afreeca/')) return `https://play.sooplive.co.kr/${url.split('/').pop()}/embed`;
-    if (url.includes('youtu.be') || url.includes('youtube.com/watch?v=')) {
-        const match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9_-]+)/);
-        if (match) return `https://www.youtube.com/embed/${match[1]}`;
-    }
-    if (url.startsWith('https://twitch.tv/')) return `https://player.twitch.tv/?channel=${url.split('/').pop()}&parent=lc2122.github.io`;
-    if (url.startsWith('https://chzzk.naver.com/live/') || url.startsWith('https://chzzk.naver.com/')) return `https://chzzk.naver.com/live/${url.split('/').pop()}`;
-    if (url.startsWith('https://kick.com/')) return `https://player.kick.com/${url.split('/').pop()}`;
-    if (url.startsWith('https://play.sooplive.co.kr/')) return `https://play.sooplive.co.kr/${url.split('/')[3]}/embed`;
-    if (url.startsWith('https://')) return url;
-    alert('지원하지 않는 URL 형식입니다.'); return null;
+}
+if (!url.startsWith('http')) { alert('유효한 URL을 입력해주세요.'); return null; }
+if (url.startsWith('https://lolcast.kr/#/player/youtube/')) return `https://www.youtube.com/embed/${url.split('/').pop()}`;
+if (url.startsWith('https://lolcast.kr/#/player/twitch/')) return `https://player.twitch.tv/?channel=${url.split('/').pop()}&parent=lc2122.github.io`;
+if (url.startsWith('https://lolcast.kr/#/player/chzzk/')) return `https://chzzk.naver.com/live/${url.split('/').pop()}`;
+if (url.startsWith('https://lolcast.kr/#/player/kick/')) return `https://player.kick.com/${url.split('/').pop()}`;
+if (url.startsWith('https://lolcast.kr/#/player/afreeca/')) return `https://play.sooplive.co.kr/${url.split('/').pop()}/embed`;
+if (url.includes('youtu.be') || url.includes('youtube.com/watch?v=')) {
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9_-]+)/);
+    if (match) return `https://www.youtube.com/embed/${match[1]}`;
+}
+if (url.startsWith('https://twitch.tv/')) return `https://player.twitch.tv/?channel=${url.split('/').pop()}&parent=lc2122.github.io`;
+if (url.startsWith('https://chzzk.naver.com/live/') || url.startsWith('https://chzzk.naver.com/')) return `https://chzzk.naver.com/live/${url.split('/').pop()}`;
+if (url.startsWith('https://kick.com/')) return `https://player.kick.com/${url.split('/').pop()}`;
+if (url.startsWith('https://play.sooplive.co.kr/')) return `https://play.sooplive.co.kr/${url.split('/')[3]}/embed`;
+if (url.startsWith('https://')) return url;
+alert('지원하지 않는 URL 형식입니다.'); return null;
+}
+
+// HLS 플레이어 URL 생성 함수
+function getPlayerUrl(m3u8Url) {
+    return `https://lc2122.github.io/hls-player/?src=${encodeURIComponent(m3u8Url)}`;
 }
 
 // 초기 로드 및 해시 처리
