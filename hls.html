@@ -62,6 +62,18 @@
       window.open('potplayer://' + url, '_blank'); 
     }
 
+    function hls2(url, channel) {
+      const baseUrl = `https://ch${channel}-nlivecdn.spotvnow.co.kr/ch${channel}/decr/medialist_14173921312004482655_hls.m3u8`;
+      const playerUrl = `https://anym3u8player.com/tv/p.php?url=${encodeURIComponent(baseUrl)}`;
+      window.open(playerUrl, '_self');
+    }
+
+    function hls3(url, channel) {
+      const baseUrl = `https://ch${channel}-nlivecdn.spotvnow.co.kr/ch${channel}/decr/medialist_14173921312004482655_hls.m3u8`;
+      const playerUrl = `https://www.livereacting.com/tools/hls-player-embed?url=${encodeURIComponent(baseUrl)}`;
+      window.open(playerUrl, '_self');
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
       const wrapperSet2 = document.getElementById('wrapperSet2');
 
@@ -73,9 +85,11 @@
         div.innerHTML = `
           ${videoNumber}<br>
           <video id="video2_${videoNumber}" width="100%"></video>
-          <input type='button' value='HLS' onclick="pot1('https://ch${videoNumber}-nlivecdn.spotvnow.co.kr/ch${videoNumber}/decr/medialist_14173921312004482655_hls.m3u8')"></input>
+          <input type='button' value='HLS' onclick="pot1('https://ch${videoNumber}-nlivecdn.spotvnow.co.kr/ch${videoNumber}/decr/medialist_14173921312004482655_hls.m3u8')"></input>        
+          <input type='button' value='HLS2' onclick="hls2('https://ch${videoNumber}-nlivecdn.spotvnow.co.kr/ch${videoNumber}/decr/medialist_14173921312004482655_hls.m3u8')"></input>
+          <input type='button' value='HLS3' onclick="hls3('https://ch${videoNumber}-nlivecdn.spotvnow.co.kr/ch${videoNumber}/decr/medialist_14173921312004482655_hls.m3u8')"></input>
           <input type='button' value='카팟' onclick="pot2('https://ch${videoNumber}-nlivecdn.spotvnow.co.kr/ch${videoNumber}/decr/medialist_14173921312004482655_hls.m3u8')"></input>
-        `;
+          `;
         wrapperSet2.appendChild(div);
         const video = document.getElementById('video2_' + videoNumber);
         callVideo1(video, `https://ch${videoNumber}-nlivecdn.spotvnow.co.kr/ch${videoNumber}/decr/medialist_14173921312004482655_hls.m3u8`);
