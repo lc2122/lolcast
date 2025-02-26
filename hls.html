@@ -86,9 +86,9 @@
           ${videoNumber}<br>
           <video id="video2_${videoNumber}" width="100%"></video>
           <input type='button' value='HLS' onclick="pot1('https://ch${videoNumber}-nlivecdn.spotvnow.co.kr/ch${videoNumber}/decr/medialist_14173921312004482655_hls.m3u8')"></input>
-          <input type='button' value='카팟' onclick="pot2('https://ch${videoNumber}-nlivecdn.spotvnow.co.kr/ch${videoNumber}/decr/medialist_14173921312004482655_hls.m3u8')"></input>
           <input type='button' value='HLS2' onclick="hls2('${videoNumber}')"></input>
           <input type='button' value='HLS3' onclick="hls3('${videoNumber}')"></input>
+          <input type='button' value='카팟' onclick="pot2('https://ch${videoNumber}-nlivecdn.spotvnow.co.kr/ch${videoNumber}/decr/medialist_14173921312004482655_hls.m3u8')"></input>
         `;
         wrapperSet2.appendChild(div);
         const video = document.getElementById('video2_' + videoNumber);
