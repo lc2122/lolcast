@@ -383,19 +383,35 @@ function transformUrl(url) {
     alert('지원하지 않는 URL 형식입니다.'); return null;
 }
 
-// 초기 로드 및 해시 처리
-window.addEventListener('load', () => {
-    videoIframe.src = CHANNELS.flow.url();
+function handleHashChange() {
     const hash = window.location.hash;
-    if (hash.startsWith('#/twitch/')) setSingleViewContent(`https://player.twitch.tv/?channel=${hash.split('/')[2]}&parent=lc2122.github.io`);
-    else if (hash.startsWith('#/youtube/')) setSingleViewContent(`https://www.youtube.com/embed/${hash.split('/')[2]}`);
-    else if (hash.startsWith('#/chzzk/')) setSingleViewContent(`https://chzzk.naver.com/live/${hash.split('/')[2]}`);
-    else if (hash.startsWith('#/soop/')) setSingleViewContent(`https://play.sooplive.co.kr/${hash.split('/')[2]}/embed`);
-    else if (hash.startsWith('#/kick/')) setSingleViewContent(`https://player.kick.com/${hash.split('/')[2]}`);
-    else if (hash.startsWith('#/hls/')) {
-    const m3u8Url = decodeURIComponent(hash.split('#/hls/')[1]);
-    if (m3u8Url.includes('.m3u8')) {
-        setSingleViewContent(m3u8Url); // getPlayerUrl()를 미리 호출하지 않음
+    if (hash.startsWith('#/twitch/')) {
+        setSingleViewContent(`https://player.twitch.tv/?channel=${hash.split('/')[2]}&parent=lc2122.github.io`);
+    } else if (hash.startsWith('#/youtube/')) {
+        setSingleViewContent(`https://www.youtube.com/embed/${hash.split('/')[2]}`);
+    } else if (hash.startsWith('#/chzzk/')) {
+        setSingleViewContent(`https://chzzk.naver.com/live/${hash.split('/')[2]}`);
+    } else if (hash.startsWith('#/soop/')) {
+        setSingleViewContent(`https://play.sooplive.co.kr/${hash.split('/')[2]}/embed`);
+    } else if (hash.startsWith('#/kick/')) {
+        setSingleViewContent(`https://player.kick.com/${hash.split('/')[2]}`);
+    } else if (hash.startsWith('#/hls/')) {
+        const m3u8Url = decodeURIComponent(hash.split('#/hls/')[1]);
+        if (m3u8Url.includes('.m3u8')) {
+            setSingleViewContent(m3u8Url);
+        }
+    } else {
+        // 기본값으로 flow 설정 (필요에 따라 수정)
+        setSingleViewContent(CHANNELS.flow.url());
     }
 }
+
+// 초기 로드 시 실행
+window.addEventListener('load', () => {
+    handleHashChange(); // 초기 해시 처리
+});
+
+// 해시 변경 시 실시간 반영
+window.addEventListener('hashchange', () => {
+    handleHashChange(); // 해시 변경 시 동일 로직 실행
 });
