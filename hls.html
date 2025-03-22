@@ -29,7 +29,7 @@
             height: 100%;
             z-index: 10;
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            overflow-y: auto; /* 채널 많아지면 스크롤 */
+            overflow-y: auto; /* 스크롤 가능 */
         }
         #sidebar.collapsed {
             transform: translateX(-100%);
@@ -64,10 +64,15 @@
         .channel-item:hover {
             background: #dee2e6;
         }
+        #spotv-channels {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px; /* 버튼 간 간격 */
+        }
         .small-channel-btn {
             display: inline-block;
             padding: 6px 10px;
-            margin: 3px;
             background: #e9ecef;
             border-radius: 4px;
             cursor: move;
@@ -76,6 +81,7 @@
             border: none;
             font-size: 12px;
             text-align: center;
+            min-width: 50px; /* 최소 너비 설정 */
         }
         .small-channel-btn:hover {
             background: #dee2e6;
@@ -145,6 +151,7 @@
         <button id="toggle-btn" onclick="toggleSidebar()">☰</button>
         <h3>채널 목록</h3>
         <div id="channels"></div>
+        <div id="spotv-channels"></div> <!-- SPOTV 채널을 위한 별도 컨테이너 -->
         <h3>분할 화면 설정</h3>
         <button onclick="setSplitScreen(1)">1분할</button>
         <button onclick="setSplitScreen(2)">2분할</button>
@@ -170,6 +177,7 @@
         }));
 
         const channelList = document.getElementById('channels');
+        const spotvChannelList = document.getElementById('spotv-channels');
         const playerContainer = document.getElementById('player-container');
         const sidebar = document.getElementById('sidebar');
         let playerCount = 1;
@@ -198,9 +206,6 @@
         });
 
         // SPOTV 채널 목록 (작은 버튼) 생성
-        const spotvContainer = document.createElement('div');
-        spotvContainer.style.display = 'flex';
-        spotvContainer.style.flexWrap = 'wrap';
         spotvChannels.forEach(channel => {
             const btn = document.createElement('div');
             btn.className = 'small-channel-btn';
@@ -219,9 +224,8 @@
                     clickIndex++;
                 }
             });
-            spotvContainer.appendChild(btn);
+            spotvChannelList.appendChild(btn);
         });
-        channelList.appendChild(spotvContainer);
 
         function toggleSidebar() {
             sidebar.classList.toggle('collapsed');
