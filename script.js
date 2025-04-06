@@ -343,7 +343,13 @@ addFavoriteBtn.addEventListener('click', () => {
 /* URL 변환 함수 */
 function transformUrl(url) {
     if (!url) return null;
-    
+
+    // 치지직 채널 ID 감지 (32자리 16진수 문자열)
+    const chzzkChannelIdPattern = /^[0-9a-fA-F]{32}$/;
+    if (chzzkChannelIdPattern.test(url)) {
+        return `https://chzzk-api-proxy.hibiya.workers.dev/m3u8-redirect/${url}`;
+    }
+
     // m3u8 URL 처리
     if (url.includes('.m3u8')) {
         return url; // m3u8 URL은 그대로 반환
