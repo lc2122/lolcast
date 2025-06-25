@@ -683,23 +683,8 @@ window.onload = function() {
             }
             
             if (isloaded) {
-                // ▼▼▼▼▼▼▼▼▼▼ 이 부분이 수정되었습니다 ▼▼▼▼▼▼▼▼▼▼
-                // 광고 시간을 감지하고 실제 영상이 시작되었는지 확인하는 로직
-                if (playfail && player.getPlayerState() === 1) {
-                    var expectedStartTime = mystart / 1000; // mystart는 밀리초이므로 초 단위로 변환
-                    var currentTime = player.getCurrentTime();
-
-                    // 현재 재생 시간이 '지정된 시작 시간'에서 크게 벗어나지 않았을 때 재생 성공으로 간주
-                    // (예: 시작 시간 ~ 시작 시간+5초 사이일 때)
-                    if (currentTime >= expectedStartTime && currentTime < expectedStartTime + 5) {
-                        playfail = false; // 재생 성공! 이제부터 동기화 시작
-                        
-                        // 중요: 광고 때문에 시간이 지연되었으므로, 서버의 정확한 시간(mytime)으로 즉시 보정
-                        seekTo(mytime);
-                    }
-                }
-                // ▲▲▲▲▲▲▲▲▲▲ 수정된 부분 끝 ▲▲▲▲▲▲▲▲▲▲
-
+                if(playfail && player.getCurrentTime() > 10 && player.getPlayerState() === 1)
+					playfail = false;
                 if ((player.getPlayerState() === 5 || player.getPlayerState() === 2) && maybetime > mystart) {
                     player.playVideo();
                     return [maybetime, "t"];
