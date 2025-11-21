@@ -1,0 +1,205 @@
+/* --- Globals & Layout --- */
+:root { /* 필요 시 변수 정의 */ }
+
+html, body {
+    overflow: hidden !important;
+    height: 100%;
+    margin: 0; padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #14161A;
+}
+
+/* --- Sidebar --- */
+#sidebar {
+    width: 220px;
+    background-color: #14161A;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0; left: 0;
+    height: 100%;
+    z-index: 10;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: transform 0.3s ease, width 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    color: #c5c8cc;
+}
+
+#sidebar.is-collapsed {
+    transform: translateX(-100%);
+    width: 0;
+    padding: 0 !important;
+}
+
+/* Typography within Sidebar */
+#sidebar .title, #sidebar .subtitle {
+    color:  #c3c6c9;
+    margin-bottom: 0.5rem;
+}
+#sidebar > div { margin-top: 1rem; }
+#sidebar > #section-group-competition { margin-top: 0; }
+#sidebar > div > .title:not(:first-child) { margin-top: 1rem; }
+
+/* Layout Buttons */
+#sidebar #split-screen-buttons {
+    display: flex;
+    width: 100%;
+    gap: 5px;
+}
+#sidebar #split-screen-buttons .button {
+    flex: 1; 
+    min-width: 0; 
+    white-space: nowrap;
+    padding: 0 6px;
+}
+#sidebar .buttons { margin-bottom: 0.2rem; }
+
+/* Links */
+#sidebar .notification a { color: #3273dc; }
+#sidebar .notification a:hover { color: #276cda; }
+
+/* --- Toggle Button --- */
+#toggle-btn {
+    position: fixed;
+    top: 10px;
+    z-index: 11;
+    transition: left 0.3s ease;
+    width: 24px !important;
+    height: 24px !important;
+    padding: 0 !important;
+    font-size: 0.7rem !important;
+    line-height: 24px !important;
+    text-align: center;
+}
+
+/* --- Player Container --- */
+#player-container {
+    flex-grow: 1;
+    display: grid;
+    gap: 0;
+    height: 100vh;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    margin-left: 220px;
+    width: calc(100% - 220px);
+}
+
+.player-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    background-color: #e0e0e0;
+}
+.player-box iframe, .player-box video {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+/* --- Button Styles --- */
+/* Outlined Buttons (Common) */
+#sidebar .button.is-outlined {
+    background-color: transparent !important;
+    border: 1px solid #6a707c;
+    color: #a0a5ac;
+    transition: all 0.2s;
+}
+#sidebar .button.is-outlined:hover {
+    background-color: rgba(106, 112, 124, 0.15) !important;
+    border-color: #a0a5ac;
+    color: #c5c8cc;
+}
+
+/* Specific Channel Button Tweaks */
+#sidebar .channel-button.is-outlined,
+#sidebar .lck-channel-btn.is-outlined {
+    padding: 4px 3px;
+    border-radius: 4px;
+    cursor: move;
+    font-size: 12px;
+    text-align: center;
+    flex-shrink: 0;
+}
+#sidebar .channel-button.is-outlined { width: 34px; flex-grow: 0; }
+#sidebar .lck-channel-btn.is-outlined { flex-grow: 1 !important; max-width: none; }
+#sidebar .spotv-btn.channel-button.is-outlined { width: auto; min-width: 0; }
+
+/* Solid Buttons */
+#sidebar .button.is-link:not(.is-outlined),
+#sidebar .button.is-info:not(.is-outlined) { border-color: transparent; color: #fff; }
+#sidebar .button.is-link:not(.is-outlined) { background-color: #3273dc; }
+#sidebar .button.is-info:not(.is-outlined) { background-color: #209cee; }
+#sidebar .button.is-link:not(.is-outlined):hover { background-color: #2b68cb; }
+#sidebar .button.is-info:not(.is-outlined):hover { background-color: #1a89d6; }
+
+/* --- Toggle Sections (Collapsible) --- */
+#combined-channels-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    gap: 3px !important;
+}
+#combined-channels-content.active {
+    max-height: 150px;
+    overflow-y: auto;
+}
+.toggle-header {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.toggle-header::after {
+    content: '▼';
+    font-size: 0.75em;
+    transition: transform 0.2s ease;
+    margin-left: 5px;
+}
+.toggle-header.collapsed::after { content: '▶'; }
+
+/* --- LCK Schedule --- */
+#lck-schedule {
+    line-height: 1.4;
+    margin-top: 5px;
+    max-height: 120px;
+    overflow-y: auto;
+    padding-top: 3px;
+    font-size: 0.8rem;
+    color: #a0a5ac;
+}
+.schedule-item {
+    border-bottom: 1px dashed #4b505a;
+    gap: 5px;
+    padding: 2px 0;
+}
+.schedule-item:last-child { border-bottom: none; }
+
+/* --- Modal (Dark Theme) --- */
+.modal-card, .modal-card-body { background-color: #2a2d33; color: #c5c8cc; }
+.modal-card-head, .modal-card-foot {
+    background-color: #1f2125;
+    border-color: #4b505a;
+}
+.modal-card-title { color: #c5c8cc; }
+.modal-card-body .label, .modal-card-body .checkbox { color: #a0a5ac; }
+.modal-card-body .input {
+    background-color: #1f2125;
+    border-color: #4b505a;
+    color: #c5c8cc;
+}
+.modal-card-body hr { background-color: #4b505a; border: none; height: 1px; }
+
+/* Favorites List in Modal */
+#favorite-list .level {
+    border-bottom: 1px solid #4b505a;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #a0a5ac;
+}
+#favorite-list .level:last-child { border-bottom: none; }
+#menu-settings-list .checkbox { display: block; margin-bottom: 0.5rem; }
