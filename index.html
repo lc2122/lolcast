@@ -2,172 +2,135 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>롤캐스트 모바일</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LCK 플레이어</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="mobile-styles.css">
+    <link rel="stylesheet" href="custom-bulma.css">
 </head>
-<body class="is-mobile-layout">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<body>
+    <div id="sidebar" class="p-4">
+        
+        <div id="section-group-competition">
+            <h3 class="title is-5">대회 채널</h3>
+            <div id="lck-channels" class="buttons are-small is-flex-wrap-wrap"></div>
 
-    <div id="main-content">
-        <div id="video-area">
+            <h3 class="title is-5">대회 대진표</h3>
+            <div id="lck-schedule">
+                <p class="loading-msg has-text-grey has-text-centered py-2">대진표 로딩 중...</p>
             </div>
-        <div id="chat-area">
-            <iframe id="chat-iframe"
-                    src="https://insagirl-toto.appspot.com/chatting/lgic/"
-                    class="full-size-iframe"
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    allowfullscreen>
-                    <p>채팅 기능을 보려면 아이프레임을 지원하는 브라우저가 필요합니다.</p>
-            </iframe>
+        </div>
+
+        <div id="section-group-channels">
+            <h3 class="title is-6">실시간 채널</h3>
+            <div id="custom-address-channels" class="buttons are-small is-flex-wrap-wrap"></div>
+
+            <h3 class="title is-6 toggle-header" onclick="toggleSection(this, 'combined-channels-content')">
+                고정 채널
+            </h3>
+            <div id="combined-channels-content" class="buttons are-small is-flex-wrap-wrap"></div>
+        </div>
+
+        <div id="section-group-layout">
+            <h3 class="title is-5">분할 화면 설정</h3>
+            <div id="split-screen-buttons" class="buttons">
+                <button class="button is-outlined" onclick="setSplitScreen(1)">1분할</button>
+                <button class="button is-outlined" onclick="setSplitScreen(2)">2분할</button>
+                <button class="button is-outlined" onclick="setSplitScreen(3)">3분할</button>
+                <button class="button is-outlined" onclick="setSplitScreen(4)">4분할</button>
+            </div>
+        </div>
+        
+        <div id="custom-url-container" class="">
+            <div class="field">
+                <div class="control">
+                        <input type="text" id="custom-url-input" class="input is-small" placeholder="m3u8, 치지직 ID, 채널 URL 입력">
+                </div>
+            </div>
+            <div id="custom-url-buttons" class="field is-grouped">
+                <p class="control">
+                    <button class="button is-link is-small is-fullwidth" onclick="playCustomUrl()">실행</button>
+                </p>
+            </div>
+        </div>
+
+        <div id="section-group-guides">
+            <div id="firefox-notice" class="notification is-warning is-light is-size-7 p-2" style="display:none;">
+                <a href="https://addons.mozilla.org/ko/firefox/addon/m3u8-hls-player-with-shortcuts/" target="_blank">HLS 플레이어 (설치 필수)</a><br>
+                <a href="https://lolcast.web.app/manual.html" target="_blank">롤캐티비 가이드</a>
+            </div>
+            <div id="chrome-notice" class="notification is-warning is-light is-size-7 p-2">
+                    <a href="https://chromewebstore.google.com/detail/hls-player-m3u8-streaming/eakdijdofmnclopcffkkgmndadhbjgka?hl=ko" target="_blank">HLS 플레이어 (설치 필수)</a><br>
+                    <a href="https://lolcast.web.app/manual.html" target="_blank">롤캐티비 가이드</a>
+            </div>
+        </div>
+
+        <div id="sidebar-settings-header" class="mt-auto pt-4"> 
+            <button class="button is-info is-fullwidth is-small" onclick="openModal()">
+                <span class="icon is-small"><i class="fas fa-cog"></i></span>
+                <span>즐겨찾기 / 메뉴 설정</span>
+            </button>
+        </div>
+    </div> 
+    
+    <div id="player-container" class="has-background-light">
+        <button id="toggle-btn" class="button is-small is-rounded" onclick="toggleSidebar()">☰</button>
+    </div>
+
+    <div class="modal" id="favorite-modal">
+        <div class="modal-background" onclick="closeModal()"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">즐겨찾기 및 메뉴 설정</p>
+                <button class="delete" aria-label="close" onclick="closeModal()"></button>
+            </header>
+            <section class="modal-card-body">
+                <div class="field">
+                    <label class="label is-small">이름</label>
+                    <div class="control">
+                        <input id="favorite-name-input" class="input is-small" type="text" placeholder="이름">
+                    </div>
+                </div>
+                <div class="field mt-3">
+                    <label class="label is-small">URL 또는 채널 ID</label>
+                    <div class="control">
+                        <input id="favorite-url-input" class="input is-small" type="text" placeholder="URL 또는 채널 ID">
+                    </div>
+                </div>
+                <label class="label is-small mt-4">즐겨찾기 목록</label>
+                <div id="favorite-list" style="max-height: 200px; overflow-y: auto; border-top: 1px solid #eee; margin-top: 5px; padding-top: 5px;">
+                </div>
+
+                <hr>
+                <label class="label is-small">사이드바 메뉴 표시 설정</label>
+                <div id="menu-settings-list" class="control">
+                    <label class="checkbox is-small">
+                        <input type="checkbox" data-section-id="section-group-competition"> 대회 정보 (채널, 대진표)
+                    </label>
+                    <label class="checkbox is-small">
+                        <input type="checkbox" data-section-id="section-group-channels"> 채널 목록 (실시간, 고정)
+                    </label>
+                    <label class="checkbox is-small">
+                        <input type="checkbox" data-section-id="section-group-layout"> 화면 설정 (분할)
+                    </label>
+                    <label class="checkbox is-small">
+                        <input type="checkbox" data-section-id="custom-url-container"> URL 입력창
+                    </label>
+                    <label class="checkbox is-small">
+                        <input type="checkbox" data-section-id="section-group-guides"> 안내 (HLS, 가이드)
+                    </label>
+                </div>
+            </section>
+            <footer class="modal-card-foot is-justify-content-flex-end">
+                <button class="button is-success" onclick="addFavorite()">즐겨찾기 추가</button>
+                <button class="button is-link" onclick="saveSidebarVisibility()">메뉴 설정 저장</button>
+                <button class="button" onclick="closeModal()">닫기</button>
+            </footer>
         </div>
     </div>
 
-    <nav id="bottom-nav" class="navbar is-fixed-bottom has-shadow">
-        <div class="navbar-brand is-flex is-justify-content-space-around" style="width: 100%;">
-            </div>
-    </nav>
-
-    <div class="modal" id="controls-modal">
-      <div class="modal-background" onclick="closeControlsModal()"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">채널 및 설정</p>
-          <button class="delete" aria-label="close" onclick="closeControlsModal()"></button>
-        </header>
-        <section class="modal-card-body">
-            <div class="tabs is-boxed is-fullwidth">
-                <ul>
-                    <li class="is-active" id="tab-link-channels">
-                        <a onclick="switchTab(event, 'tab-content-channels')">
-                            <span class="icon is-small"><i class="fas fa-tv" aria-hidden="true"></i></span>
-                            <span>채널</span>
-                        </a>
-                    </li>
-                    <li id="tab-link-settings">
-                        <a onclick="switchTab(event, 'tab-content-settings')">
-                            <span class="icon is-small"><i class="fas fa-cog" aria-hidden="true"></i></span>
-                            <span>설정</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <div id="tab-content-channels" class="tab-content">
-                <h3 class="title is-6">대회 대진표</h3>
-                <div id="lck-schedule-modal" class="mb-3 scrollable-section">
-                     <p class="loading-msg has-text-grey has-text-centered py-2 is-size-7">대진표 로딩 중...</p>
-                </div>
-
-                <h4 class="subtitle is-6 mt-3">실시간 채널</h4>
-                <div id="live-channels-modal" class="buttons are-small is-flex-wrap-wrap section-content"></div>
-                
-                <h4 class="subtitle is-6 mt-3 toggle-header collapsed is-clickable" onclick="toggleSection(this, 'fixed-channels-modal')">고정 채널</h4>
-                <div id="fixed-channels-modal" class="buttons are-small is-flex-wrap-wrap section-content" style="display: none;"></div>
-
-                <h3 class="title is-6 mt-4">사용자 입력</h3>
-                <div id="custom-url-container-modal">
-                    <div class="field">
-                        <div class="control has-icons-right">
-                            <input type="text" id="custom-url-input-modal" class="input is-small" placeholder="m3u8, 치지직 ID, 채널 URL">
-                            <span class="icon is-small is-right is-clickable" id="clear-custom-url-btn" title="입력 지우기" style="display: none;"><i class="fas fa-times"></i></span>
-                        </div>
-                    </div>
-                    <div id="custom-url-buttons-modal" class="field is-grouped mt-2">
-                        <p class="control"><button class="button is-link is-small" onclick="playCustomUrlModal()">실행</button></p>
-                    </div>
-                    <div id="recent-urls-section" style="display: none;">
-                        <label class="label is-small mt-3">최근 입력</label>
-                        <div id="recent-urls-container"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tab-content-settings" class="tab-content" style="display: none;">
-                <h3 class="title is-6 toggle-header is-clickable" onclick="toggleSection(this, 'layout-settings-content')">레이아웃 설정</h3>
-                <div id="layout-settings-content" class="section-content">
-                    <div class="field is-grouped is-grouped-multiline">
-                        <p class="control"><button id="mode-toggle-btn" class="button is-dark is-small" onclick="toggleLayoutMode()">가로 모드</button></p>
-                    </div>
-                    
-                    <div class="field mt-4">
-                        <label class="label is-small">세로 모드 영상 비율: <span id="portrait-ratio-value">50</span>%</label>
-                        <div class="field has-addons">
-                            <p class="control"><button class="button is-small" id="portrait-ratio-minus">-</button></p>
-                            <p class="control is-expanded"><input id="portrait-ratio-slider" class="slider is-fullwidth is-info" type="range" min="20" max="90" step="1"></p>
-                            <p class="control"><button class="button is-small" id="portrait-ratio-plus">+</button></p>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label is-small">가로 모드 영상 비율: <span id="landscape-ratio-value">80</span>%</label>
-                        <div class="field has-addons">
-                            <p class="control"><button class="button is-small" id="landscape-ratio-minus">-</button></p>
-                            <p class="control is-expanded"><input id="landscape-ratio-slider" class="slider is-fullwidth is-success" type="range" min="20" max="90" step="1"></p>
-                            <p class="control"><button class="button is-small" id="landscape-ratio-plus">+</button></p>
-                        </div>
-                    </div>
-                    <div class="field"><p class="control"><button class="button is-success is-small" onclick="saveLayoutRatios()">비율 저장</button></p></div>
-                </div>
-
-                <h3 class="title is-6 mt-3 toggle-header is-clickable collapsed" onclick="toggleSection(this, 'player-settings-content')">치지직 플레이어 설정</h3>
-                <div id="player-settings-content" class="section-content" style="display: none;">
-                    <div class="field">
-                        <div class="control">
-                            <label class="radio">
-                                <input type="radio" name="chzzkPlayerType" value="m3u8" checked>
-                                HLS.js (m3u8 직접 재생)
-                            </label>
-                            <br>
-                            <label class="radio">
-                                <input type="radio" name="chzzkPlayerType" value="iframe">
-                                Iframe (mul.live)
-                            </label>
-                        </div>
-                        <p class="help is-size-7 mt-1">m3u8 방식이 불안정할 경우 Iframe을 선택하세요.</p>
-                    </div>
-                </div>
-
-                <h3 class="title is-6 mt-3 toggle-header is-clickable collapsed" onclick="toggleSection(this, 'favorites-management-section')">즐겨찾기 관리</h3>
-                <div id="favorites-management-section" class="section-content" style="display: none;">
-                    <div class="field"><label class="label is-small has-text-weight-normal">이름</label><div class="control"><input id="favorite-name-input" class="input is-small" type="text" placeholder="표시될 이름 입력"></div></div>
-                    <div class="field mt-2"><label class="label is-small has-text-weight-normal">URL 또는 채널 ID</label><div class="control"><input id="favorite-url-input" class="input is-small" type="text" placeholder="채널 URL 또는 치지직 ID 등"></div></div>
-                    <p class="control mt-2"><button class="button is-info is-small" onclick="addFavorite()">즐겨찾기 추가</button></p>
-                    <label class="label is-small mt-4">저장된 목록</label>
-                    <div id="favorite-list" class="scrollable-list"></div>
-                </div>
-
-                <h3 class="title is-6 mt-3 toggle-header is-clickable collapsed" onclick="toggleSection(this, 'nav-editor-section')">하단 네비게이션 편집</h3>
-                <div id="nav-editor-section" class="section-content" style="display: none;">
-                    <div>
-                        <label class="label is-small">사용 중인 항목 (드래그하여 순서 변경)</label>
-                        <div id="active-nav-items" class="nav-editor-list"></div>
-                    </div>
-                    <div class="mt-3">
-                        <label class="label is-small">사용 가능한 항목</label>
-                        <div id="available-nav-items" class="nav-editor-list"></div>
-                    </div>
-                    <div class="field is-grouped mt-3">
-                        <p class="control"><button class="button is-link is-small" onclick="saveNavConfig()">네비게이션 저장</button></p>
-                        <p class="control"><button class="button is-light is-small" onclick="restoreDefaultNavConfig()">기본값으로 복원</button></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <footer class="modal-card-foot is-justify-content-flex-end">
-          <button class="button" onclick="closeControlsModal()">닫기</button>
-        </footer>
-      </div>
-    </div>
-
-    <div id="nav-show-btn" class="is-hidden">
-        <span class="icon"><i class="fas fa-arrow-up"></i></span>
-    </div>
-    
-    <div id="toast-container"></div>
-
-    <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
