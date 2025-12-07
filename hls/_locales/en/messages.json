@@ -1,0 +1,8 @@
+{
+	"extName": {
+		"message": "M3U8 video player"
+	},
+	"extDescription": {
+		"message": "Let the browser support m3u8 format video file play."
+	}
+}
