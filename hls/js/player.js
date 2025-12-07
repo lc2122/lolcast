@@ -58,7 +58,7 @@ var playVideo = (videoUrl) => {
 			fullscreenWeb: true,
 			fullscreen: true,
 			subtitleOffset: true,
-			miniProgressBar: true,
+			miniProgressBar: false,
 			airplay: true,
 			theme: '#23ade5',
 			thumbnails: {},
@@ -124,4 +124,5 @@ var playM3u8 = (video, url, art) => {
 	} else {
 		art.notice.show = 'Unsupported playback format: m3u8';
 	}
+
 }
