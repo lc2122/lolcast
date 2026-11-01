@@ -1,8 +1,0 @@
-{
-	"extName": {
-		"message": "M3U8 ビデオプレーヤー"
-	},
-	"extDescription": {
-		"message": "ブラウザが M3U8 形式のビデオ ファイルの再生をサポートするようにします"
-	}
-}
